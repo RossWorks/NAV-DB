@@ -42,6 +42,8 @@ private:
   E_DbError AcquireArinc424Files();
   DbRecord_t AcquireVhfRecord(std::string FileRecord, E_DbError* ReturnCode);
   DbRecord_t AcquireNdbRecord(std::string FileRecord, E_DbError* ReturnCode);
+  void Freq2Channel(uint32_t Freq, uint8_t* Channel, E_ChannelMode* Mode);
+  void ClearDbRecord(DbRecord_t* Record);
 public:
   StdDb(/* args */) {}
   ~StdDb() {}

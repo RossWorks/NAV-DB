@@ -18,7 +18,8 @@ int main(int argc, char* argv[])
     SearchResult = MyDb.Search(SearchKey);
     std::cout << "Found " <<std::to_string(SearchResult.size()) << " elements\n";
     for (DbRecord_t element: SearchResult){
-      std::cout << element.ICAO << " | " << element.Class << " | "<< RenderFrequency(element.Freq) <<"\n";
+      std::cout << element.ICAO << " | " << element.Class << " | "<< RenderFrequency(element.Freq) << " | ";
+      std::cout << element.Lat << " | " << element.Lon << " | " << (int)element.Channel << " | " << element.ChMode << "\n";
     }
     std::cout << "Enter search key: ";
     std::cin >> SearchKey;
