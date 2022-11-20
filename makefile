@@ -6,13 +6,21 @@ FLAGS = -g
 OBJECTS = ./obj/main.o ./obj/StdDb.o ./obj/CommonUtils.o
 EXECUTABLE = ./bin/NavDbBuilder
 
-$(EXECUTABLE): ./obj/main.o ./obj/StdDb.o  ./obj/CommonUtils.o
+$(EXECUTABLE): ./obj/main.o ./obj/StdDb.o ./obj/CommonUtils.o ./obj/Presentation.o ./obj/MainWindow.o
 	@echo Linking executable
-	@$(CC) ./obj/main.o ./obj/StdDb.o ./obj/CommonUtils.o -o $(EXECUTABLE) $(GTK_CLAUSE)
+	@$(CC) ./obj/main.o ./obj/StdDb.o ./obj/CommonUtils.o ./obj/Presentation.o ./obj/MainWindow.o -o $(EXECUTABLE) $(GTK_CLAUSE)
 
 ./obj/main.o: ./src/main.cpp
 	@echo compiling main.cpp
 	@$(CC) -c ./src/main.cpp -o ./obj/main.o $(GTK_CLAUSE) $(FLAGS)
+
+./obj/MainWindow.o: ./src/Windows/MainWindow.cpp
+	@echo compiling MainWindow.cpp
+	@$(CC) -c ./src/Windows/MainWindow.cpp -o ./obj/MainWindow.o $(GTK_CLAUSE) $(FLAGS)
+
+/obj/Presentation.o: ./src/Presentation/Presentation.cpp
+	@echo compiling Presentation.cpp
+	@$(CC) -c ./src/Presentation/Presentation.cpp -o ./obj/Presentation.o $(GTK_CLAUSE) $(FLAGS)
 
 ./obj/StdDb.o: ./src/StdDb/StdDb.cpp
 	@echo compiling StdDb.cpp
