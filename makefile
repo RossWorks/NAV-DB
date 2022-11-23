@@ -18,7 +18,7 @@ $(EXECUTABLE): ./obj/main.o ./obj/StdDb.o ./obj/CommonUtils.o ./obj/Presentation
 	@echo compiling MainWindow.cpp
 	@$(CC) -c ./src/Windows/MainWindow.cpp -o ./obj/MainWindow.o $(GTK_CLAUSE) $(FLAGS)
 
-/obj/Presentation.o: ./src/Presentation/Presentation.cpp
+./obj/Presentation.o: ./src/Presentation/Presentation.cpp
 	@echo compiling Presentation.cpp
 	@$(CC) -c ./src/Presentation/Presentation.cpp -o ./obj/Presentation.o $(GTK_CLAUSE) $(FLAGS)
 
