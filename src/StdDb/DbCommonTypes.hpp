@@ -32,4 +32,7 @@ const char C_FREQ            = 22;
 const char C_NAVAID_CLASS    = 27;
 const char C_NAVAID_LAT      = 32;
 const char C_NAVAID_LON      = 41;
+const char C_DME_LAT         = 55;
+const char C_DME_LON         = 64;
+const char C_NAVAID_MAGVAR   = 74;
 const char C_BLANK_CHAR      = ' ';

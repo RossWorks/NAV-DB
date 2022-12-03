@@ -1,0 +1,2258 @@
+{
+  "id": "7b84488e-b054-40c1-be1e-ad6e5b558081",
+  "version": "2.0",
+  "name": "OFMdownloader",
+  "url": "https://www.openflightmaps.org",
+  "tests": [{
+    "id": "acf28e12-a657-44fb-afd2-9a37fc3ea136",
+    "name": "EB",
+    "commands": [{
+      "id": "8e22a364-9522-4955-b803-46976ea6e4ed",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "97dcd062-c09c-4254-8177-ccd3735b2490",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1000x1000",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "5ad94b7a-e172-4f06-9a45-37d5035bac29",
+      "comment": "",
+      "command": "click",
+      "target": "id=regionsTitle",
+      "targets": [
+        ["id=regionsTitle", "id"],
+        ["linkText=Regions", "linkText"],
+        ["css=#regionsTitle", "css:finder"],
+        ["xpath=//a[contains(text(),'Regions')]", "xpath:link"],
+        ["xpath=//a[@id='regionsTitle']", "xpath:attributes"],
+        ["xpath=//div[@id='myNavbar']/ul/li[6]/a", "xpath:idRelative"],
+        ["xpath=//li[6]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Regions')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "7a6aa3e5-5a5d-4ec2-a381-550dd7063dbe",
+      "comment": "",
+      "command": "click",
+      "target": "id=1",
+      "targets": [
+        ["id=1", "id"],
+        ["linkText=EB (Belgium)", "linkText"],
+        ["css=#\\31", "css:finder"],
+        ["xpath=//a[contains(text(),'EB (Belgium)')]", "xpath:link"],
+        ["xpath=//a[@id='1']", "xpath:attributes"],
+        ["xpath=//div[@id='myNavbar']/ul/li[6]/ul/li/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, 'https://www.openflightmaps.org/?page_id=802&airac=2212&language=local')]", "xpath:href"],
+        ["xpath=//li[6]/ul/li/a", "xpath:position"],
+        ["xpath=//a[contains(.,'EB (Belgium)')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "5dcf5811-8635-44ed-8de9-e4496fb101fc",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,969)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "511b4e57-1fd9-4917-87ef-dfafff991423",
+      "comment": "",
+      "command": "click",
+      "target": "id=myProduct21",
+      "targets": [
+        ["id=myProduct21", "id"],
+        ["css=#myProduct21", "css:finder"],
+        ["xpath=//button[@id='myProduct21']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadMenu']/div[8]/div/div/button[2]", "xpath:idRelative"],
+        ["xpath=//div[8]/div/div/button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,'ARINC424 1')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "7b376e7f-6ead-45ff-949b-eb6433fa8dcb",
+      "comment": "",
+      "command": "click",
+      "target": "id=url210",
+      "targets": [
+        ["id=url210", "id"],
+        ["css=#url210", "css:finder"],
+        ["xpath=//button[@id='url210']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadList2']/div/div/div/table/tbody/tr[4]/td/button", "xpath:idRelative"],
+        ["xpath=//td/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Download')]", "xpath:innerText"]
+      ],
+      "value": "",
+      "opensWindow": true,
+      "windowHandleName": "win5111",
+      "windowTimeout": 2000
+    }, {
+      "id": "141ba388-327c-4939-881d-a3fe40a6ce93",
+      "comment": "",
+      "command": "pause",
+      "target": "3000",
+      "targets": [],
+      "value": "10"
+    }]
+  }, {
+    "id": "c05103b0-cf8f-42f9-b2aa-c7d0d3f7e650",
+    "name": "ED",
+    "commands": [{
+      "id": "78cb5dc1-ca29-4117-8241-40b2d7543fc6",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "01c299d0-2313-4b94-836a-97cbb66cab98",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1021x847",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "b1526225-c2ce-47ac-9363-987fa9f0071a",
+      "comment": "",
+      "command": "click",
+      "target": "id=regionsTitle",
+      "targets": [
+        ["id=regionsTitle", "id"],
+        ["linkText=Regions", "linkText"],
+        ["css=#regionsTitle", "css:finder"],
+        ["xpath=//a[contains(text(),'Regions')]", "xpath:link"],
+        ["xpath=//a[@id='regionsTitle']", "xpath:attributes"],
+        ["xpath=//div[@id='myNavbar']/ul/li[6]/a", "xpath:idRelative"],
+        ["xpath=//li[6]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Regions')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "45792d56-4e46-41dc-b258-bca13288c9dc",
+      "comment": "",
+      "command": "click",
+      "target": "id=2",
+      "targets": [
+        ["id=2", "id"],
+        ["linkText=ED (Germany)", "linkText"],
+        ["css=#\\32", "css:finder"],
+        ["xpath=//a[contains(text(),'ED (Germany)')]", "xpath:link"],
+        ["xpath=//a[@id='2']", "xpath:attributes"],
+        ["xpath=//div[@id='myNavbar']/ul/li[6]/ul/li[2]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, 'https://www.openflightmaps.org/?page_id=39&airac=2212&language=local')]", "xpath:href"],
+        ["xpath=//li[6]/ul/li[2]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'ED (Germany)')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "f6a135e3-94e1-4dbb-9778-e0dee366832b",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,1691)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "11c13fe8-4aba-4250-880f-fc25c06977be",
+      "comment": "",
+      "command": "click",
+      "target": "id=myProduct21",
+      "targets": [
+        ["id=myProduct21", "id"],
+        ["css=#myProduct21", "css:finder"],
+        ["xpath=//button[@id='myProduct21']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadMenu']/div[8]/div/div/button[2]", "xpath:idRelative"],
+        ["xpath=//div[8]/div/div/button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,'ARINC424 2')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "d63eb26e-3345-43fb-ac0c-a9273912e5a8",
+      "comment": "",
+      "command": "mouseOver",
+      "target": "id=myProduct21",
+      "targets": [
+        ["id=myProduct21", "id"],
+        ["css=#myProduct21", "css:finder"],
+        ["xpath=//button[@id='myProduct21']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadMenu']/div[8]/div/div/button[2]", "xpath:idRelative"],
+        ["xpath=//div[8]/div/div/button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,'ARINC424 2')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "c3c797f3-98ee-42bf-8bee-2f759fedca26",
+      "comment": "",
+      "command": "mouseOut",
+      "target": "id=myProduct21",
+      "targets": [
+        ["id=myProduct21", "id"],
+        ["css=#myProduct21", "css:finder"],
+        ["xpath=//button[@id='myProduct21']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadMenu']/div[8]/div/div/button[2]", "xpath:idRelative"],
+        ["xpath=//div[8]/div/div/button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,'ARINC424 2')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "8bb50818-d6c7-420b-be66-b0f2e0b662ad",
+      "comment": "",
+      "command": "click",
+      "target": "id=url210",
+      "targets": [
+        ["id=url210", "id"],
+        ["css=#url210", "css:finder"],
+        ["xpath=//button[@id='url210']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadList2']/div/div/div/table/tbody/tr[4]/td/button", "xpath:idRelative"],
+        ["xpath=//td/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Download')]", "xpath:innerText"]
+      ],
+      "value": "",
+      "opensWindow": true,
+      "windowHandleName": "win322",
+      "windowTimeout": 2000
+    }, {
+      "id": "ed905222-afc4-4213-a110-a7ed6bb0666f",
+      "comment": "",
+      "command": "pause",
+      "target": "3000",
+      "targets": [],
+      "value": "10"
+    }]
+  }, {
+    "id": "a2449bba-cdd6-4dee-a9fa-f961f2943082",
+    "name": "EF",
+    "commands": [{
+      "id": "2618e969-05af-4900-a56a-5ff4ec0c5f0e",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "2a459f1f-4361-42c9-b278-a454aabf71a0",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1023x847",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "2c303682-23e9-476d-a6a0-300686c052a4",
+      "comment": "",
+      "command": "click",
+      "target": "id=regionsTitle",
+      "targets": [
+        ["id=regionsTitle", "id"],
+        ["linkText=Regions", "linkText"],
+        ["css=#regionsTitle", "css:finder"],
+        ["xpath=//a[contains(text(),'Regions')]", "xpath:link"],
+        ["xpath=//a[@id='regionsTitle']", "xpath:attributes"],
+        ["xpath=//div[@id='myNavbar']/ul/li[6]/a", "xpath:idRelative"],
+        ["xpath=//li[6]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Regions')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "7b0eef08-011f-43ce-bfb5-c0c08714bb8c",
+      "comment": "",
+      "command": "click",
+      "target": "id=3",
+      "targets": [
+        ["id=3", "id"],
+        ["linkText=EF (Finland)", "linkText"],
+        ["css=#\\33", "css:finder"],
+        ["xpath=//a[contains(text(),'EF (Finland)')]", "xpath:link"],
+        ["xpath=//a[@id='3']", "xpath:attributes"],
+        ["xpath=//div[@id='myNavbar']/ul/li[6]/ul/li[3]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, 'https://www.openflightmaps.org/?page_id=914&airac=2212&language=local')]", "xpath:href"],
+        ["xpath=//li[6]/ul/li[3]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'EF (Finland)')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "0bf35ac7-cdcf-4eb9-b79f-eb8608039d15",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,975)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "22caf915-3104-4f79-aa84-ec4fd2d57edf",
+      "comment": "",
+      "command": "click",
+      "target": "id=myProduct11",
+      "targets": [
+        ["id=myProduct11", "id"],
+        ["css=#myProduct11", "css:finder"],
+        ["xpath=//button[@id='myProduct11']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadMenu']/div[5]/div/div/button[2]", "xpath:idRelative"],
+        ["xpath=//button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,'ARINC424 1')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "10faa59e-b4b8-43fb-b774-cb3a4aeafa9a",
+      "comment": "",
+      "command": "click",
+      "target": "id=url110",
+      "targets": [
+        ["id=url110", "id"],
+        ["css=#url110", "css:finder"],
+        ["xpath=//button[@id='url110']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadList1']/div/div/div/table/tbody/tr[4]/td/button", "xpath:idRelative"],
+        ["xpath=//td/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Download')]", "xpath:innerText"]
+      ],
+      "value": "",
+      "opensWindow": true,
+      "windowHandleName": "win756",
+      "windowTimeout": 2000
+    }, {
+      "id": "f743c295-dbd6-4aa3-a94c-6382682e01e4",
+      "comment": "",
+      "command": "pause",
+      "target": "3000",
+      "targets": [],
+      "value": "10"
+    }]
+  }, {
+    "id": "98995049-450c-4f13-9cc9-64720311ec1a",
+    "name": "EH",
+    "commands": [{
+      "id": "36497c61-696a-485f-8d03-8c1a2a0abfe2",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "e3e6b804-5da2-41f2-9c32-b549c7c68390",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1146x847",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "4e46b1be-63de-484b-9569-1447311f69f1",
+      "comment": "",
+      "command": "click",
+      "target": "id=regionsTitle",
+      "targets": [
+        ["id=regionsTitle", "id"],
+        ["linkText=Regions", "linkText"],
+        ["css=#regionsTitle", "css:finder"],
+        ["xpath=//a[contains(text(),'Regions')]", "xpath:link"],
+        ["xpath=//a[@id='regionsTitle']", "xpath:attributes"],
+        ["xpath=//div[@id='myNavbar']/ul/li[6]/a", "xpath:idRelative"],
+        ["xpath=//li[6]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Regions')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "1e3ec370-0750-4deb-8a56-eda7b290f9d7",
+      "comment": "",
+      "command": "click",
+      "target": "id=4",
+      "targets": [
+        ["id=4", "id"],
+        ["linkText=EH (Netherlands)", "linkText"],
+        ["css=#\\34", "css:finder"],
+        ["xpath=//a[contains(text(),'EH (Netherlands)')]", "xpath:link"],
+        ["xpath=//a[@id='4']", "xpath:attributes"],
+        ["xpath=//div[@id='myNavbar']/ul/li[6]/ul/li[4]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, 'https://www.openflightmaps.org/?page_id=814&airac=2212&language=local')]", "xpath:href"],
+        ["xpath=//li[6]/ul/li[4]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'EH (Netherlands)')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "717c731c-7a6a-4b8f-9a9f-8154636f84ca",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,911)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "528932f4-4d52-45b1-a6ba-11d5508020a8",
+      "comment": "",
+      "command": "click",
+      "target": "id=myProduct21",
+      "targets": [
+        ["id=myProduct21", "id"],
+        ["css=#myProduct21", "css:finder"],
+        ["xpath=//button[@id='myProduct21']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadMenu']/div[8]/div/div/button[2]", "xpath:idRelative"],
+        ["xpath=//div[8]/div/div/button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,'ARINC424 2')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "2f08f3e5-03cf-452c-8137-314f2f320e90",
+      "comment": "",
+      "command": "mouseOver",
+      "target": "id=myProduct21",
+      "targets": [
+        ["id=myProduct21", "id"],
+        ["css=#myProduct21", "css:finder"],
+        ["xpath=//button[@id='myProduct21']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadMenu']/div[8]/div/div/button[2]", "xpath:idRelative"],
+        ["xpath=//div[8]/div/div/button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,'ARINC424 2')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "b13f42dc-9ba2-4c4f-8d20-e7f6548ae0f4",
+      "comment": "",
+      "command": "mouseOut",
+      "target": "id=myProduct21",
+      "targets": [
+        ["id=myProduct21", "id"],
+        ["css=#myProduct21", "css:finder"],
+        ["xpath=//button[@id='myProduct21']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadMenu']/div[8]/div/div/button[2]", "xpath:idRelative"],
+        ["xpath=//div[8]/div/div/button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,'ARINC424 2')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "4934295e-211b-4131-bfca-282a9ab6f272",
+      "comment": "",
+      "command": "click",
+      "target": "id=url210",
+      "targets": [
+        ["id=url210", "id"],
+        ["css=#url210", "css:finder"],
+        ["xpath=//button[@id='url210']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadList2']/div/div/div/table/tbody/tr[4]/td/button", "xpath:idRelative"],
+        ["xpath=//td/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Download')]", "xpath:innerText"]
+      ],
+      "value": "",
+      "opensWindow": true,
+      "windowHandleName": "win1129",
+      "windowTimeout": 2000
+    }, {
+      "id": "f823a3a9-4097-499b-bbe9-b019cd4d5671",
+      "comment": "",
+      "command": "pause",
+      "target": "3000",
+      "targets": [],
+      "value": "10"
+    }]
+  }, {
+    "id": "2db75607-6e3d-4c60-a1c9-9b000ce6a95b",
+    "name": "EK",
+    "commands": [{
+      "id": "c69b31ed-02f0-4e52-bbb1-f995ecd2f370",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "42a03119-b41c-4dea-a905-f067dca6de4e",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1119x847",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "d30664df-e043-470e-94db-1897a50f992d",
+      "comment": "",
+      "command": "click",
+      "target": "id=regionsTitle",
+      "targets": [
+        ["id=regionsTitle", "id"],
+        ["linkText=Regions", "linkText"],
+        ["css=#regionsTitle", "css:finder"],
+        ["xpath=//a[contains(text(),'Regions')]", "xpath:link"],
+        ["xpath=//a[@id='regionsTitle']", "xpath:attributes"],
+        ["xpath=//div[@id='myNavbar']/ul/li[6]/a", "xpath:idRelative"],
+        ["xpath=//li[6]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Regions')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "279a75da-ecb6-416d-9bf1-de1a4d37eea9",
+      "comment": "",
+      "command": "click",
+      "target": "id=5",
+      "targets": [
+        ["id=5", "id"],
+        ["linkText=EK (Denmark)", "linkText"],
+        ["css=#\\35", "css:finder"],
+        ["xpath=//a[contains(text(),'EK (Denmark)')]", "xpath:link"],
+        ["xpath=//a[@id='5']", "xpath:attributes"],
+        ["xpath=//div[@id='myNavbar']/ul/li[6]/ul/li[5]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, 'https://www.openflightmaps.org/?page_id=203&airac=2212&language=local')]", "xpath:href"],
+        ["xpath=//li[6]/ul/li[5]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'EK (Denmark)')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "4edccc65-6ebb-4fba-81d9-dc866d1ee740",
+      "comment": "",
+      "command": "click",
+      "target": "id=myProduct21",
+      "targets": [
+        ["id=myProduct21", "id"],
+        ["css=#myProduct21", "css:finder"],
+        ["xpath=//button[@id='myProduct21']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadMenu']/div[8]/div/div/button[2]", "xpath:idRelative"],
+        ["xpath=//div[8]/div/div/button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,'ARINC424 1')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "95b119f3-ea89-4dc1-8ee4-74779d148cf8",
+      "comment": "",
+      "command": "click",
+      "target": "id=url210",
+      "targets": [
+        ["id=url210", "id"],
+        ["css=#url210", "css:finder"],
+        ["xpath=//button[@id='url210']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadList2']/div/div/div/table/tbody/tr[4]/td/button", "xpath:idRelative"],
+        ["xpath=//td/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Download')]", "xpath:innerText"]
+      ],
+      "value": "",
+      "opensWindow": true,
+      "windowHandleName": "win1935",
+      "windowTimeout": 2000
+    }, {
+      "id": "67ebae60-2ae9-4df0-b816-e6a1f907d141",
+      "comment": "",
+      "command": "pause",
+      "target": "10000",
+      "targets": [],
+      "value": "10"
+    }, {
+      "id": "593854d6-c9c4-47c8-8c6a-577d70fd73e4",
+      "comment": "",
+      "command": "pause",
+      "target": "3000",
+      "targets": [],
+      "value": "10"
+    }]
+  }, {
+    "id": "c20fd93c-47ce-4d4f-935c-743318c64b49",
+    "name": "EP",
+    "commands": [{
+      "id": "313e1681-8dc5-46cf-85a0-ed264f75771c",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "496b7289-165d-441b-91c0-530fa026bec9",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1160x847",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "31f3a209-0825-46e7-b770-7db3d35f4cbf",
+      "comment": "",
+      "command": "click",
+      "target": "id=regionsTitle",
+      "targets": [
+        ["id=regionsTitle", "id"],
+        ["linkText=Regions", "linkText"],
+        ["css=#regionsTitle", "css:finder"],
+        ["xpath=//a[contains(text(),'Regions')]", "xpath:link"],
+        ["xpath=//a[@id='regionsTitle']", "xpath:attributes"],
+        ["xpath=//div[@id='myNavbar']/ul/li[6]/a", "xpath:idRelative"],
+        ["xpath=//li[6]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Regions')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "9b1f336c-156b-4639-b298-d7f8a8a993fe",
+      "comment": "",
+      "command": "click",
+      "target": "id=6",
+      "targets": [
+        ["id=6", "id"],
+        ["linkText=EP (Poland)", "linkText"],
+        ["css=#\\36", "css:finder"],
+        ["xpath=//a[contains(text(),'EP (Poland)')]", "xpath:link"],
+        ["xpath=//a[@id='6']", "xpath:attributes"],
+        ["xpath=//div[@id='myNavbar']/ul/li[6]/ul/li[6]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, 'https://www.openflightmaps.org/?page_id=810&airac=2212&language=local')]", "xpath:href"],
+        ["xpath=//li[6]/ul/li[6]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'EP (Poland)')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "9ec3cfbf-df1a-4e1d-8102-ba73fb946963",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,1030)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "89b726b0-6d35-4f55-b25c-94430a3fe605",
+      "comment": "",
+      "command": "click",
+      "target": "id=myProduct21",
+      "targets": [
+        ["id=myProduct21", "id"],
+        ["css=#myProduct21", "css:finder"],
+        ["xpath=//button[@id='myProduct21']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadMenu']/div[8]/div/div/button[2]", "xpath:idRelative"],
+        ["xpath=//div[8]/div/div/button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,'ARINC424 1')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "01c76090-d34c-498c-b818-7bdac16be247",
+      "comment": "",
+      "command": "mouseOver",
+      "target": "id=myProduct21",
+      "targets": [
+        ["id=myProduct21", "id"],
+        ["css=#myProduct21", "css:finder"],
+        ["xpath=//button[@id='myProduct21']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadMenu']/div[8]/div/div/button[2]", "xpath:idRelative"],
+        ["xpath=//div[8]/div/div/button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,'ARINC424 1')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "9cb85948-3c69-4408-8a2c-94f45a8bf8d6",
+      "comment": "",
+      "command": "mouseOut",
+      "target": "id=myProduct21",
+      "targets": [
+        ["id=myProduct21", "id"],
+        ["css=#myProduct21", "css:finder"],
+        ["xpath=//button[@id='myProduct21']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadMenu']/div[8]/div/div/button[2]", "xpath:idRelative"],
+        ["xpath=//div[8]/div/div/button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,'ARINC424 1')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "4535b5a2-bd9d-48de-a953-a8e3d463706a",
+      "comment": "",
+      "command": "click",
+      "target": "id=url210",
+      "targets": [
+        ["id=url210", "id"],
+        ["css=#url210", "css:finder"],
+        ["xpath=//button[@id='url210']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadList2']/div/div/div/table/tbody/tr[4]/td/button", "xpath:idRelative"],
+        ["xpath=//td/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Download')]", "xpath:innerText"]
+      ],
+      "value": "",
+      "opensWindow": true,
+      "windowHandleName": "win7970",
+      "windowTimeout": 2000
+    }, {
+      "id": "d598941e-51db-477e-b34e-b342e80b19ba",
+      "comment": "",
+      "command": "pause",
+      "target": "3000",
+      "targets": [],
+      "value": "10"
+    }]
+  }, {
+    "id": "b538cf62-5a31-416e-8599-38de27c6003d",
+    "name": "ES",
+    "commands": [{
+      "id": "41b53306-e2c2-47ed-9670-2221ebd852e1",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "ea245d7c-e008-4272-9108-3e89ac14caaa",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1175x847",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "8d4aa707-4cb0-4c6f-828e-23de8ef0b9fd",
+      "comment": "",
+      "command": "click",
+      "target": "id=regionsTitle",
+      "targets": [
+        ["id=regionsTitle", "id"],
+        ["linkText=Regions", "linkText"],
+        ["css=#regionsTitle", "css:finder"],
+        ["xpath=//a[contains(text(),'Regions')]", "xpath:link"],
+        ["xpath=//a[@id='regionsTitle']", "xpath:attributes"],
+        ["xpath=//div[@id='myNavbar']/ul/li[6]/a", "xpath:idRelative"],
+        ["xpath=//li[6]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Regions')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "7450006c-e813-4ded-88a2-8714f052de34",
+      "comment": "",
+      "command": "click",
+      "target": "id=7",
+      "targets": [
+        ["id=7", "id"],
+        ["linkText=ES (Sweden)", "linkText"],
+        ["css=#\\37", "css:finder"],
+        ["xpath=//a[contains(text(),'ES (Sweden)')]", "xpath:link"],
+        ["xpath=//a[@id='7']", "xpath:attributes"],
+        ["xpath=//div[@id='myNavbar']/ul/li[6]/ul/li[7]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, 'https://www.openflightmaps.org/?page_id=694&airac=2212&language=local')]", "xpath:href"],
+        ["xpath=//li[7]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'ES (Sweden)')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "d19b4e6c-54e3-44b5-9fdf-ddc2b6592155",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,8074)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "47974aec-f6c7-4c8f-94ac-c60fca5054f7",
+      "comment": "",
+      "command": "click",
+      "target": "id=bag11",
+      "targets": [
+        ["id=bag11", "id"],
+        ["css=#bag11", "css:finder"],
+        ["xpath=//span[@id='bag11']", "xpath:attributes"],
+        ["xpath=//button[@id='myProduct11']/span", "xpath:idRelative"],
+        ["xpath=//button[2]/span", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "a9c461f9-da78-4ab6-a9ca-298905c6476f",
+      "comment": "",
+      "command": "mouseOver",
+      "target": "id=bag11",
+      "targets": [
+        ["id=bag11", "id"],
+        ["css=#bag11", "css:finder"],
+        ["xpath=//span[@id='bag11']", "xpath:attributes"],
+        ["xpath=//button[@id='myProduct11']/span", "xpath:idRelative"],
+        ["xpath=//button[2]/span", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "f7e709ae-836c-49aa-beea-6f0db38a690f",
+      "comment": "",
+      "command": "mouseOut",
+      "target": "id=bag11",
+      "targets": [
+        ["id=bag11", "id"],
+        ["css=#bag11", "css:finder"],
+        ["xpath=//span[@id='bag11']", "xpath:attributes"],
+        ["xpath=//button[@id='myProduct11']/span", "xpath:idRelative"],
+        ["xpath=//button[2]/span", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "654c91d9-6e56-4aa6-9c1d-03a065154864",
+      "comment": "",
+      "command": "click",
+      "target": "id=url110",
+      "targets": [
+        ["id=url110", "id"],
+        ["css=#url110", "css:finder"],
+        ["xpath=//button[@id='url110']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadList1']/div/div/div/table/tbody/tr[4]/td/button", "xpath:idRelative"],
+        ["xpath=//td/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Download')]", "xpath:innerText"]
+      ],
+      "value": "",
+      "opensWindow": true,
+      "windowHandleName": "win9671",
+      "windowTimeout": 2000
+    }, {
+      "id": "d9604580-b860-45e3-867b-1d269daa9998",
+      "comment": "",
+      "command": "pause",
+      "target": "3000",
+      "targets": [],
+      "value": "10"
+    }]
+  }, {
+    "id": "ef71f95f-c8b9-4c16-9c8b-fef3c9ba3344",
+    "name": "FA",
+    "commands": [{
+      "id": "aab7eee5-8e7c-4712-b974-1ca9a2af12ec",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "32231c16-ba0f-461c-aca9-095c1015d613",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1127x847",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "cf048616-2425-47c5-999c-78a8755f59c5",
+      "comment": "",
+      "command": "click",
+      "target": "id=regionsTitle",
+      "targets": [
+        ["id=regionsTitle", "id"],
+        ["linkText=Regions", "linkText"],
+        ["css=#regionsTitle", "css:finder"],
+        ["xpath=//a[contains(text(),'Regions')]", "xpath:link"],
+        ["xpath=//a[@id='regionsTitle']", "xpath:attributes"],
+        ["xpath=//div[@id='myNavbar']/ul/li[6]/a", "xpath:idRelative"],
+        ["xpath=//li[6]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Regions')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "00bb2dae-05b1-4601-82a2-724daa26035e",
+      "comment": "",
+      "command": "click",
+      "target": "id=8",
+      "targets": [
+        ["id=8", "id"],
+        ["linkText=FA (South Africa)", "linkText"],
+        ["css=#\\38", "css:finder"],
+        ["xpath=//a[contains(text(),'FA (South Africa)')]", "xpath:link"],
+        ["xpath=//a[@id='8']", "xpath:attributes"],
+        ["xpath=//div[@id='myNavbar']/ul/li[6]/ul/li[8]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, 'https://www.openflightmaps.org/?page_id=969&airac=2212&language=local')]", "xpath:href"],
+        ["xpath=//li[8]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'FA (South Africa)')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "1c02c391-0c9b-44ed-9373-4eff5f42573a",
+      "comment": "",
+      "command": "click",
+      "target": "id=myProduct21",
+      "targets": [
+        ["id=myProduct21", "id"],
+        ["css=#myProduct21", "css:finder"],
+        ["xpath=//button[@id='myProduct21']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadMenu']/div[8]/div/div/button[2]", "xpath:idRelative"],
+        ["xpath=//div[8]/div/div/button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,'ARINC424 1')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "1fa9ffd0-85a5-400d-9daa-8c478565acc5",
+      "comment": "",
+      "command": "click",
+      "target": "id=url210",
+      "targets": [
+        ["id=url210", "id"],
+        ["css=#url210", "css:finder"],
+        ["xpath=//button[@id='url210']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadList2']/div/div/div/table/tbody/tr[4]/td/button", "xpath:idRelative"],
+        ["xpath=//td/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Download')]", "xpath:innerText"]
+      ],
+      "value": "",
+      "opensWindow": true,
+      "windowHandleName": "win9704",
+      "windowTimeout": 2000
+    }, {
+      "id": "c3eb575b-3e0d-4aa4-b86d-bac861b09832",
+      "comment": "",
+      "command": "pause",
+      "target": "3000",
+      "targets": [],
+      "value": "10"
+    }]
+  }, {
+    "id": "f8485859-3135-4d19-8b5b-f8943b9a8fff",
+    "name": "FY",
+    "commands": [{
+      "id": "c0650e90-4df0-42df-8f29-8ce48a04d413",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "1df182eb-fc8d-469e-b5c8-0a1f7b1c48c6",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1159x847",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "df1be6fa-d72d-4bd0-b781-0a1eb24dd69b",
+      "comment": "",
+      "command": "click",
+      "target": "id=regionsTitle",
+      "targets": [
+        ["id=regionsTitle", "id"],
+        ["linkText=Regions", "linkText"],
+        ["css=#regionsTitle", "css:finder"],
+        ["xpath=//a[contains(text(),'Regions')]", "xpath:link"],
+        ["xpath=//a[@id='regionsTitle']", "xpath:attributes"],
+        ["xpath=//div[@id='myNavbar']/ul/li[6]/a", "xpath:idRelative"],
+        ["xpath=//li[6]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Regions')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "aafa9905-02c3-4178-a0ca-5c84f61b5308",
+      "comment": "",
+      "command": "click",
+      "target": "id=9",
+      "targets": [
+        ["id=9", "id"],
+        ["linkText=FY (Namibia)", "linkText"],
+        ["css=#\\39", "css:finder"],
+        ["xpath=//a[contains(text(),'FY (Namibia)')]", "xpath:link"],
+        ["xpath=//a[@id='9']", "xpath:attributes"],
+        ["xpath=//div[@id='myNavbar']/ul/li[6]/ul/li[9]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, 'https://www.openflightmaps.org/?page_id=849&airac=2212&language=local')]", "xpath:href"],
+        ["xpath=//li[9]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'FY (Namibia)')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "6a6ecf7f-8a5f-4280-b18b-912e073a6203",
+      "comment": "",
+      "command": "click",
+      "target": "id=myProduct21",
+      "targets": [
+        ["id=myProduct21", "id"],
+        ["css=#myProduct21", "css:finder"],
+        ["xpath=//button[@id='myProduct21']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadMenu']/div[8]/div/div/button[2]", "xpath:idRelative"],
+        ["xpath=//div[8]/div/div/button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,'ARINC424 1')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "94ef8343-ffbe-4a89-ae8a-3606724f8ae5",
+      "comment": "",
+      "command": "click",
+      "target": "id=url210",
+      "targets": [
+        ["id=url210", "id"],
+        ["css=#url210", "css:finder"],
+        ["xpath=//button[@id='url210']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadList2']/div/div/div/table/tbody/tr[4]/td/button", "xpath:idRelative"],
+        ["xpath=//td/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Download')]", "xpath:innerText"]
+      ],
+      "value": "",
+      "opensWindow": true,
+      "windowHandleName": "win7938",
+      "windowTimeout": 2000
+    }, {
+      "id": "1d3d64ed-0701-494d-8ae3-162abb1152f5",
+      "comment": "",
+      "command": "pause",
+      "target": "3000",
+      "targets": [],
+      "value": "10"
+    }]
+  }, {
+    "id": "ad354789-d5ec-499f-bc9c-c6772a654b3b",
+    "name": "LB",
+    "commands": [{
+      "id": "31c594ba-b5b3-40de-9899-e24f0b585ba5",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "f0de68ca-44da-4faa-8d21-25c4b66149c8",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1075x847",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "1e3a184b-7b21-4284-b5be-585ba0531492",
+      "comment": "",
+      "command": "click",
+      "target": "id=regionsTitle",
+      "targets": [
+        ["id=regionsTitle", "id"],
+        ["linkText=Regions", "linkText"],
+        ["css=#regionsTitle", "css:finder"],
+        ["xpath=//a[contains(text(),'Regions')]", "xpath:link"],
+        ["xpath=//a[@id='regionsTitle']", "xpath:attributes"],
+        ["xpath=//div[@id='myNavbar']/ul/li[6]/a", "xpath:idRelative"],
+        ["xpath=//li[6]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Regions')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "52d4a571-e180-42ce-9c9f-824366edb24c",
+      "comment": "",
+      "command": "click",
+      "target": "id=10",
+      "targets": [
+        ["id=10", "id"],
+        ["linkText=LB (Bulgaria)", "linkText"],
+        ["css=#\\31 0", "css:finder"],
+        ["xpath=//a[contains(text(),'LB (Bulgaria)')]", "xpath:link"],
+        ["xpath=//a[@id='10']", "xpath:attributes"],
+        ["xpath=//div[@id='myNavbar']/ul/li[6]/ul/li[10]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, 'https://www.openflightmaps.org/?page_id=550&airac=2212&language=local')]", "xpath:href"],
+        ["xpath=//li[10]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'LB (Bulgaria)')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "12ea4dac-ec3a-47ce-aa5a-49bc40287023",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,1027)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "d911f038-4a82-43a2-8ca1-bad3afa95e70",
+      "comment": "",
+      "command": "click",
+      "target": "id=myProduct21",
+      "targets": [
+        ["id=myProduct21", "id"],
+        ["css=#myProduct21", "css:finder"],
+        ["xpath=//button[@id='myProduct21']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadMenu']/div[8]/div/div/button[2]", "xpath:idRelative"],
+        ["xpath=//div[8]/div/div/button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,'ARINC424 1')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "89345a6f-ce77-4b6f-b17f-656a9df4ea21",
+      "comment": "",
+      "command": "mouseOver",
+      "target": "id=myProduct21",
+      "targets": [
+        ["id=myProduct21", "id"],
+        ["css=#myProduct21", "css:finder"],
+        ["xpath=//button[@id='myProduct21']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadMenu']/div[8]/div/div/button[2]", "xpath:idRelative"],
+        ["xpath=//div[8]/div/div/button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,'ARINC424 1')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "7828ce77-4e9b-4cbd-b45c-abee2515b37c",
+      "comment": "",
+      "command": "mouseOut",
+      "target": "id=myProduct21",
+      "targets": [
+        ["id=myProduct21", "id"],
+        ["css=#myProduct21", "css:finder"],
+        ["xpath=//button[@id='myProduct21']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadMenu']/div[8]/div/div/button[2]", "xpath:idRelative"],
+        ["xpath=//div[8]/div/div/button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,'ARINC424 1')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "eb63288e-7d33-41af-8c31-60258337757b",
+      "comment": "",
+      "command": "click",
+      "target": "id=url210",
+      "targets": [
+        ["id=url210", "id"],
+        ["css=#url210", "css:finder"],
+        ["xpath=//button[@id='url210']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadList2']/div/div/div/table/tbody/tr[4]/td/button", "xpath:idRelative"],
+        ["xpath=//td/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Download')]", "xpath:innerText"]
+      ],
+      "value": "",
+      "opensWindow": true,
+      "windowHandleName": "win6818",
+      "windowTimeout": 2000
+    }, {
+      "id": "81b7710b-6b74-4d8a-b6e1-0d0da11a786b",
+      "comment": "",
+      "command": "pause",
+      "target": "3000",
+      "targets": [],
+      "value": "10"
+    }]
+  }, {
+    "id": "55d94f7d-7df5-4bff-8192-6e45f244e66d",
+    "name": "LD",
+    "commands": [{
+      "id": "0052d4b2-7f5a-4fa5-8a48-d393b0d239cd",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "90eb385e-ccac-4b4f-b5a4-95f702851388",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1173x847",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "95bd2eeb-dd7a-4482-9b5c-8d1d73974920",
+      "comment": "",
+      "command": "click",
+      "target": "id=regionsTitle",
+      "targets": [
+        ["id=regionsTitle", "id"],
+        ["linkText=Regions", "linkText"],
+        ["css=#regionsTitle", "css:finder"],
+        ["xpath=//a[contains(text(),'Regions')]", "xpath:link"],
+        ["xpath=//a[@id='regionsTitle']", "xpath:attributes"],
+        ["xpath=//div[@id='myNavbar']/ul/li[6]/a", "xpath:idRelative"],
+        ["xpath=//li[6]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Regions')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "f2edb9ee-4a2b-4be2-9505-9f3208726b6d",
+      "comment": "",
+      "command": "click",
+      "target": "id=11",
+      "targets": [
+        ["id=11", "id"],
+        ["linkText=LD (Croatia)", "linkText"],
+        ["css=#\\31 1", "css:finder"],
+        ["xpath=//a[contains(text(),'LD (Croatia)')]", "xpath:link"],
+        ["xpath=//a[@id='11']", "xpath:attributes"],
+        ["xpath=//div[@id='myNavbar']/ul/li[6]/ul/li[11]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, 'https://www.openflightmaps.org/?page_id=844&airac=2212&language=local')]", "xpath:href"],
+        ["xpath=//li[11]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'LD (Croatia)')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "860d4df3-f729-4b90-9e72-7bca5c22302c",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,1627)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "ec255fe0-b756-4b0b-93f9-2b9bcb22f81c",
+      "comment": "",
+      "command": "click",
+      "target": "id=myProduct21",
+      "targets": [
+        ["id=myProduct21", "id"],
+        ["css=#myProduct21", "css:finder"],
+        ["xpath=//button[@id='myProduct21']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadMenu']/div[8]/div/div/button[2]", "xpath:idRelative"],
+        ["xpath=//div[8]/div/div/button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,'ARINC424 1')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "7f852297-2d59-49ba-84d1-348ad27bb309",
+      "comment": "",
+      "command": "click",
+      "target": "id=url210",
+      "targets": [
+        ["id=url210", "id"],
+        ["css=#url210", "css:finder"],
+        ["xpath=//button[@id='url210']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadList2']/div/div/div/table/tbody/tr[4]/td/button", "xpath:idRelative"],
+        ["xpath=//td/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Download')]", "xpath:innerText"]
+      ],
+      "value": "",
+      "opensWindow": true,
+      "windowHandleName": "win9551",
+      "windowTimeout": 2000
+    }, {
+      "id": "43a7bebd-4882-47ac-b864-2df95773eba3",
+      "comment": "",
+      "command": "pause",
+      "target": "3000",
+      "targets": [],
+      "value": "10"
+    }]
+  }, {
+    "id": "3b9cc721-7ff4-4b6a-b567-cd61fed5f489",
+    "name": "LG",
+    "commands": [{
+      "id": "473be844-39ba-450f-b144-82d161e28b03",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "d005cf2f-4afc-4177-9e68-35b1ea460a68",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1056x847",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "381decab-6d35-4bcd-a917-df3eb943b61a",
+      "comment": "",
+      "command": "click",
+      "target": "id=regionsTitle",
+      "targets": [
+        ["id=regionsTitle", "id"],
+        ["linkText=Regions", "linkText"],
+        ["css=#regionsTitle", "css:finder"],
+        ["xpath=//a[contains(text(),'Regions')]", "xpath:link"],
+        ["xpath=//a[@id='regionsTitle']", "xpath:attributes"],
+        ["xpath=//div[@id='myNavbar']/ul/li[6]/a", "xpath:idRelative"],
+        ["xpath=//li[6]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Regions')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "fe0985bf-eaeb-49bc-b316-1738ac121fe8",
+      "comment": "",
+      "command": "click",
+      "target": "id=12",
+      "targets": [
+        ["id=12", "id"],
+        ["linkText=LG (Greece)", "linkText"],
+        ["css=#\\31 2", "css:finder"],
+        ["xpath=//a[contains(text(),'LG (Greece)')]", "xpath:link"],
+        ["xpath=//a[@id='12']", "xpath:attributes"],
+        ["xpath=//div[@id='myNavbar']/ul/li[6]/ul/li[12]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, 'https://www.openflightmaps.org/?page_id=851&airac=2212&language=local')]", "xpath:href"],
+        ["xpath=//li[12]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'LG (Greece)')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "3e8fd4ae-879b-4672-a054-02a715b4b674",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,1048)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "cd8ea1d9-3ffc-4ae1-b832-d3b19a1be5ca",
+      "comment": "",
+      "command": "click",
+      "target": "id=myProduct21",
+      "targets": [
+        ["id=myProduct21", "id"],
+        ["css=#myProduct21", "css:finder"],
+        ["xpath=//button[@id='myProduct21']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadMenu']/div[8]/div/div/button[2]", "xpath:idRelative"],
+        ["xpath=//div[8]/div/div/button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,'ARINC424 1')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "79faaf0d-a6c4-4f74-921f-168f8a69fb94",
+      "comment": "",
+      "command": "click",
+      "target": "id=url210",
+      "targets": [
+        ["id=url210", "id"],
+        ["css=#url210", "css:finder"],
+        ["xpath=//button[@id='url210']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadList2']/div/div/div/table/tbody/tr[4]/td/button", "xpath:idRelative"],
+        ["xpath=//td/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Download')]", "xpath:innerText"]
+      ],
+      "value": "",
+      "opensWindow": true,
+      "windowHandleName": "win1463",
+      "windowTimeout": 2000
+    }, {
+      "id": "6e7b0976-9bfb-43f4-84d1-54359de82bc3",
+      "comment": "",
+      "command": "pause",
+      "target": "3000",
+      "targets": [],
+      "value": "10"
+    }]
+  }, {
+    "id": "4bf9c7eb-717a-4724-8ad9-6cfb9725b692",
+    "name": "LH",
+    "commands": [{
+      "id": "b2c66fa2-4d80-4e99-83b0-e3f194534be6",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "76ffd4d4-300e-4b81-b80a-3c21bc225127",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1083x847",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "ffd3096f-6baa-49a8-b2be-50f3544a86e0",
+      "comment": "",
+      "command": "click",
+      "target": "id=regionsTitle",
+      "targets": [
+        ["id=regionsTitle", "id"],
+        ["linkText=Regions", "linkText"],
+        ["css=#regionsTitle", "css:finder"],
+        ["xpath=//a[contains(text(),'Regions')]", "xpath:link"],
+        ["xpath=//a[@id='regionsTitle']", "xpath:attributes"],
+        ["xpath=//div[@id='myNavbar']/ul/li[6]/a", "xpath:idRelative"],
+        ["xpath=//li[6]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Regions')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "0da5987c-b796-40a9-9661-8e4863428613",
+      "comment": "",
+      "command": "click",
+      "target": "id=13",
+      "targets": [
+        ["id=13", "id"],
+        ["linkText=LH (Hungary)", "linkText"],
+        ["css=#\\31 3", "css:finder"],
+        ["xpath=//a[contains(text(),'LH (Hungary)')]", "xpath:link"],
+        ["xpath=//a[@id='13']", "xpath:attributes"],
+        ["xpath=//div[@id='myNavbar']/ul/li[6]/ul/li[13]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, 'https://www.openflightmaps.org/?page_id=29&airac=2212&language=local')]", "xpath:href"],
+        ["xpath=//li[13]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'LH (Hungary)')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "e1a6c023-5e4f-40ed-8d6d-5c298d5a550b",
+      "comment": "",
+      "command": "click",
+      "target": "id=myProduct21",
+      "targets": [
+        ["id=myProduct21", "id"],
+        ["css=#myProduct21", "css:finder"],
+        ["xpath=//button[@id='myProduct21']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadMenu']/div[8]/div/div/button[2]", "xpath:idRelative"],
+        ["xpath=//div[8]/div/div/button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,'ARINC424 1')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "590bb750-b67e-4846-9835-2947f26d527b",
+      "comment": "",
+      "command": "click",
+      "target": "id=url210",
+      "targets": [
+        ["id=url210", "id"],
+        ["css=#url210", "css:finder"],
+        ["xpath=//button[@id='url210']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadList2']/div/div/div/table/tbody/tr[4]/td/button", "xpath:idRelative"],
+        ["xpath=//td/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Download')]", "xpath:innerText"]
+      ],
+      "value": "",
+      "opensWindow": true,
+      "windowHandleName": "win8928",
+      "windowTimeout": 2000
+    }, {
+      "id": "905cd5c2-0fb0-4a09-8af7-1ef6616772d4",
+      "comment": "",
+      "command": "pause",
+      "target": "3000",
+      "targets": [],
+      "value": "10"
+    }]
+  }, {
+    "id": "68094009-e7db-46cd-8da4-253424b20d2c",
+    "name": "LI",
+    "commands": [{
+      "id": "dc092153-625d-4cb8-afc5-2cef67c0877e",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "f875148f-0f0e-4c47-8215-b5f30e1117f5",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "834x847",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "f3760af6-513c-44f7-b1f0-907b32b0d252",
+      "comment": "",
+      "command": "click",
+      "target": "id=regionsTitle",
+      "targets": [
+        ["id=regionsTitle", "id"],
+        ["linkText=Regions", "linkText"],
+        ["css=#regionsTitle", "css:finder"],
+        ["xpath=//a[contains(text(),'Regions')]", "xpath:link"],
+        ["xpath=//a[@id='regionsTitle']", "xpath:attributes"],
+        ["xpath=//div[@id='myNavbar']/ul/li[6]/a", "xpath:idRelative"],
+        ["xpath=//li[6]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Regions')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "9cdb2761-418e-4419-b05a-ec2acc7390ac",
+      "comment": "",
+      "command": "click",
+      "target": "id=14",
+      "targets": [
+        ["id=14", "id"],
+        ["linkText=LI (Italy)", "linkText"],
+        ["css=#\\31 4", "css:finder"],
+        ["xpath=//a[contains(text(),'LI (Italy)')]", "xpath:link"],
+        ["xpath=//a[@id='14']", "xpath:attributes"],
+        ["xpath=//div[@id='myNavbar']/ul/li[6]/ul/li[14]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, 'https://www.openflightmaps.org/?page_id=929&airac=2212&language=local')]", "xpath:href"],
+        ["xpath=//li[14]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'LI (Italy)')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "52f24edb-150e-4e38-ad93-9fe12af8e5cd",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,1107)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "fa7e2b56-51da-4708-92b7-936f3c48e500",
+      "comment": "",
+      "command": "click",
+      "target": "id=myProduct21",
+      "targets": [
+        ["id=myProduct21", "id"],
+        ["css=#myProduct21", "css:finder"],
+        ["xpath=//button[@id='myProduct21']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadMenu']/div[8]/div/div/button[2]", "xpath:idRelative"],
+        ["xpath=//div[8]/div/div/button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,'ARINC424 1')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "22f5b8f0-7f30-430d-bfbd-bcc5b3738e99",
+      "comment": "",
+      "command": "click",
+      "target": "id=url210",
+      "targets": [
+        ["id=url210", "id"],
+        ["css=#url210", "css:finder"],
+        ["xpath=//button[@id='url210']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadList2']/div/div/div/table/tbody/tr[4]/td/button", "xpath:idRelative"],
+        ["xpath=//td/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Download')]", "xpath:innerText"]
+      ],
+      "value": "",
+      "opensWindow": true,
+      "windowHandleName": "win9204",
+      "windowTimeout": 2000
+    }, {
+      "id": "4fb3d632-6e9c-42e0-aa6d-0fa73d6a6e4a",
+      "comment": "",
+      "command": "pause",
+      "target": "3000",
+      "targets": [],
+      "value": "10"
+    }]
+  }, {
+    "id": "afb46f23-1231-4c55-8804-30b6a1e7b8ab",
+    "name": "LJ",
+    "commands": [{
+      "id": "f87b5b93-b493-47bf-91a1-4e4138bc2cb9",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "3227f0bd-745d-4377-bad8-18b9964bf78c",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "933x847",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "86f674ea-bccc-4fa6-b453-70bc457a4897",
+      "comment": "",
+      "command": "click",
+      "target": "id=regionsTitle",
+      "targets": [
+        ["id=regionsTitle", "id"],
+        ["linkText=Regions", "linkText"],
+        ["css=#regionsTitle", "css:finder"],
+        ["xpath=//a[contains(text(),'Regions')]", "xpath:link"],
+        ["xpath=//a[@id='regionsTitle']", "xpath:attributes"],
+        ["xpath=//div[@id='myNavbar']/ul/li[6]/a", "xpath:idRelative"],
+        ["xpath=//li[6]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Regions')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "909a5df4-5df8-4ec1-8937-5b6071198d7c",
+      "comment": "",
+      "command": "click",
+      "target": "id=15",
+      "targets": [
+        ["id=15", "id"],
+        ["linkText=LJ (Slovenia)", "linkText"],
+        ["css=#\\31 5", "css:finder"],
+        ["xpath=//a[contains(text(),'LJ (Slovenia)')]", "xpath:link"],
+        ["xpath=//a[@id='15']", "xpath:attributes"],
+        ["xpath=//div[@id='myNavbar']/ul/li[6]/ul/li[15]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, 'https://www.openflightmaps.org/?page_id=448&airac=2212&language=local')]", "xpath:href"],
+        ["xpath=//li[15]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'LJ (Slovenia)')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "caf9165e-3803-4c60-ad8b-15f3cbadc50f",
+      "comment": "",
+      "command": "click",
+      "target": "id=bag21",
+      "targets": [
+        ["id=bag21", "id"],
+        ["css=#bag21", "css:finder"],
+        ["xpath=//span[@id='bag21']", "xpath:attributes"],
+        ["xpath=//button[@id='myProduct21']/span", "xpath:idRelative"],
+        ["xpath=//div[8]/div/div/button[2]/span", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "000e6fad-5233-4669-99a6-74a6cb1fe2b2",
+      "comment": "",
+      "command": "mouseOver",
+      "target": "id=bag21",
+      "targets": [
+        ["id=bag21", "id"],
+        ["css=#bag21", "css:finder"],
+        ["xpath=//span[@id='bag21']", "xpath:attributes"],
+        ["xpath=//button[@id='myProduct21']/span", "xpath:idRelative"],
+        ["xpath=//div[8]/div/div/button[2]/span", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "ef36bcda-49d8-4005-b78e-166917a830ae",
+      "comment": "",
+      "command": "mouseOut",
+      "target": "id=bag21",
+      "targets": [
+        ["id=bag21", "id"],
+        ["css=#bag21", "css:finder"],
+        ["xpath=//span[@id='bag21']", "xpath:attributes"],
+        ["xpath=//button[@id='myProduct21']/span", "xpath:idRelative"],
+        ["xpath=//div[8]/div/div/button[2]/span", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "ce2d67b8-e44d-488c-a1ec-5496d478d1ad",
+      "comment": "",
+      "command": "click",
+      "target": "id=url210",
+      "targets": [
+        ["id=url210", "id"],
+        ["css=#url210", "css:finder"],
+        ["xpath=//button[@id='url210']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadList2']/div/div/div/table/tbody/tr[4]/td/button", "xpath:idRelative"],
+        ["xpath=//td/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Download')]", "xpath:innerText"]
+      ],
+      "value": "",
+      "opensWindow": true,
+      "windowHandleName": "win2845",
+      "windowTimeout": 2000
+    }, {
+      "id": "782962dc-87ca-414a-b57c-5a69975dd1bb",
+      "comment": "",
+      "command": "pause",
+      "target": "3000",
+      "targets": [],
+      "value": "10"
+    }]
+  }, {
+    "id": "ae54f0a4-55d8-4e0c-a0fe-adc2230d7b1c",
+    "name": "LK",
+    "commands": [{
+      "id": "36a0eefc-f48d-46e3-bf04-66f1013c4de0",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "ba000fcf-e0db-482f-83aa-8bd56305b5bd",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "921x847",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "3dc42f25-4e1d-4afc-b1e6-6a4de1450f54",
+      "comment": "",
+      "command": "click",
+      "target": "id=regionsTitle",
+      "targets": [
+        ["id=regionsTitle", "id"],
+        ["linkText=Regions", "linkText"],
+        ["css=#regionsTitle", "css:finder"],
+        ["xpath=//a[contains(text(),'Regions')]", "xpath:link"],
+        ["xpath=//a[@id='regionsTitle']", "xpath:attributes"],
+        ["xpath=//div[@id='myNavbar']/ul/li[6]/a", "xpath:idRelative"],
+        ["xpath=//li[6]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Regions')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "104843fe-47a1-4a6a-b572-e6ab7b0971de",
+      "comment": "",
+      "command": "click",
+      "target": "id=16",
+      "targets": [
+        ["id=16", "id"],
+        ["linkText=LK (Czech Republic)", "linkText"],
+        ["css=#\\31 6", "css:finder"],
+        ["xpath=//a[contains(text(),'LK (Czech Republic)')]", "xpath:link"],
+        ["xpath=//a[@id='16']", "xpath:attributes"],
+        ["xpath=//div[@id='myNavbar']/ul/li[6]/ul/li[16]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, 'https://www.openflightmaps.org/?page_id=816&airac=2212&language=local')]", "xpath:href"],
+        ["xpath=//li[16]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'LK (Czech Republic)')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "d3ed0ecf-eb20-4217-a0ff-63c2da834e15",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,1064)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "7c157a99-952d-4108-8bb1-1a1bedd6df05",
+      "comment": "",
+      "command": "click",
+      "target": "id=myProduct21",
+      "targets": [
+        ["id=myProduct21", "id"],
+        ["css=#myProduct21", "css:finder"],
+        ["xpath=//button[@id='myProduct21']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadMenu']/div[8]/div/div/button[2]", "xpath:idRelative"],
+        ["xpath=//div[8]/div/div/button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,'ARINC424 1')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "61587803-f354-4ec8-aac9-8f6df7552b5e",
+      "comment": "",
+      "command": "mouseOver",
+      "target": "id=myProduct21",
+      "targets": [
+        ["id=myProduct21", "id"],
+        ["css=#myProduct21", "css:finder"],
+        ["xpath=//button[@id='myProduct21']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadMenu']/div[8]/div/div/button[2]", "xpath:idRelative"],
+        ["xpath=//div[8]/div/div/button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,'ARINC424 1')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "b1282fb5-c895-4792-b137-7f57eb6bf2eb",
+      "comment": "",
+      "command": "mouseOut",
+      "target": "id=myProduct21",
+      "targets": [
+        ["id=myProduct21", "id"],
+        ["css=#myProduct21", "css:finder"],
+        ["xpath=//button[@id='myProduct21']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadMenu']/div[8]/div/div/button[2]", "xpath:idRelative"],
+        ["xpath=//div[8]/div/div/button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,'ARINC424 1')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "549827cd-2ffa-4a05-a64e-be2f3b64b1d5",
+      "comment": "",
+      "command": "click",
+      "target": "id=url210",
+      "targets": [
+        ["id=url210", "id"],
+        ["css=#url210", "css:finder"],
+        ["xpath=//button[@id='url210']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadList2']/div/div/div/table/tbody/tr[4]/td/button", "xpath:idRelative"],
+        ["xpath=//td/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Download')]", "xpath:innerText"]
+      ],
+      "value": "",
+      "opensWindow": true,
+      "windowHandleName": "win5751",
+      "windowTimeout": 2000
+    }, {
+      "id": "9bd77ade-e616-408e-b580-ef9bd5a53c97",
+      "comment": "",
+      "command": "pause",
+      "target": "3000",
+      "targets": [],
+      "value": "10"
+    }]
+  }, {
+    "id": "064052d4-d6e3-44c9-843f-77965224f922",
+    "name": "LM",
+    "commands": [{
+      "id": "c70e04d4-28e4-4c07-8fb4-b9ac11745764",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "3323ee2d-93dc-4803-85a6-2262ffc4f25d",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "883x847",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "95291a57-73b9-454e-89d6-9f2800ae750c",
+      "comment": "",
+      "command": "click",
+      "target": "id=regionsTitle",
+      "targets": [
+        ["id=regionsTitle", "id"],
+        ["linkText=Regions", "linkText"],
+        ["css=#regionsTitle", "css:finder"],
+        ["xpath=//a[contains(text(),'Regions')]", "xpath:link"],
+        ["xpath=//a[@id='regionsTitle']", "xpath:attributes"],
+        ["xpath=//div[@id='myNavbar']/ul/li[6]/a", "xpath:idRelative"],
+        ["xpath=//li[6]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Regions')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "541b7a1f-c69e-4f0e-9718-c798ac5bb3eb",
+      "comment": "",
+      "command": "click",
+      "target": "id=17",
+      "targets": [
+        ["id=17", "id"],
+        ["linkText=LM (Malta)", "linkText"],
+        ["css=#\\31 7", "css:finder"],
+        ["xpath=//a[contains(text(),'LM (Malta)')]", "xpath:link"],
+        ["xpath=//a[@id='17']", "xpath:attributes"],
+        ["xpath=//div[@id='myNavbar']/ul/li[6]/ul/li[17]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, 'https://www.openflightmaps.org/?page_id=1091&airac=2212&language=local')]", "xpath:href"],
+        ["xpath=//li[17]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'LM (Malta)')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "6b9adaa7-2365-4f7b-b3c0-fde579c82408",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,1116)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "f4d7650f-60aa-4362-83f7-e073e0aa632b",
+      "comment": "",
+      "command": "click",
+      "target": "id=myProduct21",
+      "targets": [
+        ["id=myProduct21", "id"],
+        ["css=#myProduct21", "css:finder"],
+        ["xpath=//button[@id='myProduct21']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadMenu']/div[8]/div/div/button[2]", "xpath:idRelative"],
+        ["xpath=//div[8]/div/div/button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,'ARINC424 1')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "b0a47cd3-9cc7-4b83-9457-a76a200feca9",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,2760)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "3d565490-5e36-4122-bd73-3789fcf1153c",
+      "comment": "",
+      "command": "click",
+      "target": "id=url210",
+      "targets": [
+        ["id=url210", "id"],
+        ["css=#url210", "css:finder"],
+        ["xpath=//button[@id='url210']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadList2']/div/div/div/table/tbody/tr[4]/td/button", "xpath:idRelative"],
+        ["xpath=//td/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Download')]", "xpath:innerText"]
+      ],
+      "value": "",
+      "opensWindow": true,
+      "windowHandleName": "win9475",
+      "windowTimeout": 2000
+    }, {
+      "id": "7575acc8-760a-4710-b262-72f1ef0b59f6",
+      "comment": "",
+      "command": "pause",
+      "target": "3000",
+      "targets": [],
+      "value": "10"
+    }]
+  }, {
+    "id": "35b012c2-5874-4975-8ac4-e8a0f10be9ce",
+    "name": "LO",
+    "commands": [{
+      "id": "74c58f68-97e7-4853-9484-977b6ce5f737",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "4fe79851-4b98-4913-ab34-7a045d0bcba8",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "930x847",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "0761f71b-3169-49ba-9f88-5ab9610bd849",
+      "comment": "",
+      "command": "click",
+      "target": "id=regionsTitle",
+      "targets": [
+        ["id=regionsTitle", "id"],
+        ["linkText=Regions", "linkText"],
+        ["css=#regionsTitle", "css:finder"],
+        ["xpath=//a[contains(text(),'Regions')]", "xpath:link"],
+        ["xpath=//a[@id='regionsTitle']", "xpath:attributes"],
+        ["xpath=//div[@id='myNavbar']/ul/li[6]/a", "xpath:idRelative"],
+        ["xpath=//li[6]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Regions')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "c861f982-6998-45f9-8aa1-a7eba58a7456",
+      "comment": "",
+      "command": "click",
+      "target": "id=18",
+      "targets": [
+        ["id=18", "id"],
+        ["linkText=LO (Austria)", "linkText"],
+        ["css=#\\31 8", "css:finder"],
+        ["xpath=//a[contains(text(),'LO (Austria)')]", "xpath:link"],
+        ["xpath=//a[@id='18']", "xpath:attributes"],
+        ["xpath=//div[@id='myNavbar']/ul/li[6]/ul/li[18]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, 'https://www.openflightmaps.org/?page_id=16&airac=2212&language=local')]", "xpath:href"],
+        ["xpath=//li[18]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'LO (Austria)')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "62162fa8-a6a5-426a-bc00-38cb0479cce7",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,1739)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "d35224c5-0679-45f9-8311-5b63e6e0a18f",
+      "comment": "",
+      "command": "click",
+      "target": "id=myProduct21",
+      "targets": [
+        ["id=myProduct21", "id"],
+        ["css=#myProduct21", "css:finder"],
+        ["xpath=//button[@id='myProduct21']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadMenu']/div[8]/div/div/button[2]", "xpath:idRelative"],
+        ["xpath=//div[8]/div/div/button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,'ARINC424 2')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "347fcb93-4d6f-47a3-ae8d-5dc36bfec031",
+      "comment": "",
+      "command": "mouseOver",
+      "target": "id=myProduct21",
+      "targets": [
+        ["id=myProduct21", "id"],
+        ["css=#myProduct21", "css:finder"],
+        ["xpath=//button[@id='myProduct21']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadMenu']/div[8]/div/div/button[2]", "xpath:idRelative"],
+        ["xpath=//div[8]/div/div/button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,'ARINC424 2')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "536ee552-afa6-4ead-81da-b8831e4a49b4",
+      "comment": "",
+      "command": "mouseOut",
+      "target": "id=myProduct21",
+      "targets": [
+        ["id=myProduct21", "id"],
+        ["css=#myProduct21", "css:finder"],
+        ["xpath=//button[@id='myProduct21']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadMenu']/div[8]/div/div/button[2]", "xpath:idRelative"],
+        ["xpath=//div[8]/div/div/button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,'ARINC424 2')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "a2c1e7e9-d8b6-4865-b359-33f84c4454c9",
+      "comment": "",
+      "command": "click",
+      "target": "id=url210",
+      "targets": [
+        ["id=url210", "id"],
+        ["css=#url210", "css:finder"],
+        ["xpath=//button[@id='url210']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadList2']/div/div/div/table/tbody/tr[4]/td/button", "xpath:idRelative"],
+        ["xpath=//td/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Download')]", "xpath:innerText"]
+      ],
+      "value": "",
+      "opensWindow": true,
+      "windowHandleName": "win3643",
+      "windowTimeout": 2000
+    }, {
+      "id": "62eaeef9-9355-4282-a09f-4b2bf50b8631",
+      "comment": "",
+      "command": "pause",
+      "target": "3000",
+      "targets": [],
+      "value": "10"
+    }]
+  }, {
+    "id": "6c442010-3ace-438f-875b-3d77e543fe8f",
+    "name": "LR",
+    "commands": [{
+      "id": "d75ecf64-d1e2-4817-9777-c571cfc7518d",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "1dc0d702-8a1e-4345-84cd-d7f0e3024191",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "963x847",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "7528ee90-38d7-45b1-8cd5-d52c73874263",
+      "comment": "",
+      "command": "click",
+      "target": "id=regionsTitle",
+      "targets": [
+        ["id=regionsTitle", "id"],
+        ["linkText=Regions", "linkText"],
+        ["css=#regionsTitle", "css:finder"],
+        ["xpath=//a[contains(text(),'Regions')]", "xpath:link"],
+        ["xpath=//a[@id='regionsTitle']", "xpath:attributes"],
+        ["xpath=//div[@id='myNavbar']/ul/li[6]/a", "xpath:idRelative"],
+        ["xpath=//li[6]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Regions')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "121632a1-646d-4d24-894d-ac96e56f0a2b",
+      "comment": "",
+      "command": "click",
+      "target": "id=19",
+      "targets": [
+        ["id=19", "id"],
+        ["linkText=LR (Romania)", "linkText"],
+        ["css=#\\31 9", "css:finder"],
+        ["xpath=//a[contains(text(),'LR (Romania)')]", "xpath:link"],
+        ["xpath=//a[@id='19']", "xpath:attributes"],
+        ["xpath=//div[@id='myNavbar']/ul/li[6]/ul/li[19]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, 'https://www.openflightmaps.org/?page_id=355&airac=2212&language=local')]", "xpath:href"],
+        ["xpath=//li[19]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'LR (Romania)')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "89c8599c-943a-4062-9602-5b158a0152e3",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,1365)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "aaa6adce-491b-4212-80be-8f4c325af67a",
+      "comment": "",
+      "command": "click",
+      "target": "id=myProduct21",
+      "targets": [
+        ["id=myProduct21", "id"],
+        ["css=#myProduct21", "css:finder"],
+        ["xpath=//button[@id='myProduct21']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadMenu']/div[8]/div/div/button[2]", "xpath:idRelative"],
+        ["xpath=//div[8]/div/div/button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,'ARINC424 1')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "a5d55f5c-5aeb-452b-b290-387855535374",
+      "comment": "",
+      "command": "mouseOver",
+      "target": "id=myProduct21",
+      "targets": [
+        ["id=myProduct21", "id"],
+        ["css=#myProduct21", "css:finder"],
+        ["xpath=//button[@id='myProduct21']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadMenu']/div[8]/div/div/button[2]", "xpath:idRelative"],
+        ["xpath=//div[8]/div/div/button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,'ARINC424 1')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "073afe6e-6958-4934-9e28-52ac23eb476d",
+      "comment": "",
+      "command": "mouseOut",
+      "target": "id=myProduct21",
+      "targets": [
+        ["id=myProduct21", "id"],
+        ["css=#myProduct21", "css:finder"],
+        ["xpath=//button[@id='myProduct21']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadMenu']/div[8]/div/div/button[2]", "xpath:idRelative"],
+        ["xpath=//div[8]/div/div/button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,'ARINC424 1')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "0ccf9a39-c83d-4213-a439-750d2b7bcf84",
+      "comment": "",
+      "command": "click",
+      "target": "id=url210",
+      "targets": [
+        ["id=url210", "id"],
+        ["css=#url210", "css:finder"],
+        ["xpath=//button[@id='url210']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadList2']/div/div/div/table/tbody/tr[4]/td/button", "xpath:idRelative"],
+        ["xpath=//td/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Download')]", "xpath:innerText"]
+      ],
+      "value": "",
+      "opensWindow": true,
+      "windowHandleName": "win4682",
+      "windowTimeout": 2000
+    }, {
+      "id": "28073744-afc6-4cc4-834e-a9cd9f29d244",
+      "comment": "",
+      "command": "pause",
+      "target": "3000",
+      "targets": [],
+      "value": "10"
+    }]
+  }, {
+    "id": "8f8de015-eea3-462d-84ea-7500c82e8a5c",
+    "name": "LS",
+    "commands": [{
+      "id": "e665b2b1-8663-4359-ab0b-c96f4f2d7a7e",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "db0064d7-5a53-4ee3-8fce-2a0d3d8a86ba",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "906x847",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "6469adb9-ffd3-4556-a4da-19bbd79c141e",
+      "comment": "",
+      "command": "click",
+      "target": "id=regionsTitle",
+      "targets": [
+        ["id=regionsTitle", "id"],
+        ["linkText=Regions", "linkText"],
+        ["css=#regionsTitle", "css:finder"],
+        ["xpath=//a[contains(text(),'Regions')]", "xpath:link"],
+        ["xpath=//a[@id='regionsTitle']", "xpath:attributes"],
+        ["xpath=//div[@id='myNavbar']/ul/li[6]/a", "xpath:idRelative"],
+        ["xpath=//li[6]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Regions')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "5822442e-106d-4543-9fff-60e69aa090c3",
+      "comment": "",
+      "command": "click",
+      "target": "id=20",
+      "targets": [
+        ["id=20", "id"],
+        ["linkText=LS (Switzerland)", "linkText"],
+        ["css=#\\32 0", "css:finder"],
+        ["xpath=//a[contains(text(),'LS (Switzerland)')]", "xpath:link"],
+        ["xpath=//a[@id='20']", "xpath:attributes"],
+        ["xpath=//div[@id='myNavbar']/ul/li[6]/ul/li[20]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, 'https://www.openflightmaps.org/?page_id=34&airac=2212&language=local')]", "xpath:href"],
+        ["xpath=//li[20]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'LS (Switzerland)')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "cf45be99-7346-46ce-8f80-2fbf7a7feedd",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,1746)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "80ab6e17-f6b4-4277-ade1-59e0fb2bcc15",
+      "comment": "",
+      "command": "click",
+      "target": "id=myProduct21",
+      "targets": [
+        ["id=myProduct21", "id"],
+        ["css=#myProduct21", "css:finder"],
+        ["xpath=//button[@id='myProduct21']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadMenu']/div[8]/div/div/button[2]", "xpath:idRelative"],
+        ["xpath=//div[8]/div/div/button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,'ARINC424 1')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "74716dbc-709d-4dc0-8e3c-e3dcb97d65e3",
+      "comment": "",
+      "command": "click",
+      "target": "id=url210",
+      "targets": [
+        ["id=url210", "id"],
+        ["css=#url210", "css:finder"],
+        ["xpath=//button[@id='url210']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadList2']/div/div/div/table/tbody/tr[4]/td/button", "xpath:idRelative"],
+        ["xpath=//td/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Download')]", "xpath:innerText"]
+      ],
+      "value": "",
+      "opensWindow": true,
+      "windowHandleName": "win9308",
+      "windowTimeout": 2000
+    }, {
+      "id": "db0fc904-c696-4673-a1b9-d469ee88109e",
+      "comment": "",
+      "command": "pause",
+      "target": "3000",
+      "targets": [],
+      "value": "10"
+    }]
+  }, {
+    "id": "f9a495be-fa9c-4f2c-898d-bb2efa4b098f",
+    "name": "LZ",
+    "commands": [{
+      "id": "4cf3707d-91de-4dba-8c2e-68de13094f20",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "71213ba6-1d1e-451d-89df-a6affcdddf5d",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "869x847",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "d09fc3a6-8904-4288-8edc-5d1f6b91ac1c",
+      "comment": "",
+      "command": "click",
+      "target": "id=regionsTitle",
+      "targets": [
+        ["id=regionsTitle", "id"],
+        ["linkText=Regions", "linkText"],
+        ["css=#regionsTitle", "css:finder"],
+        ["xpath=//a[contains(text(),'Regions')]", "xpath:link"],
+        ["xpath=//a[@id='regionsTitle']", "xpath:attributes"],
+        ["xpath=//div[@id='myNavbar']/ul/li[6]/a", "xpath:idRelative"],
+        ["xpath=//li[6]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Regions')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "b22e5a53-9587-4b6d-9c74-4333abe265b3",
+      "comment": "",
+      "command": "click",
+      "target": "id=21",
+      "targets": [
+        ["id=21", "id"],
+        ["linkText=LZ (Slovakia)", "linkText"],
+        ["css=#\\32 1", "css:finder"],
+        ["xpath=//a[contains(text(),'LZ (Slovakia)')]", "xpath:link"],
+        ["xpath=//a[@id='21']", "xpath:attributes"],
+        ["xpath=//div[@id='myNavbar']/ul/li[6]/ul/li[21]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, 'https://www.openflightmaps.org/?page_id=895&airac=2212&language=local')]", "xpath:href"],
+        ["xpath=//li[21]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'LZ (Slovakia)')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "7b0e19ae-95bf-48e5-a27d-c06d45003216",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,1054)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "3b29e94b-c734-44dd-a90a-ec7ff07452b4",
+      "comment": "",
+      "command": "click",
+      "target": "id=myProduct21",
+      "targets": [
+        ["id=myProduct21", "id"],
+        ["css=#myProduct21", "css:finder"],
+        ["xpath=//button[@id='myProduct21']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadMenu']/div[8]/div/div/button[2]", "xpath:idRelative"],
+        ["xpath=//div[8]/div/div/button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,'ARINC424 1')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "96b8cc35-2161-43ca-9a0e-fb0187174abd",
+      "comment": "",
+      "command": "click",
+      "target": "id=url210",
+      "targets": [
+        ["id=url210", "id"],
+        ["css=#url210", "css:finder"],
+        ["xpath=//button[@id='url210']", "xpath:attributes"],
+        ["xpath=//div[@id='downloadList2']/div/div/div/table/tbody/tr[4]/td/button", "xpath:idRelative"],
+        ["xpath=//td/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Download')]", "xpath:innerText"]
+      ],
+      "value": "",
+      "opensWindow": true,
+      "windowHandleName": "win4172",
+      "windowTimeout": 2000
+    }, {
+      "id": "5028c819-d465-4cb2-b492-7529abbd6e5b",
+      "comment": "",
+      "command": "pause",
+      "target": "3000",
+      "targets": [],
+      "value": "10"
+    }]
+  }],
+  "suites": [{
+    "id": "4efc1555-8592-4152-af8c-43f2803b30de",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": []
+  }],
+  "urls": ["https://www.openflightmaps.org/"],
+  "plugins": []
+}

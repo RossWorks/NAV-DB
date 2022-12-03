@@ -18,6 +18,11 @@ E_DbError StdDb::StdDbInitialization(){
     return OUT_OF_MEMORY;
   }
   this->Storage.reserve(NewDBSize);
+  this->Statistics.APT_size = 0;
+  this->Statistics.Enroute_size = 0;
+  this->Statistics.GlobalSize = 0;
+  this->Statistics.NDB_size = 0;
+  this->Statistics.VHF_size = 0;
   this->AcquireArinc424Files();
   return NO_ERROR;
 }
@@ -44,15 +49,47 @@ E_DbError StdDb::AcquireArinc424Files(){
               this->Storage[CurrentID] = TmpDbRecord;
               CurrentID++;
               this->Statistics.VHF_size++;
-            break;
+              this->Statistics.GlobalSize++;
+              break;
             case 'B':
               TmpDbRecord = this->AcquireNdbRecord(FileRecord,&ErrorCode);
               TmpDbRecord.ID = CurrentID;
               this->Storage[CurrentID] = TmpDbRecord;
               CurrentID++;
               this->Statistics.NDB_size++;
+              this->Statistics.GlobalSize++;
+              break;
+          }
+          break;
+        case 'E':
+          switch (FileRecord[C_SECTION_CODE+1]){
+          case 'A':
+            TmpDbRecord = this->AcquireEnrRecord(FileRecord,&ErrorCode);
+            TmpDbRecord.ID = CurrentID;
+            this->Storage[CurrentID] = TmpDbRecord;
+            CurrentID++;
+            this->Statistics.Enroute_size++;
+            this->Statistics.GlobalSize++;
+            break;
+          default:
             break;
           }
+        case 'P':
+          switch (FileRecord[C_SECTION_CODE+1]){
+          case 'A':
+          case ' ':
+            if (FileRecord[21] != '0'){break;}
+            TmpDbRecord = this->AcquireAptRecord(FileRecord,&ErrorCode);
+            TmpDbRecord.ID = CurrentID;
+            this->Storage[CurrentID] = TmpDbRecord;
+            CurrentID++;
+            this->Statistics.Enroute_size++;
+            this->Statistics.GlobalSize++;
+            break;
+          default:
+            break;
+          }
+          break;
         default:
           break;
       }
@@ -137,7 +174,7 @@ DbRecord_t StdDb::AcquireVhfRecord(std::string FileRecord, E_DbError* ReturnCode
       case 'P': output.Class = MLSDME; break;
       case ' ': *ReturnCode  = RECORD_MALFORMED; break; 
       default : *ReturnCode  = RECORD_MALFORMED; break;
-    }
+      }
     break;
   }
   output.Freq = 0;
@@ -156,6 +193,17 @@ DbRecord_t StdDb::AcquireVhfRecord(std::string FileRecord, E_DbError* ReturnCode
                 (FileRecord[C_NAVAID_LON+3]-48)*1+
                 (float)(FileRecord[C_NAVAID_LON+4]-48)/6+
                 (float)(FileRecord[C_NAVAID_LON+5]-48)/60;
+  output.DmeLat = 0;
+  output.DmeLat += (FileRecord[C_DME_LAT+1]-48)*10 +
+                   (FileRecord[C_DME_LAT+2]-48)+
+                   (float)(FileRecord[C_DME_LAT+3]-48)/6+
+                   (float)(FileRecord[C_DME_LAT+4]-48)/60;
+  output.DmeLon = 0;
+  output.DmeLon += (FileRecord[C_DME_LON+1]-48)*100 +
+                   (FileRecord[C_DME_LON+2]-48)*10+
+                   (FileRecord[C_DME_LON+3]-48)*1+
+                   (float)(FileRecord[C_DME_LON+4]-48)/6+
+                   (float)(FileRecord[C_DME_LON+5]-48)/60;
   return output;
 }
 
@@ -163,7 +211,7 @@ DbRecord_t StdDb::AcquireVhfRecord(std::string FileRecord, E_DbError* ReturnCode
 std::vector<DbRecord_t> StdDb::Search(std::string Searchkey){
   std::vector<DbRecord_t> output;
   std::string TmpString;
-  for (int i = 1; i< this->Statistics.VHF_size; i++){
+  for (int i = 1; i< this->Statistics.GlobalSize; i++){
     TmpString = this->Storage[i].ICAO;
     if (TmpString == Searchkey){
       output.push_back(this->Storage[i]);
@@ -209,4 +257,54 @@ void StdDb::ClearDbRecord( DbRecord_t *Record){
   Record->Lat = 0.0;
   Record->Lon = 0.0;
   Record->MagVar = 0.0;
+}
+
+DbRecord_t StdDb::AcquireEnrRecord(std::string FileRecord, E_DbError* ReturnCode){
+  DbRecord_t output;
+  for (int i = 0; i < 5; i++){
+    output.ICAO[i] = FileRecord[C_ICAO_IDENT+i];
+  }
+  output.ICAO[5] = '\0';
+  output.Lat = 0;
+  output.Lat += (FileRecord[C_NAVAID_LAT+1]-48)*10 +
+                (FileRecord[C_NAVAID_LAT+2]-48)+
+                (float)(FileRecord[C_NAVAID_LAT+3]-48)/6+
+                (float)(FileRecord[C_NAVAID_LAT+4]-48)/60;
+  output.Lon = 0;
+  output.Lon += (FileRecord[C_NAVAID_LON+1]-48)*100 +
+                (FileRecord[C_NAVAID_LON+2]-48)*10+
+                (FileRecord[C_NAVAID_LON+3]-48)*1+
+                (float)(FileRecord[C_NAVAID_LON+4]-48)/6+
+                (float)(FileRecord[C_NAVAID_LON+5]-48)/60;
+  return output;
+}
+
+DbRecord_t StdDb::AcquireAptRecord(std::string FileRecord, E_DbError* ReturnCode){
+  DbRecord_t output;
+  for (int i = 0; i < 4; i++){
+    output.ICAO[i] = FileRecord[6+i];
+  }
+  output.ICAO[4+1] = '\0';
+  output.Lat = 0;
+  output.Lat += (FileRecord[C_NAVAID_LAT+1]-48)*10 +
+                (FileRecord[C_NAVAID_LAT+2]-48)+
+                (float)(FileRecord[C_NAVAID_LAT+3]-48)/6+
+                (float)(FileRecord[C_NAVAID_LAT+4]-48)/60;
+  output.Lon = 0;
+  output.Lon += (FileRecord[C_NAVAID_LON+1]-48)*100 +
+                (FileRecord[C_NAVAID_LON+2]-48)*10+
+                (FileRecord[C_NAVAID_LON+3]-48)*1+
+                (float)(FileRecord[C_NAVAID_LON+4]-48)/6+
+                (float)(FileRecord[C_NAVAID_LON+5]-48)/60;
+  return output;
+}
+
+std::map<std::string, uint32_t> StdDb::getStatistics(){
+  std::map<std::string, uint32_t> output;
+  output["TOTAL"] = this->Statistics.GlobalSize;
+  output["VHF"] = this->Statistics.VHF_size;
+  output["NDB"] = this->Statistics.NDB_size;
+  output["APT"] = this->Statistics.APT_size;
+  output["WPT"] = this->Statistics.Enroute_size;
+  return output;
 }
