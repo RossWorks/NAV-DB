@@ -40,6 +40,7 @@ E_DbError StdDb::AcquireArinc424Files(){
     while (getline(A424File,FileRecord))
     {
       ClearDbRecord(&TmpDbRecord);
+      //if (FileRecord[C_CONT_INDEX] != 0){continue;}
       switch(FileRecord[C_SECTION_CODE]){
         case 'D':
           switch(FileRecord[C_SECTION_CODE+1]){
@@ -101,6 +102,7 @@ E_DbError StdDb::AcquireArinc424Files(){
 
 DbRecord_t StdDb::AcquireNdbRecord(std::string FileRecord, E_DbError* ReturnCode){
   DbRecord_t output;
+  std::string SpareString;
   for (uint8_t i=0; i<4; i++){
     output.ICAO[i] = FileRecord[C_ICAO_IDENT+i];
     if (output.ICAO[i] == ' '){output.ICAO[i] = '\0';}
@@ -132,15 +134,18 @@ DbRecord_t StdDb::AcquireNdbRecord(std::string FileRecord, E_DbError* ReturnCode
                 (FileRecord[C_NAVAID_LON+3]-48)*1+
                 (float)(FileRecord[C_NAVAID_LON+4]-48)/6+
                 (float)(FileRecord[C_NAVAID_LON+5]-48)/60;
-
+  for (uint8_t i = 0; i < 4; i++){
+    output.MagVar += (FileRecord[C_NAVAID_MAGVAR+1+i]-48) * pow(10,2-i);
+  }
+  if (FileRecord[C_NAVAID_MAGVAR] == 'W'){
+    output.MagVar *= -1;
+  }
   return output;
 }
 
 
 DbRecord_t StdDb::AcquireVhfRecord(std::string FileRecord, E_DbError* ReturnCode){
   DbRecord_t output;
-  std::string SpareString;
-  SpareString.reserve(20);
   char SpareChar = 0;
   for (uint8_t i=0; i<4; i++){
     output.ICAO[i] = FileRecord[C_ICAO_IDENT+i];
@@ -151,6 +156,13 @@ DbRecord_t StdDb::AcquireVhfRecord(std::string FileRecord, E_DbError* ReturnCode
     output.CountryCode[i] = FileRecord[C_COUNTRY_CODE+i];
   }
   output.CountryCode[2] = '\0';
+  output.MagVar = 0;
+  for (uint8_t i = 0; i < 4; i++){
+    output.MagVar += (FileRecord[C_NAVAID_MAGVAR+1+i]-48)*pow(10,2-i);
+  }
+  if (FileRecord[C_NAVAID_MAGVAR] == 'W'){
+    output.MagVar *= -1;
+  }
   switch (FileRecord[C_NAVAID_CLASS]){
     case 'V':
       switch(FileRecord[C_NAVAID_CLASS+1]){
@@ -239,7 +251,7 @@ void StdDb::Freq2Channel(uint32_t Freq, uint8_t* Channel, E_ChannelMode* Mode){
     W = 112.30;
     L = 70;
   }
-  if ((Freq % 10000 - Freq % 1000) == 0){ENV = 0; *Mode = X;}
+  if ((Freq % 100000 - Freq % 10000) == 0){ENV = 0; *Mode = X;}
   else{ENV = 1; *Mode = Y;}
   pre_output = (MyFrequency-(W+0.05*ENV))*10+L;
   *Channel = (uint8_t)pre_output;
@@ -281,10 +293,16 @@ DbRecord_t StdDb::AcquireEnrRecord(std::string FileRecord, E_DbError* ReturnCode
 
 DbRecord_t StdDb::AcquireAptRecord(std::string FileRecord, E_DbError* ReturnCode){
   DbRecord_t output;
-  for (int i = 0; i < 4; i++){
+  int i = 0;
+  output.Class = APT;
+  for (i = 0; i < 4; i++){
     output.ICAO[i] = FileRecord[6+i];
   }
   output.ICAO[4+1] = '\0';
+  for (i = 0; i < 30; i++){
+    output.LongName[i] = FileRecord[C_APT_LONG_NAME+i];
+  }
+  output.ICAO[C_APT_LONG_NAME+30] = '\0';
   output.Lat = 0;
   output.Lat += (FileRecord[C_NAVAID_LAT+1]-48)*10 +
                 (FileRecord[C_NAVAID_LAT+2]-48)+

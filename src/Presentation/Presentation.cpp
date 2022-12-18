@@ -3,7 +3,6 @@
 std::string PresentSearchResult(std::vector<DbRecord_t> List){
   std::string output = "";
   char TmpString[100];
-  std::string TmpFreq;
   uint8_t NameLen = 0;
   std::string WpType;
   unsigned int I = 1;
@@ -13,6 +12,7 @@ std::string PresentSearchResult(std::vector<DbRecord_t> List){
   for (DbRecord_t element: List){
     switch (element.Class){
     case  UNKNOWN : WpType = "\e[05;31mUNK   "; break;
+    case  APT     : WpType = "\e[01;36mAPT   "; break;
     case  NDB     : WpType = "\e[01;31mNDB   "; break;
     case  VOR     : WpType = "\e[01;32mVOR   "; break;
     case  DME     : WpType = "\e[01;32mDME   "; break;
@@ -23,10 +23,9 @@ std::string PresentSearchResult(std::vector<DbRecord_t> List){
     case  ILSDME  : WpType = "\e[01;33mILSDME"; break;
     case  MILTAC  : WpType = "\e[01;31mMILTAC"; break;
     case  MLSDME  : WpType = "\e[01;31mMLSDME"; break;
-    default: break;
+    default       : WpType = "\e[05;31mUNK   "; break;
     }
     WpType += "\e[m";
-    TmpFreq = RenderFrequency(element.Freq);
     sprintf(TmpString,"%i -> |%-8s|%-8s|%s|\n",
             I,
             element.ICAO,
@@ -38,14 +37,37 @@ std::string PresentSearchResult(std::vector<DbRecord_t> List){
   return output;
 }
 
-std::string PresentDetailed(DbRecord_t element){
+std::string PresentVHF(DbRecord_t VHF){
   std::string output = "";
-  output += "NAME:\t" + std::string(element.ICAO) + "\n";
-  output += "REGION:\t" + std::string(element.CountryCode) + "\n";
-  output += "LATITUDE:\t" + std::string(std::to_string(element.Lat)) + "\n";
-  output += "LONGITUDE:\t" + std::string(std::to_string(element.Lon)) + "\n";
-  output += "NAME:\t" + std::string(element.ICAO) + "\n";
-  output += "NAME:\t" + std::string(element.ICAO) + "\n";
-  output += "NAME:\t" + std::string(element.ICAO) + "\n";
+  output += "NAME:    \t" + std::string(VHF.ICAO) + "\n";
+  output += "REGION:  \t" + std::string(VHF.CountryCode) + "\n";
+  output += "LATITUDE:\t" + RenderCoord(VHF.Lat) + "\n";
+  output += "LONGITUDE:\t" + RenderCoord(VHF.Lon) + "\n";
+  output += "FREQUENCY:\t" + RenderFrequency(VHF.Freq) + "\n";
+  output += "CHANNEL:\t" + std::to_string(VHF.Channel) + " " + (VHF.ChMode == X ? "X" : "Y") + "\n";
+  output += "MAG VAR:\t" + std::string(VHF.MagVar >= 0 ? "E" : "W") + std::to_string(abs(VHF.MagVar)) + "\n";
+  return output;
+}
+
+std::string PresentAPT(DbRecord_t APT){
+  std::string output = "";
+  output += "NAME:    \t" + std::string(APT.ICAO) + "\n";
+  output += "LONG NAME:\t" + std::string(APT.LongName) + "\n";
+  output += "REGION:  \t" + std::string(APT.CountryCode) + "\n";
+  output += "LATITUDE:\t" + RenderCoord(APT.Lat) + "\n";
+  output += "LONGITUDE:\t" + RenderCoord(APT.Lon) + "\n";
+  output += "FREQUENCY:\t" + RenderFrequency(APT.Freq) + "\n";
+  output += "MAG VAR:\t" + std::string(APT.MagVar >= 0 ? "E" : "W") + std::to_string(abs(APT.MagVar)) + "\n";
+  return output;
+}
+
+std::string PresentNDB(DbRecord_t NDB){
+  std::string output = "";
+  output += "NAME:    \t" + std::string(NDB.ICAO) + "\n";
+  output += "REGION:  \t" + std::string(NDB.CountryCode) + "\n";
+  output += "LATITUDE:\t" + std::string(std::to_string(NDB.Lat)) + "\n";
+  output += "LONGITUDE:\t" + std::string(std::to_string(NDB.Lon)) + "\n";
+  output += "FREQUENCY:\t" + RenderFrequency(NDB.Freq) + "\n";
+  output += "MAG VAR:\t" + std::string(NDB.MagVar >= 0 ? "E" : "W") + std::to_string(abs(NDB.MagVar)) + "\n";
   return output;
 }

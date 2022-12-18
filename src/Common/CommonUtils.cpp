@@ -21,14 +21,3 @@ std::vector<std::string> SplitString(std::string InString, char delimiter){
   }while(Cstring[N] != '\0');
   return output;
 }
-
-std::string RenderFrequency(uint32_t Frequency){
-  std::string output;
-  if (Frequency >= 1e6){
-    output = std::to_string((float)Frequency/1e6).substr(0,6) + " MHz";
-  }
-  else if (Frequency >= 1e3){
-    output = std::to_string((float)Frequency/1e3).substr(0,6) + " kHz";
-  }  
-  return output;
-}
