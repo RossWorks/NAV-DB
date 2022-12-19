@@ -84,7 +84,7 @@ E_DbError StdDb::AcquireArinc424Files(){
             TmpDbRecord.ID = CurrentID;
             this->Storage[CurrentID] = TmpDbRecord;
             CurrentID++;
-            this->Statistics.Enroute_size++;
+            this->Statistics.APT_size++;
             this->Statistics.GlobalSize++;
             break;
           default:
@@ -123,23 +123,9 @@ DbRecord_t StdDb::AcquireNdbRecord(std::string FileRecord, E_DbError* ReturnCode
     default:
       break;
   }
-  output.Lat = 0;
-  output.Lat += (FileRecord[C_NAVAID_LAT+1]-48)*10 +
-                (FileRecord[C_NAVAID_LAT+2]-48)+
-                (float)(FileRecord[C_NAVAID_LAT+3]-48)/6+
-                (float)(FileRecord[C_NAVAID_LAT+4]-48)/60;
-  output.Lon = 0;
-  output.Lon += (FileRecord[C_NAVAID_LON+1]-48)*100 +
-                (FileRecord[C_NAVAID_LON+2]-48)*10+
-                (FileRecord[C_NAVAID_LON+3]-48)*1+
-                (float)(FileRecord[C_NAVAID_LON+4]-48)/6+
-                (float)(FileRecord[C_NAVAID_LON+5]-48)/60;
-  for (uint8_t i = 0; i < 4; i++){
-    output.MagVar += (FileRecord[C_NAVAID_MAGVAR+1+i]-48) * pow(10,2-i);
-  }
-  if (FileRecord[C_NAVAID_MAGVAR] == 'W'){
-    output.MagVar *= -1;
-  }
+  output.Lat = ReadLat(FileRecord, C_NAVAID_LAT);
+  output.Lon = ReadLon(FileRecord, C_NAVAID_LON);
+  output.MagVar = ReadMagVar(FileRecord, C_NAVAID_MAGVAR);
   return output;
 }
 
@@ -156,13 +142,7 @@ DbRecord_t StdDb::AcquireVhfRecord(std::string FileRecord, E_DbError* ReturnCode
     output.CountryCode[i] = FileRecord[C_COUNTRY_CODE+i];
   }
   output.CountryCode[2] = '\0';
-  output.MagVar = 0;
-  for (uint8_t i = 0; i < 4; i++){
-    output.MagVar += (FileRecord[C_NAVAID_MAGVAR+1+i]-48)*pow(10,2-i);
-  }
-  if (FileRecord[C_NAVAID_MAGVAR] == 'W'){
-    output.MagVar *= -1;
-  }
+  output.MagVar = ReadMagVar(FileRecord, C_NAVAID_MAGVAR);
   switch (FileRecord[C_NAVAID_CLASS]){
     case 'V':
       switch(FileRecord[C_NAVAID_CLASS+1]){
@@ -194,28 +174,11 @@ DbRecord_t StdDb::AcquireVhfRecord(std::string FileRecord, E_DbError* ReturnCode
     output.Freq += (FileRecord[C_FREQ+i]-48)*pow(10,8-i);
   }
   Freq2Channel(output.Freq, &output.Channel, &output.ChMode);
-  output.Lat = 0;
-  output.Lat += (FileRecord[C_NAVAID_LAT+1]-48)*10 +
-                (FileRecord[C_NAVAID_LAT+2]-48)+
-                (float)(FileRecord[C_NAVAID_LAT+3]-48)/6+
-                (float)(FileRecord[C_NAVAID_LAT+4]-48)/60;
-  output.Lon = 0;
-  output.Lon += (FileRecord[C_NAVAID_LON+1]-48)*100 +
-                (FileRecord[C_NAVAID_LON+2]-48)*10+
-                (FileRecord[C_NAVAID_LON+3]-48)*1+
-                (float)(FileRecord[C_NAVAID_LON+4]-48)/6+
-                (float)(FileRecord[C_NAVAID_LON+5]-48)/60;
-  output.DmeLat = 0;
-  output.DmeLat += (FileRecord[C_DME_LAT+1]-48)*10 +
-                   (FileRecord[C_DME_LAT+2]-48)+
-                   (float)(FileRecord[C_DME_LAT+3]-48)/6+
-                   (float)(FileRecord[C_DME_LAT+4]-48)/60;
-  output.DmeLon = 0;
-  output.DmeLon += (FileRecord[C_DME_LON+1]-48)*100 +
-                   (FileRecord[C_DME_LON+2]-48)*10+
-                   (FileRecord[C_DME_LON+3]-48)*1+
-                   (float)(FileRecord[C_DME_LON+4]-48)/6+
-                   (float)(FileRecord[C_DME_LON+5]-48)/60;
+  output.Lat = ReadLat(FileRecord, C_NAVAID_LAT);
+  output.Lon = ReadLon(FileRecord, C_NAVAID_LON);
+  output.DmeLat = ReadLat(FileRecord, C_DME_LAT);
+  output.DmeLon = ReadLon(FileRecord, C_DME_LON);
+  output.DmeElev = ReadElev(FileRecord, C_DME_ELEV);
   return output;
 }
 
@@ -273,21 +236,12 @@ void StdDb::ClearDbRecord( DbRecord_t *Record){
 
 DbRecord_t StdDb::AcquireEnrRecord(std::string FileRecord, E_DbError* ReturnCode){
   DbRecord_t output;
-  for (int i = 0; i < 5; i++){
+  for (int i = 0; i < 6; i++){
     output.ICAO[i] = FileRecord[C_ICAO_IDENT+i];
   }
   output.ICAO[5] = '\0';
-  output.Lat = 0;
-  output.Lat += (FileRecord[C_NAVAID_LAT+1]-48)*10 +
-                (FileRecord[C_NAVAID_LAT+2]-48)+
-                (float)(FileRecord[C_NAVAID_LAT+3]-48)/6+
-                (float)(FileRecord[C_NAVAID_LAT+4]-48)/60;
-  output.Lon = 0;
-  output.Lon += (FileRecord[C_NAVAID_LON+1]-48)*100 +
-                (FileRecord[C_NAVAID_LON+2]-48)*10+
-                (FileRecord[C_NAVAID_LON+3]-48)*1+
-                (float)(FileRecord[C_NAVAID_LON+4]-48)/6+
-                (float)(FileRecord[C_NAVAID_LON+5]-48)/60;
+  output.Lat = ReadLat(FileRecord, C_NAVAID_LAT);
+  output.Lon = ReadLon(FileRecord, C_NAVAID_LON);
   return output;
 }
 
@@ -303,17 +257,10 @@ DbRecord_t StdDb::AcquireAptRecord(std::string FileRecord, E_DbError* ReturnCode
     output.LongName[i] = FileRecord[C_APT_LONG_NAME+i];
   }
   output.ICAO[C_APT_LONG_NAME+30] = '\0';
-  output.Lat = 0;
-  output.Lat += (FileRecord[C_NAVAID_LAT+1]-48)*10 +
-                (FileRecord[C_NAVAID_LAT+2]-48)+
-                (float)(FileRecord[C_NAVAID_LAT+3]-48)/6+
-                (float)(FileRecord[C_NAVAID_LAT+4]-48)/60;
-  output.Lon = 0;
-  output.Lon += (FileRecord[C_NAVAID_LON+1]-48)*100 +
-                (FileRecord[C_NAVAID_LON+2]-48)*10+
-                (FileRecord[C_NAVAID_LON+3]-48)*1+
-                (float)(FileRecord[C_NAVAID_LON+4]-48)/6+
-                (float)(FileRecord[C_NAVAID_LON+5]-48)/60;
+  output.Lat = ReadLat(FileRecord, C_NAVAID_LAT);
+  output.Lon = ReadLon(FileRecord, C_NAVAID_LON);
+  output.MagVar = ReadMagVar(FileRecord, C_APT_MAGVAR);
+
   return output;
 }
 

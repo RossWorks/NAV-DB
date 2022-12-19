@@ -12,8 +12,9 @@
 #include <list>
 #include <math.h>
 
-#include "DbCommonTypes.hpp"
+#include "./DbCommonTypes.hpp"
 #include "../Common/CommonUtils.hpp"
+#include "./StdDbUtils.hpp"
 
 const std::string C_DataFolder = "./Data/";
 
@@ -27,6 +28,7 @@ typedef struct Record
   E_NavAidClass Class;
   double Lat, Lon;
   double DmeLat, DmeLon;
+  int DmeElev;
   float MagVar;
   uint32_t Freq;
   uint8_t Channel;

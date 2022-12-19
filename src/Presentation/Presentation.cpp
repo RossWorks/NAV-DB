@@ -44,6 +44,9 @@ std::string PresentVHF(DbRecord_t VHF){
   output += "LATITUDE:\t" + RenderCoord(VHF.Lat) + "\n";
   output += "LONGITUDE:\t" + RenderCoord(VHF.Lon) + "\n";
   output += "FREQUENCY:\t" + RenderFrequency(VHF.Freq) + "\n";
+  output += "DME LAT:\t" + RenderCoord(VHF.DmeLat) + "\n";
+  output += "DME LON:\t" + RenderCoord(VHF.DmeLon) + "\n";
+  output += "DME ELEV:\t" + std::to_string(VHF.DmeElev) + "\n";
   output += "CHANNEL:\t" + std::to_string(VHF.Channel) + " " + (VHF.ChMode == X ? "X" : "Y") + "\n";
   output += "MAG VAR:\t" + std::string(VHF.MagVar >= 0 ? "E" : "W") + std::to_string(abs(VHF.MagVar)) + "\n";
   return output;
