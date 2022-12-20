@@ -179,6 +179,15 @@ DbRecord_t StdDb::AcquireVhfRecord(std::string FileRecord, E_DbError* ReturnCode
   output.DmeLat = ReadLat(FileRecord, C_DME_LAT);
   output.DmeLon = ReadLon(FileRecord, C_DME_LON);
   output.DmeElev = ReadElev(FileRecord, C_DME_ELEV);
+  switch (FileRecord[C_VHF_FIGURE_MERIT]){
+    case TERMINAL       : output.VhfRange = TERMINAL; break;
+    case LOW_ALT        : output.VhfRange = LOW_ALT; break;
+    case HI_ALT         : output.VhfRange = HI_ALT; break;
+    case EXT_HI_ALT     : output.VhfRange = EXT_HI_ALT; break;
+    case VHF_IS_MIL     : output.VhfRange = VHF_IS_MIL; break;
+    case OUT_OF_SERVICE : output.VhfRange = OUT_OF_SERVICE; break;
+    default : break;
+  }
   return output;
 }
 

@@ -33,6 +33,7 @@ typedef struct Record
   uint32_t Freq;
   uint8_t Channel;
   E_ChannelMode ChMode;
+  E_VhfRange VhfRange;
 }DbRecord_t;
 
 typedef struct StdDbStatistics{

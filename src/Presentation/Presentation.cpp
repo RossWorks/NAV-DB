@@ -41,14 +41,46 @@ std::string PresentVHF(DbRecord_t VHF){
   std::string output = "";
   output += "NAME:    \t" + std::string(VHF.ICAO) + "\n";
   output += "REGION:  \t" + std::string(VHF.CountryCode) + "\n";
-  output += "LATITUDE:\t" + RenderCoord(VHF.Lat) + "\n";
-  output += "LONGITUDE:\t" + RenderCoord(VHF.Lon) + "\n";
+  if (VHF.Class == VOR || VHF.Class == VORDME ||VHF.Class == TACAN ||
+      VHF.Class == VORTAC){
+    output += "LATITUDE:\t" + RenderCoord(VHF.Lat) + "\n";
+    output += "LONGITUDE:\t" + RenderCoord(VHF.Lon) + "\n";
+  }
   output += "FREQUENCY:\t" + RenderFrequency(VHF.Freq) + "\n";
-  output += "DME LAT:\t" + RenderCoord(VHF.DmeLat) + "\n";
-  output += "DME LON:\t" + RenderCoord(VHF.DmeLon) + "\n";
-  output += "DME ELEV:\t" + std::to_string(VHF.DmeElev) + "\n";
   output += "CHANNEL:\t" + std::to_string(VHF.Channel) + " " + (VHF.ChMode == X ? "X" : "Y") + "\n";
-  output += "MAG VAR:\t" + std::string(VHF.MagVar >= 0 ? "E" : "W") + std::to_string(abs(VHF.MagVar)) + "\n";
+  if (VHF.Class == VORDME || VHF.Class == DME || VHF.Class == TACAN || 
+      VHF.Class == VORTAC){
+    output += "DME LAT:\t" + RenderCoord(VHF.DmeLat) + "\n";
+    output += "DME LON:\t" + RenderCoord(VHF.DmeLon) + "\n";
+    output += "DME ELEV:\t" + std::to_string(VHF.DmeElev) + "\n";
+  }
+  if (VHF.Class != DME){
+    output += "MAG VAR:\t" + std::string(VHF.MagVar >= 0 ? "E" : "W") + std::to_string(abs(VHF.MagVar)) + "\n";
+  }
+  output += "RANGE:\t";
+  switch (VHF.VhfRange){
+    case TERMINAL:
+      output += "TERMINAL (25 NM)\n";
+      break;
+    case LOW_ALT:
+      output += "LOW ALTITUDE (40 NM)\n";
+      break;
+    case HI_ALT:
+      output += "HIGH ALTITUDE (130 NM)\n";
+      break;
+    case EXT_HI_ALT:
+      output += "VERY HIGH ALTITUDE (> 130 NM)\n";
+      break;
+    case VHF_IS_MIL:
+      output += "STATION IS MILITARY\n";
+      break;
+    case OUT_OF_SERVICE:
+      output += "STATION OUT OF SERVICE\n";
+      break;
+    default:
+      output += "UNDEFINED\n";
+      break;
+  }
   return output;
 }
 
@@ -68,8 +100,8 @@ std::string PresentNDB(DbRecord_t NDB){
   std::string output = "";
   output += "NAME:    \t" + std::string(NDB.ICAO) + "\n";
   output += "REGION:  \t" + std::string(NDB.CountryCode) + "\n";
-  output += "LATITUDE:\t" + std::string(std::to_string(NDB.Lat)) + "\n";
-  output += "LONGITUDE:\t" + std::string(std::to_string(NDB.Lon)) + "\n";
+  output += "LATITUDE:\t" + RenderCoord(NDB.Lat) + "\n";
+  output += "LONGITUDE:\t" + RenderCoord(NDB.Lon) + "\n";
   output += "FREQUENCY:\t" + RenderFrequency(NDB.Freq) + "\n";
   output += "MAG VAR:\t" + std::string(NDB.MagVar >= 0 ? "E" : "W") + std::to_string(abs(NDB.MagVar)) + "\n";
   return output;
