@@ -76,9 +76,8 @@ E_DbError StdDb::AcquireArinc424Files(){
             break;
           }
         case 'P':
-          switch (FileRecord[C_SECTION_CODE+1]){
+          switch (FileRecord[C_APT_SUBSECTION]){
           case 'A':
-          case ' ':
             if (FileRecord[21] != '0'){break;}
             TmpDbRecord = this->AcquireAptRecord(FileRecord,&ErrorCode);
             TmpDbRecord.ID = CurrentID;
@@ -262,14 +261,37 @@ DbRecord_t StdDb::AcquireAptRecord(std::string FileRecord, E_DbError* ReturnCode
     output.ICAO[i] = FileRecord[6+i];
   }
   output.ICAO[4+1] = '\0';
-  for (i = 0; i < 30; i++){
+  for (i = 0; i < 25; i++){
     output.LongName[i] = FileRecord[C_APT_LONG_NAME+i];
   }
-  output.ICAO[C_APT_LONG_NAME+30] = '\0';
+  output.LongName[25] = '\0';
   output.Lat = ReadLat(FileRecord, C_NAVAID_LAT);
   output.Lon = ReadLon(FileRecord, C_NAVAID_LON);
   output.MagVar = ReadMagVar(FileRecord, C_APT_MAGVAR);
-
+  for (i=0; i<3; i++){
+    output.IATA[i] = FileRecord[C_IATA_IDENT+i];
+  }
+  output.IATA[3] = '\0';
+  for (i=0; i<3; i++){
+    if (FileRecord[C_APT_RWY_LONG+i]!= ' '){
+      output.LongestRWYlength += (FileRecord[C_APT_RWY_LONG+i]-48)*pow(10,4-i);
+    }
+  }
+  output.AptIfrCapable = (FileRecord[C_APT_IS_IFR] == 'Y');
+  switch (FileRecord[C_APT_RWY_SURFACE]){
+  case 'H': output.LongRwySurfType = HARD_SURFACE;break;
+  case 'S': output.LongRwySurfType = SOFT_SURFACE;break;
+  case 'W': output.LongRwySurfType = WATER_SURFACE;break;
+  case 'U': output.LongRwySurfType = UNDEF_SURFACE;break;
+  default : output.LongRwySurfType = UNDEF_SURFACE;break;
+  }
+  switch (FileRecord[C_APT_USE]){
+  case 'C': output.AptUsage = CIVIL;break;
+  case 'M': output.AptUsage = MILITARY;break;
+  case 'P': output.AptUsage = PRIVATE;break;
+  case 'J': output.AptUsage = JOINT;break;
+  default : output.AptUsage = PRIVATE;break;
+  }
   return output;
 }
 
@@ -280,5 +302,27 @@ std::map<std::string, uint32_t> StdDb::getStatistics(){
   output["NDB"] = this->Statistics.NDB_size;
   output["APT"] = this->Statistics.APT_size;
   output["WPT"] = this->Statistics.Enroute_size;
+  return output;
+}
+
+std::vector<DbRecord_t> StdDb::List(E_LIST_TYPE ListType){
+  int i = 0, C = 0;
+  std::vector<DbRecord_t> output;
+  switch (ListType){
+    case VHF_LIST:
+      output.reserve(this->Statistics.VHF_size);
+      for (i = 0; i < this->Statistics.GlobalSize; i++){
+        if (this->Storage[i].Class == VOR || this->Storage[i].Class == VORDME ||
+            this->Storage[i].Class == DME || this->Storage[i].Class == VORTAC ||
+            this->Storage[i].Class == ILS || this->Storage[i].Class == ILSDME ||
+            this->Storage[i].Class == TACAN){
+          output[C] = this->Storage[i];
+          C++;
+        }
+      }
+      break;
+    default:
+      break;
+  }
   return output;
 }

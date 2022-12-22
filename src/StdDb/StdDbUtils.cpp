@@ -28,7 +28,9 @@ double ReadLon(std::string FileRecord, char StartIndex){
 float ReadMagVar(std::string FileRecord, char StartIndex){
   float output = 0.0;
   for (uint8_t i = 0; i < 4; i++){
-    output += (FileRecord[StartIndex+1+i]-48) * pow(10,2-i);
+    if(FileRecord[StartIndex+1+i] != ' '){
+      output += (FileRecord[StartIndex+1+i]-48) * pow(10,2-i);
+    }
   }
   if (FileRecord[StartIndex] == 'W'){
     output *= -1;

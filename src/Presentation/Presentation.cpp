@@ -88,11 +88,30 @@ std::string PresentAPT(DbRecord_t APT){
   std::string output = "";
   output += "NAME:    \t" + std::string(APT.ICAO) + "\n";
   output += "LONG NAME:\t" + std::string(APT.LongName) + "\n";
+  output += "IATA CODE:\t" + std::string(APT.IATA) + "\n";
   output += "REGION:  \t" + std::string(APT.CountryCode) + "\n";
   output += "LATITUDE:\t" + RenderCoord(APT.Lat) + "\n";
   output += "LONGITUDE:\t" + RenderCoord(APT.Lon) + "\n";
   output += "FREQUENCY:\t" + RenderFrequency(APT.Freq) + "\n";
   output += "MAG VAR:\t" + std::string(APT.MagVar >= 0 ? "E" : "W") + std::to_string(abs(APT.MagVar)) + "\n";
+  output += "USAGE:\t";
+  switch (APT.AptUsage){
+  case CIVIL:    output += "CIVIL"; break;
+  case MILITARY: output += "MILITARY"; break;
+  case PRIVATE:  output += "PRIVATE"; break;
+  case JOINT:    output += "JOINT"; break;
+  }
+  output += " - ";
+  APT.AptIfrCapable ? output += "IFR" : output += "VFR";
+  output += "\n";
+  output +="LONGEST RWY:\t" + std::to_string(APT.LongestRWYlength) + " ft - ";
+  switch (APT.LongRwySurfType){
+  case SOFT_SURFACE:  output += "SOFT"; break;
+  case HARD_SURFACE:  output += "HARD"; break;
+  case WATER_SURFACE: output += "WATER"; break;
+  case UNDEF_SURFACE: output += "UNDEFINED"; break;
+  }
+  output += "\n";
   return output;
 }
 
@@ -105,4 +124,8 @@ std::string PresentNDB(DbRecord_t NDB){
   output += "FREQUENCY:\t" + RenderFrequency(NDB.Freq) + "\n";
   output += "MAG VAR:\t" + std::string(NDB.MagVar >= 0 ? "E" : "W") + std::to_string(abs(NDB.MagVar)) + "\n";
   return output;
+}
+
+std::string presentVhfList(std::vector<DbRecord_t> List){
+  
 }

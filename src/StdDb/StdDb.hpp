@@ -25,6 +25,7 @@ typedef struct Record
   char LongName[26];
   char CountryCode[3];
   char DMEident[5];
+  char IATA[4];
   E_NavAidClass Class;
   double Lat, Lon;
   double DmeLat, DmeLon;
@@ -34,6 +35,10 @@ typedef struct Record
   uint8_t Channel;
   E_ChannelMode ChMode;
   E_VhfRange VhfRange;
+  E_Surf_Type LongRwySurfType;
+  uint8_t LongestRWYlength;
+  E_AptPubMil AptUsage;
+  bool AptIfrCapable;
 }DbRecord_t;
 
 typedef struct StdDbStatistics{
@@ -59,6 +64,7 @@ public:
   E_DbError StdDbInitialization();
   std::map<std::string, uint32_t> getStatistics();
   std::vector<DbRecord_t> Search(std::string Searchkey);
+  std::vector<DbRecord_t> List(E_LIST_TYPE ListType);
 };
 
 #endif 
