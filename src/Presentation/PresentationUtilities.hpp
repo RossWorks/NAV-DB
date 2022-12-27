@@ -14,6 +14,6 @@ enum E_CoordPrecision{
 
 std::string RenderFrequency(uint32_t Frequency);
 
-std::string RenderCoord(double Coord);
+std::string RenderCoord(double Coord, bool IsLat);
 
 #endif

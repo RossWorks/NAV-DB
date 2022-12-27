@@ -43,15 +43,15 @@ std::string PresentVHF(DbRecord_t VHF){
   output += "REGION:  \t" + std::string(VHF.CountryCode) + "\n";
   if (VHF.Class == VOR || VHF.Class == VORDME ||VHF.Class == TACAN ||
       VHF.Class == VORTAC){
-    output += "LATITUDE:\t" + RenderCoord(VHF.Lat) + "\n";
-    output += "LONGITUDE:\t" + RenderCoord(VHF.Lon) + "\n";
+    output += "LATITUDE:\t" + RenderCoord(VHF.Lat, true) + "\n";
+    output += "LONGITUDE:\t" + RenderCoord(VHF.Lon, false) + "\n";
   }
   output += "FREQUENCY:\t" + RenderFrequency(VHF.Freq) + "\n";
   output += "CHANNEL:\t" + std::to_string(VHF.Channel) + " " + (VHF.ChMode == X ? "X" : "Y") + "\n";
   if (VHF.Class == VORDME || VHF.Class == DME || VHF.Class == TACAN || 
       VHF.Class == VORTAC){
-    output += "DME LAT:\t" + RenderCoord(VHF.DmeLat) + "\n";
-    output += "DME LON:\t" + RenderCoord(VHF.DmeLon) + "\n";
+    output += "DME LAT:\t" + RenderCoord(VHF.DmeLat, true) + "\n";
+    output += "DME LON:\t" + RenderCoord(VHF.DmeLon, false) + "\n";
     output += "DME ELEV:\t" + std::to_string(VHF.DmeElev) + "\n";
   }
   if (VHF.Class != DME){
@@ -90,8 +90,9 @@ std::string PresentAPT(DbRecord_t APT){
   output += "LONG NAME:\t" + std::string(APT.LongName) + "\n";
   output += "IATA CODE:\t" + std::string(APT.IATA) + "\n";
   output += "REGION:  \t" + std::string(APT.CountryCode) + "\n";
-  output += "LATITUDE:\t" + RenderCoord(APT.Lat) + "\n";
-  output += "LONGITUDE:\t" + RenderCoord(APT.Lon) + "\n";
+  output += "LATITUDE:\t" + RenderCoord(APT.Lat, true) + "\n";
+  output += "LONGITUDE:\t" + RenderCoord(APT.Lon, false) + "\n";
+  output += "ELEVEATION:\t" + std::to_string(APT.Elev) + "\n";
   output += "FREQUENCY:\t" + RenderFrequency(APT.Freq) + "\n";
   output += "MAG VAR:\t" + std::string(APT.MagVar >= 0 ? "E" : "W") + std::to_string(abs(APT.MagVar)) + "\n";
   output += "USAGE:\t";
@@ -119,8 +120,8 @@ std::string PresentNDB(DbRecord_t NDB){
   std::string output = "";
   output += "NAME:    \t" + std::string(NDB.ICAO) + "\n";
   output += "REGION:  \t" + std::string(NDB.CountryCode) + "\n";
-  output += "LATITUDE:\t" + RenderCoord(NDB.Lat) + "\n";
-  output += "LONGITUDE:\t" + RenderCoord(NDB.Lon) + "\n";
+  output += "LATITUDE:\t" + RenderCoord(NDB.Lat, true) + "\n";
+  output += "LONGITUDE:\t" + RenderCoord(NDB.Lon,false) + "\n";
   output += "FREQUENCY:\t" + RenderFrequency(NDB.Freq) + "\n";
   output += "MAG VAR:\t" + std::string(NDB.MagVar >= 0 ? "E" : "W") + std::to_string(abs(NDB.MagVar)) + "\n";
   return output;

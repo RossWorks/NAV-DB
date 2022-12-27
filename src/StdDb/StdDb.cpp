@@ -267,6 +267,7 @@ DbRecord_t StdDb::AcquireAptRecord(std::string FileRecord, E_DbError* ReturnCode
   output.LongName[25] = '\0';
   output.Lat = ReadLat(FileRecord, C_NAVAID_LAT);
   output.Lon = ReadLon(FileRecord, C_NAVAID_LON);
+  output.Elev= ReadElev(FileRecord, C_APT_ELEV);
   output.MagVar = ReadMagVar(FileRecord, C_APT_MAGVAR);
   for (i=0; i<3; i++){
     output.IATA[i] = FileRecord[C_IATA_IDENT+i];

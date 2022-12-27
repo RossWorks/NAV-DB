@@ -29,7 +29,7 @@ typedef struct Record
   E_NavAidClass Class;
   double Lat, Lon;
   double DmeLat, DmeLon;
-  int DmeElev;
+  int Elev, DmeElev;
   float MagVar;
   uint32_t Freq;
   uint8_t Channel;

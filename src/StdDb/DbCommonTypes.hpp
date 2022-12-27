@@ -71,6 +71,7 @@ const char C_NAVAID_LAT       = 32;
 const char C_NAVAID_LON       = 41;
 const char C_APT_MAGVAR       = 51;
 const char C_DME_LAT          = 55;
+const char C_APT_ELEV         = 56;
 const char C_DME_LON          = 64;
 const char C_NAVAID_MAGVAR    = 74;
 const char C_DME_ELEV         = 79;
