@@ -95,7 +95,7 @@ std::string PresentAPT(DbRecord_t APT){
   output += "ELEVEATION:\t" + std::to_string(APT.Elev) + "\n";
   output += "FREQUENCY:\t" + RenderFrequency(APT.Freq) + "\n";
   output += "MAG VAR:\t" + std::string(APT.MagVar >= 0 ? "E" : "W") + std::to_string(abs(APT.MagVar)) + "\n";
-  output += "USAGE:\t";
+  output += "USAGE:\t\t";
   switch (APT.AptUsage){
   case CIVIL:    output += "CIVIL"; break;
   case MILITARY: output += "MILITARY"; break;
@@ -113,6 +113,7 @@ std::string PresentAPT(DbRecord_t APT){
   case UNDEF_SURFACE: output += "UNDEFINED"; break;
   }
   output += "\n";
+  output += "TIME ZONE:\t" + std::to_string(APT.TimeZoneOffset/60) + ":" +  std::to_string(APT.TimeZoneOffset%60) + "\n";
   return output;
 }
 

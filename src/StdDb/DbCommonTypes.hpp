@@ -76,6 +76,7 @@ const char C_DME_LON          = 64;
 const char C_NAVAID_MAGVAR    = 74;
 const char C_DME_ELEV         = 79;
 const char C_APT_USE          = 80;
+const char C_APT_TIMEZONE     = 81;
 const char C_APT_LONG_NAME    = 93;
 const char C_VHF_FIGURE_MERIT = 84;
 const char C_BLANK_CHAR       = ' ';

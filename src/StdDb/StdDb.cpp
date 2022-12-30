@@ -293,6 +293,23 @@ DbRecord_t StdDb::AcquireAptRecord(std::string FileRecord, E_DbError* ReturnCode
   case 'J': output.AptUsage = JOINT;break;
   default : output.AptUsage = PRIVATE;break;
   }
+  output.TimeZoneOffset = 0;
+  if (FileRecord[C_APT_TIMEZONE] == ' '){}
+  else if (FileRecord[C_APT_TIMEZONE] == 'Z'){
+    output.TimeZoneOffset += 0*60;
+  }
+  else if (FileRecord[C_APT_TIMEZONE] <= 'M'){
+    output.TimeZoneOffset += -1*(FileRecord[C_APT_TIMEZONE]-'A'+1)*60;
+    output.TimeZoneOffset += -1*(FileRecord[C_APT_TIMEZONE+1]-'0'*10);
+    output.TimeZoneOffset += -1*(FileRecord[C_APT_TIMEZONE+2]-'0');
+  }
+  else if (FileRecord[C_APT_TIMEZONE] >= 'N'){
+    output.TimeZoneOffset += (FileRecord[C_APT_TIMEZONE]-'N'+1)*60;
+    output.TimeZoneOffset += FileRecord[C_APT_TIMEZONE+1]-'0'*10;
+    output.TimeZoneOffset += FileRecord[C_APT_TIMEZONE+2]-'0';
+  }
+  
+  
   return output;
 }
 

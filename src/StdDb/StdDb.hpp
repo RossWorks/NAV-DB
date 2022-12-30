@@ -39,6 +39,7 @@ typedef struct Record
   uint8_t LongestRWYlength;
   E_AptPubMil AptUsage;
   bool AptIfrCapable;
+  int TimeZoneOffset;
 }DbRecord_t;
 
 typedef struct StdDbStatistics{
