@@ -12,4 +12,6 @@ float ReadMagVar(std::string FileRecord, char StartIndex);
 
 int ReadElev(std::string FileRecord, char StartIndex);
 
+void ReadIcaoCode(char* output, std::string FileRecord, char StartIndex, char MaxLen);
+
 #endif

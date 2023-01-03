@@ -24,6 +24,9 @@ E_DbError StdDb::StdDbInitialization(){
   this->Statistics.NDB_size = 0;
   this->Statistics.VHF_size = 0;
   this->AcquireArinc424Files();
+  std::cout << "Starting sorting...\n";
+  this->SortDatabase();
+  std::cout << "DONE\n";
   return NO_ERROR;
 }
 
@@ -102,6 +105,7 @@ E_DbError StdDb::AcquireArinc424Files(){
 DbRecord_t StdDb::AcquireNdbRecord(std::string FileRecord, E_DbError* ReturnCode){
   DbRecord_t output;
   std::string SpareString;
+  output.ListType = NDB_LIST;
   for (uint8_t i=0; i<4; i++){
     output.ICAO[i] = FileRecord[C_ICAO_IDENT+i];
     if (output.ICAO[i] == ' '){output.ICAO[i] = '\0';}
@@ -131,6 +135,7 @@ DbRecord_t StdDb::AcquireNdbRecord(std::string FileRecord, E_DbError* ReturnCode
 
 DbRecord_t StdDb::AcquireVhfRecord(std::string FileRecord, E_DbError* ReturnCode){
   DbRecord_t output;
+  output.ListType = VHF_LIST;
   char SpareChar = 0;
   for (uint8_t i=0; i<4; i++){
     output.ICAO[i] = FileRecord[C_ICAO_IDENT+i];
@@ -244,6 +249,7 @@ void StdDb::ClearDbRecord( DbRecord_t *Record){
 
 DbRecord_t StdDb::AcquireEnrRecord(std::string FileRecord, E_DbError* ReturnCode){
   DbRecord_t output;
+  output.ListType = WP_LIST;
   for (int i = 0; i < 6; i++){
     output.ICAO[i] = FileRecord[C_ICAO_IDENT+i];
   }
@@ -257,10 +263,9 @@ DbRecord_t StdDb::AcquireAptRecord(std::string FileRecord, E_DbError* ReturnCode
   DbRecord_t output;
   int i = 0;
   output.Class = APT;
-  for (i = 0; i < 4; i++){
-    output.ICAO[i] = FileRecord[6+i];
-  }
-  output.ICAO[4+1] = '\0';
+  output.ListType = APT_LIST;
+  ReadIcaoCode(output.CountryCode, FileRecord, 10, 2);
+  ReadIcaoCode(output.ICAO, FileRecord, C_APT_ICAO_IDENT, 4);
   for (i = 0; i < 25; i++){
     output.LongName[i] = FileRecord[C_APT_LONG_NAME+i];
   }
@@ -270,9 +275,10 @@ DbRecord_t StdDb::AcquireAptRecord(std::string FileRecord, E_DbError* ReturnCode
   output.Elev= ReadElev(FileRecord, C_APT_ELEV);
   output.MagVar = ReadMagVar(FileRecord, C_APT_MAGVAR);
   for (i=0; i<3; i++){
-    output.IATA[i] = FileRecord[C_IATA_IDENT+i];
+    output.IATA[i] = FileRecord[C_APT_IATA_IDENT+i];
   }
   output.IATA[3] = '\0';
+  output.LongestRWYlength = 0;
   for (i=0; i<3; i++){
     if (FileRecord[C_APT_RWY_LONG+i]!= ' '){
       output.LongestRWYlength += (FileRecord[C_APT_RWY_LONG+i]-48)*pow(10,4-i);
@@ -308,8 +314,6 @@ DbRecord_t StdDb::AcquireAptRecord(std::string FileRecord, E_DbError* ReturnCode
     output.TimeZoneOffset += FileRecord[C_APT_TIMEZONE+1]-'0'*10;
     output.TimeZoneOffset += FileRecord[C_APT_TIMEZONE+2]-'0';
   }
-  
-  
   return output;
 }
 
@@ -343,4 +347,52 @@ std::vector<DbRecord_t> StdDb::List(E_LIST_TYPE ListType){
       break;
   }
   return output;
+}
+
+bool StdDb::SortTwoRecords(const DbRecord_t Record1,const DbRecord_t Record2){
+  std::string Name1(Record1.ICAO), Name2(Record2.ICAO);
+  if (Record1.ListType < Record2.ListType){return true;}
+  if (Record1.ListType > Record2.ListType){return false;}
+  if (Record1.ListType == Record2.ListType){
+    if (Name1 <= Name2){return true;}
+    if (Name1 > Name2){return false;}
+  }
+  return false;
+}
+
+void StdDb::SortDatabase(){
+  bool Swapped = false;
+  uint64_t Iteration = 0;
+  float progress = 0, old_progress = 0;
+  int i = 0, start = 0, end = this->Statistics.GlobalSize-1;
+  DbRecord_t AUX;
+  do{
+    progress = (float)Iteration/(this->Statistics.GlobalSize/2)*100;
+    if ((progress - old_progress) > 0.1){
+      printf("\r %.2f %", progress);
+      old_progress = progress;
+    }
+    Iteration++;
+    for (i = start; i <= end; i++){
+      if (this->SortTwoRecords(this->Storage[i], this->Storage[i+1])){
+        AUX = this->Storage[i];
+        this->Storage[i] = this->Storage[i+1];
+        this->Storage[i+1] = AUX;
+        Swapped = true;
+      }
+    }
+    if (!Swapped){break;}
+    Swapped = false;
+    end--;
+    for (i = end; i > start; i--){
+      if (this->SortTwoRecords(this->Storage[i], this->Storage[i-1])){
+        AUX = this->Storage[i];
+        this->Storage[i] = this->Storage[i-1];
+        this->Storage[i-1] = AUX;
+        Swapped = true;
+      }
+    }
+    start++;
+  } while (Swapped);
+    
 }

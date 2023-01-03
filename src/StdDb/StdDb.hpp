@@ -31,12 +31,13 @@ typedef struct Record
   double DmeLat, DmeLon;
   int Elev, DmeElev;
   float MagVar;
+  E_LIST_TYPE ListType;
   uint32_t Freq;
   uint8_t Channel;
   E_ChannelMode ChMode;
   E_VhfRange VhfRange;
   E_Surf_Type LongRwySurfType;
-  uint8_t LongestRWYlength;
+  uint32_t LongestRWYlength;
   E_AptPubMil AptUsage;
   bool AptIfrCapable;
   int TimeZoneOffset;
@@ -59,6 +60,8 @@ private:
   DbRecord_t AcquireAptRecord(std::string FileRecord, E_DbError* ReturnCode);
   void Freq2Channel(uint32_t Freq, uint8_t* Channel, E_ChannelMode* Mode);
   void ClearDbRecord(DbRecord_t* Record);
+  void SortDatabase();
+  bool SortTwoRecords(const DbRecord_t Record1, const DbRecord_t Record2);
 public:
   StdDb(/* args */) {}
   ~StdDb() {}

@@ -47,3 +47,14 @@ int ReadElev(std::string FileRecord, char StartIndex){
   if (FileRecord[StartIndex] == '-'){output *= -1;}
   return 0;
 }
+
+void ReadIcaoCode(char* output, std::string FileRecord, char StartIndex, char MaxLen){
+  int C = 0;
+  for(C=0; C<MaxLen; C++){
+    if (output[C] != ' '){
+      output[C] = FileRecord[StartIndex+C];
+    }
+    else{output[C] = '\0';}
+  }
+  output[MaxLen] = '\0';
+}

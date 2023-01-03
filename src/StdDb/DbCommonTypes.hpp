@@ -57,9 +57,10 @@ typedef enum DbErrorCode{
 
 const char C_SECTION_CODE     =  4;
 const char C_SUBSECTION_CODE  =  5;
+const char C_APT_ICAO_IDENT   =  6;
 const char C_APT_SUBSECTION   = 12;
 const char C_ICAO_IDENT       = 13;
-const char C_IATA_IDENT       = 13;
+const char C_APT_IATA_IDENT   = 13;
 const char C_COUNTRY_CODE     = 19;
 const char C_CONT_INDEX       = 21;
 const char C_FREQ             = 22;
