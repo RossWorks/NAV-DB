@@ -266,10 +266,10 @@ DbRecord_t StdDb::AcquireAptRecord(std::string FileRecord, E_DbError* ReturnCode
   output.ListType = APT_LIST;
   ReadIcaoCode(output.CountryCode, FileRecord, 10, 2);
   ReadIcaoCode(output.ICAO, FileRecord, C_APT_ICAO_IDENT, 4);
-  for (i = 0; i < 25; i++){
+  for (i = 0; i < C_LONG_NAME_LEN; i++){
     output.LongName[i] = FileRecord[C_APT_LONG_NAME+i];
   }
-  output.LongName[25] = '\0';
+  output.LongName[C_LONG_NAME_LEN] = '\0';
   output.Lat = ReadLat(FileRecord, C_NAVAID_LAT);
   output.Lon = ReadLon(FileRecord, C_NAVAID_LON);
   output.Elev= ReadElev(FileRecord, C_APT_ELEV);

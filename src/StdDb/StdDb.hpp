@@ -22,7 +22,7 @@ typedef struct Record
 {
   uint32_t ID;
   char ICAO[6];
-  char LongName[26];
+  char LongName[C_LONG_NAME_LEN+1];
   char CountryCode[3];
   char DMEident[5];
   char IATA[4];

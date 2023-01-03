@@ -66,6 +66,7 @@ const char C_CONT_INDEX       = 21;
 const char C_FREQ             = 22;
 const char C_NAVAID_CLASS     = 27;
 const char C_APT_RWY_LONG     = 27;
+const char C_LONG_NAME_LEN    = 30;
 const char C_APT_IS_IFR       = 30;
 const char C_APT_RWY_SURFACE  = 31;
 const char C_NAVAID_LAT       = 32;
