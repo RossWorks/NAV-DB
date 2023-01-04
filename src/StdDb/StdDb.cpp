@@ -4,6 +4,16 @@ StdDb::StdDb(){
   this->DbIsSorted = false;
 }
 
+/**
+ * This function computes how many records are stored in the Arinc 424 files
+ * inside the C_DataFolder path. The sum of the physical sizes of every file is 
+ * then divided by 133 (132 char + newline) to obtain the total number of lines.
+ * This method is inefficient at best, as it does not take in account:
+ * 1) unused/skipped records
+ * 2) continuation records
+ * The function assumes that every line of every fle holds an independent
+ * reference point.
+ */
 uint32_t StdDb::GetSourceFilesSize(){
   std::filesystem::directory_iterator SearchingPath(C_DataFolder);
   uint32_t output = 0;
@@ -16,6 +26,14 @@ uint32_t StdDb::GetSourceFilesSize(){
   return output;
 }
 
+/**
+ * This function initializes the Std-DB by loading the info from the A424 files
+ * into the RAM. First it deduces how many records the `Storage` vector should
+ * hold, by counting how many lines the A424 files hold (it assumes that 1 line 
+ * = 1 Reference point), then it reserves the needed memory to avoid a continous
+ * reallocation. Sorting of the read info is optional, since it can take quite
+ * time. Sorting is mandatory to build a usable DB for NavSys.
+ */
 E_DbError StdDb::StdDbInitialization(bool SortDb){
   uint32_t NewDBSize = this->GetSourceFilesSize();
   if (NewDBSize > this->Storage.max_size()){
@@ -37,6 +55,15 @@ E_DbError StdDb::StdDbInitialization(bool SortDb){
   return NO_ERROR;
 }
 
+/**
+ * This function iterates trough the files inside `C_DataFolder'. For each file,
+ * every line is read. According to Section and Subsection chars, the current
+ * line is passed to the appropriate function able to read that specific type of
+ * record (VHF, APT, NDB, etc...). Each line is sotred inside a 135 chars long
+ * string to save time by allocating memory only once. Each line read inceases
+ * a counter, used in statistics, to keep track of how many records have been
+ * acquired and of what type.
+ */
 E_DbError StdDb::AcquireArinc424Files(){
   std::filesystem::directory_iterator SearchingPath(C_DataFolder);
   std::ifstream A424File;
@@ -109,6 +136,9 @@ E_DbError StdDb::AcquireArinc424Files(){
   return NO_ERROR;
 }
 
+/**
+ * This function reads an Arinc 424 record identified as an NDB navaid.
+ */
 DbRecord_t StdDb::AcquireNdbRecord(std::string FileRecord, E_DbError* ReturnCode){
   DbRecord_t output;
   std::string SpareString;
@@ -139,7 +169,9 @@ DbRecord_t StdDb::AcquireNdbRecord(std::string FileRecord, E_DbError* ReturnCode
   return output;
 }
 
-
+/**
+ * This function reads an Arinc 424 record identified as a VHF navaid.
+ */
 DbRecord_t StdDb::AcquireVhfRecord(std::string FileRecord, E_DbError* ReturnCode){
   DbRecord_t output;
   output.ListType = VHF_LIST;
@@ -202,7 +234,11 @@ DbRecord_t StdDb::AcquireVhfRecord(std::string FileRecord, E_DbError* ReturnCode
   return output;
 }
 
-
+/**
+ * this function searchs the Database for all the points having `SearchKey` as
+ * ICAO code. The search is simple, but inefficient, sequential search suitable
+ * for unordered Databases
+ */
 std::vector<DbRecord_t> StdDb::Search(std::string Searchkey){
   std::vector<DbRecord_t> output;
   std::string TmpString;
@@ -240,6 +276,9 @@ void StdDb::Freq2Channel(uint32_t Freq, uint8_t* Channel, E_ChannelMode* Mode){
   *Channel = (uint8_t)pre_output;
 }
 
+/**
+ * This function clears a DbRecord by setting all its values to zero
+ */
 void StdDb::ClearDbRecord( DbRecord_t *Record){
   int i = 0;
   Record->Channel     = 0;
@@ -254,6 +293,9 @@ void StdDb::ClearDbRecord( DbRecord_t *Record){
   Record->MagVar = 0.0;
 }
 
+/**
+ * This function reads an Arinc 424 record identified as an enroute waypoint.
+ */
 DbRecord_t StdDb::AcquireEnrRecord(std::string FileRecord, E_DbError* ReturnCode){
   DbRecord_t output;
   output.ListType = WP_LIST;
@@ -266,6 +308,9 @@ DbRecord_t StdDb::AcquireEnrRecord(std::string FileRecord, E_DbError* ReturnCode
   return output;
 }
 
+/**
+ * This function reads an Arinc 424 record identified as an airport.
+ */
 DbRecord_t StdDb::AcquireAptRecord(std::string FileRecord, E_DbError* ReturnCode){
   DbRecord_t output;
   int i = 0;
