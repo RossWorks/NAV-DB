@@ -51,6 +51,7 @@ class StdDb{
 private:
   std::vector<DbRecord_t> Storage;
   StdDbStat_t Statistics;
+  bool DbIsSorted;
   uint32_t SetDbSize();
   uint32_t GetSourceFilesSize();
   E_DbError AcquireArinc424Files();
@@ -63,9 +64,9 @@ private:
   void SortDatabase();
   bool SortTwoRecords(const DbRecord_t Record1, const DbRecord_t Record2);
 public:
-  StdDb(/* args */) {}
-  ~StdDb() {}
-  E_DbError StdDbInitialization();
+  StdDb();
+  ~StdDb(){}
+  E_DbError StdDbInitialization(bool SortDb);
   std::map<std::string, uint32_t> getStatistics();
   std::vector<DbRecord_t> Search(std::string Searchkey);
   std::vector<DbRecord_t> List(E_LIST_TYPE ListType);

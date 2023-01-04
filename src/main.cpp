@@ -1,15 +1,11 @@
 #include "./StdDb/StdDb.hpp"
 #include "./Common/CommonUtils.hpp"
 #include "./Presentation/Presentation.hpp"
-
-
-int MainSetup(StdDb* DBMngPtr){
-  DBMngPtr->StdDbInitialization();
-  return 0;  
-}
+#include "./Common/CommonSettings.hpp"
 
 int main(int argc, char* argv[])
 {
+  Settings MySettings;
   StdDb MyDb;
   uint IndexOfSpace = 0, argument = 0;
   std::map<std::string,uint32_t> Stats;
@@ -19,7 +15,8 @@ int main(int argc, char* argv[])
   SearchResult.reserve(20);
 
   system("clear");
-  MainSetup(&MyDb);
+  MySettings.Parse(argc, argv);
+  MyDb.StdDbInitialization(MySettings.GetDbSortSetting());
   Stats = MyDb.getStatistics();
   for (std::pair<std::string,uint32_t> element: Stats){
     std::cout << element.first << ": " << element.second << '\n';

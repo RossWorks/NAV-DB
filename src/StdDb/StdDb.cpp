@@ -1,5 +1,9 @@
 #include "StdDb.hpp"
 
+StdDb::StdDb(){
+  this->DbIsSorted = false;
+}
+
 uint32_t StdDb::GetSourceFilesSize(){
   std::filesystem::directory_iterator SearchingPath(C_DataFolder);
   uint32_t output = 0;
@@ -12,7 +16,7 @@ uint32_t StdDb::GetSourceFilesSize(){
   return output;
 }
 
-E_DbError StdDb::StdDbInitialization(){
+E_DbError StdDb::StdDbInitialization(bool SortDb){
   uint32_t NewDBSize = this->GetSourceFilesSize();
   if (NewDBSize > this->Storage.max_size()){
     return OUT_OF_MEMORY;
@@ -24,9 +28,12 @@ E_DbError StdDb::StdDbInitialization(){
   this->Statistics.NDB_size = 0;
   this->Statistics.VHF_size = 0;
   this->AcquireArinc424Files();
-  std::cout << "Starting sorting...\n";
-  this->SortDatabase();
-  std::cout << "DONE\n";
+  if (SortDb){
+    std::cout << "Sorting Db...\n";
+    this->SortDatabase();
+    std::cout << "DONE\n";
+    this->DbIsSorted = true;
+  }
   return NO_ERROR;
 }
 
