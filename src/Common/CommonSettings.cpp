@@ -61,3 +61,5 @@ void Settings::PrintSettings(){
 }
 
 bool Settings::GetDbSortSetting(){return this->SortDb;}
+
+bool Settings::GetTermClearSetting(){return this->ClearTerminalOnNewText;}

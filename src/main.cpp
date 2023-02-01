@@ -8,7 +8,8 @@
 int main(int argc, char* argv[])
 {
   std::string SettingFile(argv[1]);
-  Hmi_SM HMI(SettingFile);
+  StdDb MyStdDb;
+  Hmi_SM HMI(SettingFile, &MyStdDb);
   HMI_State HMIstate = HMI_START;
   while (HMIstate != HMI_TERMINATE){
     HMIstate = HMI.ExecuteStep();

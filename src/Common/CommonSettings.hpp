@@ -19,6 +19,7 @@ public:
   void ParseSettingFile(std::string SettingsFilePath);
   void PrintSettings();
   bool GetDbSortSetting();
+  bool GetTermClearSetting();
 };
 
 #endif
