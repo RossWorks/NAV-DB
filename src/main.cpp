@@ -2,60 +2,16 @@
 #include "./Common/CommonUtils.hpp"
 #include "./Presentation/Presentation.hpp"
 #include "./Common/CommonSettings.hpp"
+#include "./CLI-Interface/Hmi_SM.hpp"
+
 
 int main(int argc, char* argv[])
 {
-  Settings MySettings;
-  StdDb MyDb;
-  uint IndexOfSpace = 0, argument = 0;
-  std::map<std::string,uint32_t> Stats;
-  std::string SearchKey, command;
-  std::string CLIout;
-  std::vector<DbRecord_t> SearchResult;
-  SearchResult.reserve(20);
-
-  system("clear");
-  MySettings.Parse(argc, argv);
-  MyDb.StdDbInitialization(MySettings.GetDbSortSetting());
-  Stats = MyDb.getStatistics();
-  for (std::pair<std::string,uint32_t> element: Stats){
-    std::cout << element.first << ": " << element.second << '\n';
-  }
-  std::cout << "Enter search key: ";
-  std::cin >> SearchKey;
-  while (SearchKey != "QUITNOW"){
-    SearchResult = MyDb.Search(SearchKey);
-    CLIout = PresentSearchResult(SearchResult);
-    std::cout << CLIout;
-    std::cout << "Enter search key: ";
-    std::cin >> SearchKey;
-    system("clear");
-    if (SearchKey.length() >= 7){
-      command  = SearchKey.substr(0,7);
-      argument = std::stoi(SearchKey.substr(7, SearchKey.length()-7));
-      if (command == "DETAILS" && argument > 0 && argument <= SearchResult.size()){
-        switch (SearchResult[argument-1].Class){
-          case VOR:
-          case VORDME:
-          case DME:
-            CLIout = PresentVHF(SearchResult[argument-1]);
-            break;
-          case APT:
-            CLIout = PresentAPT(SearchResult[argument-1]);
-            break;
-          case NDB:
-            CLIout = PresentNDB(SearchResult[argument-1]);
-            break;
-          default:
-            CLIout = PresentVHF(SearchResult[argument-1]);
-            break;
-        }
-        std::cout << CLIout;
-        std::cout << "Enter search key: ";
-        std::cin >> SearchKey;
-        system("clear");
-      }
-    }
+  std::string SettingFile(argv[1]);
+  Hmi_SM HMI(SettingFile);
+  HMI_State HMIstate = HMI_START;
+  while (HMIstate != HMI_TERMINATE){
+    HMIstate = HMI.ExecuteStep();
   }
   return 0;
 }

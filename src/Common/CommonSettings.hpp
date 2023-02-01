@@ -2,19 +2,22 @@
 #define COMMON_SETTING_HPP
 
 #include <string>
+#include <iostream>
+#include <fstream>
 
-enum E_ArgParseError{
-  NO_ERROR_ARG  ,
-  INVALID_ARG
-};
+enum LOG_LEVEL{LOG_ERROR, LOG_WARN, LOG_INFO};
 
 class Settings{
 private:
   bool SortDb;
+  bool ClearTerminalOnNewText;
+  bool FileRead;
+  LOG_LEVEL Verbosity;
 public:
   Settings();
   ~Settings();
-  void Parse(int argc, char** argv);
+  void ParseSettingFile(std::string SettingsFilePath);
+  void PrintSettings();
   bool GetDbSortSetting();
 };
 

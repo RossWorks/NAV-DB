@@ -8,7 +8,8 @@ project NavDb is
   for source_dirs use ("./src/",
                        "./src/Common/",
                        "./src/StdDb/",
-                       "./src/Presentation/");
+                       "./src/Presentation/",
+                       "./src/CLI-Interface/");
   for Object_Dir use "./obj";
   for Exec_dir use "./bin";
   for main use ("./src/main.cpp");
@@ -20,7 +21,7 @@ project NavDb is
       when "release" =>
         for Executable("main.cpp") use "NavDb.bin";
     end case;
-   end Builder;
+  end Builder;
 
   package Compiler is
     case Mode is
