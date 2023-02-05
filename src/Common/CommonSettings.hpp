@@ -13,6 +13,7 @@ private:
   bool ClearTerminalOnNewText;
   bool FileRead;
   LOG_LEVEL Verbosity;
+  std::string A424FilesDir;
 public:
   Settings();
   ~Settings();
@@ -20,6 +21,7 @@ public:
   void PrintSettings();
   bool GetDbSortSetting();
   bool GetTermClearSetting();
+  std::string GetA424FilesDir();
 };
 
 #endif

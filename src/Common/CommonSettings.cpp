@@ -6,6 +6,7 @@ Settings::Settings(){
   this->ClearTerminalOnNewText = false;
   this->Verbosity = LOG_INFO;
   this->FileRead = false;
+  this->A424FilesDir = "./Data/";
 }
 
 Settings::~Settings(){}
@@ -41,6 +42,9 @@ void Settings::ParseSettingFile(std::string SettingsFilePath){
         this->ClearTerminalOnNewText = (std::toupper(value.at(0))=='Y') ? true : false;
         continue;
       }
+      if (key == "A424DIR"){
+        this->A424FilesDir = value.substr(0,value.size());
+      }
     }
   }
   SettingsFile.close();
@@ -63,3 +67,5 @@ void Settings::PrintSettings(){
 bool Settings::GetDbSortSetting(){return this->SortDb;}
 
 bool Settings::GetTermClearSetting(){return this->ClearTerminalOnNewText;}
+
+std::string Settings::GetA424FilesDir(){return this->A424FilesDir;}

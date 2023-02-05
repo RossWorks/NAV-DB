@@ -16,8 +16,6 @@
 #include "../Common/CommonUtils.hpp"
 #include "./StdDbUtils.hpp"
 
-const std::string C_DataFolder = "./Data/";
-
 typedef struct Record
 {
   uint32_t ID;
@@ -57,13 +55,13 @@ private:
    * @brief Get the Source Files Size
    * @return the bytes size to be allocated in RAM for the DB 
    */
-  uint32_t GetSourceFilesSize();
+  uint32_t GetSourceFilesSize(std::string A424Dir);
 
   /**
    * @brief Reads data from the A424 files
    * @return E_DbError 
    */
-  E_DbError AcquireArinc424Files();
+  E_DbError AcquireArinc424Files(std::string A424Dir);
 
   /**
    * @brief Reads a Arinc 424 record containg a VHF navaid
@@ -133,7 +131,7 @@ public:
   * @param SortDb tells if the Db is to be sorted
   * @return E_DbError NO_ERROR if all good
   */
-  E_DbError StdDbInitialization(bool SortDb);
+  E_DbError StdDbInitialization(bool SortDb, std::string A424Folder);
 
   /**
    * @brief Get the Statistics for the Db

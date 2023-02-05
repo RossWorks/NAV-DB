@@ -11,11 +11,14 @@ StdDb::StdDb(){
  * This method is inefficient at best, as it does not take in account:
  * 1) unused/skipped records
  * 2) continuation records
- * The function assumes that every line of every fle holds an independent
+ * The function assumes that every line of every file holds an independent
  * reference point.
  */
-uint32_t StdDb::GetSourceFilesSize(){
-  std::filesystem::directory_iterator SearchingPath(C_DataFolder);
+uint32_t StdDb::GetSourceFilesSize(std::string A424Dir){
+  if (!std::filesystem::is_directory(A424Dir)){
+    return IO_ERROR;
+  };
+  std::filesystem::directory_iterator SearchingPath(A424Dir);
   uint32_t output = 0;
   for (const auto FileName: SearchingPath){
     if (FileName.is_regular_file()){
@@ -34,10 +37,12 @@ uint32_t StdDb::GetSourceFilesSize(){
  * reallocation. Sorting of the read info is optional, since it can take quite
  * time. Sorting is mandatory to build a usable DB for NavSys.
  */
-E_DbError StdDb::StdDbInitialization(bool SortDb){
-  uint32_t NewDBSize = this->GetSourceFilesSize();
+E_DbError StdDb::StdDbInitialization(bool SortDb, std::string A424Folder){
+  E_DbError output = NO_ERROR;
+  uint32_t NewDBSize = this->GetSourceFilesSize(A424Folder);
   if (NewDBSize > this->Storage.max_size()){
-    return OUT_OF_MEMORY;
+    output = OUT_OF_MEMORY;
+    return output;
   }
   this->Storage.reserve(NewDBSize);
   this->Statistics.APT_size = 0;
@@ -45,14 +50,17 @@ E_DbError StdDb::StdDbInitialization(bool SortDb){
   this->Statistics.GlobalSize = 0;
   this->Statistics.NDB_size = 0;
   this->Statistics.VHF_size = 0;
-  this->AcquireArinc424Files();
+  output = this->AcquireArinc424Files(A424Folder);
+  if (output != NO_ERROR){
+    return output;
+  }
   if (SortDb){
     std::cout << "Sorting Db...\n";
     this->SortDatabase();
     std::cout << "DONE\n";
     this->DbIsSorted = true;
   }
-  return NO_ERROR;
+  return output;
 }
 
 /**
@@ -64,8 +72,11 @@ E_DbError StdDb::StdDbInitialization(bool SortDb){
  * a counter, used in statistics, to keep track of how many records have been
  * acquired and of what type.
  */
-E_DbError StdDb::AcquireArinc424Files(){
-  std::filesystem::directory_iterator SearchingPath(C_DataFolder);
+E_DbError StdDb::AcquireArinc424Files(std::string A424Dir){
+  if (!std::filesystem::is_directory(A424Dir)){
+    return IO_ERROR;
+  };
+  std::filesystem::directory_iterator SearchingPath(A424Dir);
   std::ifstream A424File;
   std::string FileRecord;
   DbRecord_t TmpDbRecord;
