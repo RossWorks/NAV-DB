@@ -128,7 +128,7 @@ std::string PresentNDB(DbRecord_t NDB){
   return output;
 }
 
-std::string presentVhfList(std::vector<DbRecord_t> List){
+std::string PresentList(std::vector<DbRecord_t> List){
   std::string output("");
   return output;
 }
