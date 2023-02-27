@@ -59,7 +59,7 @@ void Settings::PrintSettings(){
   if (this->Verbosity == LOG_INFO){
     std::cout << "Database sorting is ";
     std::cout << (this->SortDb ? "ENABLED" : "DISABLED") << "\n";
-    std::cout << "Terminal will " << (this->ClearTerminalOnNewText?"NOT ":"")<< "be cleared at each new print\n";
+    std::cout << "Terminal will " << (this->ClearTerminalOnNewText?"":"NOT ")<< "be cleared at each new print\n";
   }
   return;
 }
@@ -69,3 +69,5 @@ bool Settings::GetDbSortSetting(){return this->SortDb;}
 bool Settings::GetTermClearSetting(){return this->ClearTerminalOnNewText;}
 
 std::string Settings::GetA424FilesDir(){return this->A424FilesDir;}
+
+LOG_LEVEL Settings::GetVerbosity(){return this->Verbosity;}

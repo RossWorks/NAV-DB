@@ -22,6 +22,7 @@ public:
   bool GetDbSortSetting();
   bool GetTermClearSetting();
   std::string GetA424FilesDir();
+  LOG_LEVEL GetVerbosity();
 };
 
 #endif

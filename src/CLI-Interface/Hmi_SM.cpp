@@ -30,6 +30,11 @@ HMI_State Hmi_SM::ExecuteStep(){
         std::cout << "STD-DB NOT initalized!\n";
         break;
       }
+      if (MySettings.GetVerbosity() > LOG_WARN){
+        std::cout << "APT:\t" <<this->StdDbPointer->getStatistics().at("APT") << "\n";
+        std::cout << "NDB:\t" <<this->StdDbPointer->getStatistics().at("NDB") << "\n";
+        std::cout << "VHF:\t" <<this->StdDbPointer->getStatistics().at("VHF") << "\n";
+      }
       NextStep = HMI_SEARCH;
       break;
     case HMI_SEARCH:
