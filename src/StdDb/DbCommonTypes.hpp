@@ -1,3 +1,5 @@
+#ifndef DB_COMMON_TYPES
+#define DB_COMMON_TYPES
 typedef enum NavAidClass{
   UNKNOWN,
   APT,
@@ -82,3 +84,4 @@ const char C_APT_TIMEZONE     = 81;
 const char C_APT_LONG_NAME    = 93;
 const char C_VHF_FIGURE_MERIT = 84;
 const char C_BLANK_CHAR       = ' ';
+#endif

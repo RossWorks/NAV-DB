@@ -12,6 +12,9 @@ Hmi_SM::~Hmi_SM(){
 HMI_State Hmi_SM::ExecuteStep(){
   HMI_State NextStep = HMI_TERMINATE;
   E_DbError SpareError = IO_ERROR;
+  uint32_t TmpInt = 0;
+  std::string UserInput("");
+  E_LIST_TYPE MyList = VHF_LIST;
   static uint32_t ResultIndex = 0;
   switch (this->State){
     case HMI_START:
@@ -31,27 +34,26 @@ HMI_State Hmi_SM::ExecuteStep(){
       break;
     case HMI_SEARCH:
       std::cout << "Enter search key: ";
-      std::cin >> this->SearchKey;
+      std::cin >> UserInput;
       if (MySettings.GetTermClearSetting()){system("clear");}
-      if (SearchKey == "QUITNOW"){NextStep = HMI_TERMINATE; break;}
-      if (SearchKey.at(0) == '#'){
-        try{
-          ResultIndex = std::stoi(SearchKey.substr(1,SearchKey.size()));
-          if (ResultIndex > (this->SearchResults.size()) || ResultIndex < 1){
-            throw std::invalid_argument("s");
-          }
-        }
-        catch(const std::exception& e){
-          ResultIndex = 0;
-          if (MySettings.GetTermClearSetting()){system("clear");}
+      if (UserInput == "QUITNOW"){NextStep = HMI_TERMINATE; break;}
+      NextStep = ParseCommand(UserInput, &(this->SearchKey), &TmpInt, &MyList);
+      switch (NextStep){
+        case HMI_LIST:
+          this->SearchResults = this->StdDbPointer->GetList(MyList,TmpInt,10);
           NextStep = HMI_SHOW_RESULTS;
-          break; 
-        }
-        NextStep = HMI_DETAIL_RESULT;
-        break;
+          break;
+        case HMI_SEARCH:
+          this->SearchResults = this->StdDbPointer->Search(SearchKey);
+          NextStep = HMI_SHOW_RESULTS;
+          break;
+        case HMI_DETAIL_RESULT:
+          ResultIndex = TmpInt;
+          NextStep = HMI_DETAIL_RESULT;
+          break;
+        default:
+          break;
       }
-      this->SearchResults = this->StdDbPointer->Search(SearchKey);
-      NextStep = HMI_SHOW_RESULTS;
       break;
     case HMI_SHOW_RESULTS:
       std::cout << PresentSearchResult(this->SearchResults);

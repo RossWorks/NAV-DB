@@ -40,11 +40,16 @@ uint32_t StdDb::GetSourceFilesSize(std::string A424Dir){
 E_DbError StdDb::StdDbInitialization(bool SortDb, std::string A424Folder){
   E_DbError output = NO_ERROR;
   uint32_t NewDBSize = this->GetSourceFilesSize(A424Folder);
-  if (NewDBSize > this->Storage.max_size()){
-    output = OUT_OF_MEMORY;
-    return output;
+  try{
+    this->AptStorage.reserve(NewDBSize);
+    this->NdbStorage.reserve(NewDBSize);
+    this->VhfStorage.reserve(NewDBSize);
+    //this->WpStorage.reserve(NewDBSize);
   }
-  this->Storage.reserve(NewDBSize);
+  catch (const std::length_error& StdDbAllocationFailure){
+    std::cout << "Not enough memory to allocate all Database\n";
+    return OUT_OF_MEMORY;
+  }
   this->Statistics.APT_size = 0;
   this->Statistics.Enroute_size = 0;
   this->Statistics.GlobalSize = 0;
@@ -56,7 +61,9 @@ E_DbError StdDb::StdDbInitialization(bool SortDb, std::string A424Folder){
   }
   if (SortDb){
     std::cout << "Sorting Db...\n";
-    this->SortDatabase();
+    SortDatabase(&(this->AptStorage));
+    SortDatabase(&(this->NdbStorage));
+    SortDatabase(&(this->VhfStorage));
     std::cout << "DONE\n";
     this->DbIsSorted = true;
   }
@@ -81,8 +88,10 @@ E_DbError StdDb::AcquireArinc424Files(std::string A424Dir){
   std::string FileRecord;
   DbRecord_t TmpDbRecord;
   E_DbError ErrorCode = RECORD_MALFORMED;
-  uint32_t CurrentID = 1;
   FileRecord.reserve(135);
+  this->Statistics.APT_size = 0;
+  this->Statistics.NDB_size = 0;
+  this->Statistics.VHF_size = 0;
   for (const auto FileName: SearchingPath){
     A424File.open(FileName.path(),std::ios_base::in);
     while (getline(A424File,FileRecord))
@@ -94,31 +103,25 @@ E_DbError StdDb::AcquireArinc424Files(std::string A424Dir){
           switch(FileRecord[C_SECTION_CODE+1]){
             case C_BLANK_CHAR:
               TmpDbRecord = this->AcquireVhfRecord(FileRecord,&ErrorCode);
-              TmpDbRecord.ID = CurrentID;
-              this->Storage[CurrentID] = TmpDbRecord;
-              CurrentID++;
-              this->Statistics.VHF_size++;
-              this->Statistics.GlobalSize++;
+              TmpDbRecord.ID = this->Statistics.VHF_size;
+              this->VhfStorage.push_back(TmpDbRecord);
               break;
             case 'B':
               TmpDbRecord = this->AcquireNdbRecord(FileRecord,&ErrorCode);
-              TmpDbRecord.ID = CurrentID;
-              this->Storage[CurrentID] = TmpDbRecord;
-              CurrentID++;
-              this->Statistics.NDB_size++;
-              this->Statistics.GlobalSize++;
+              TmpDbRecord.ID = this->Statistics.NDB_size;
+              this->NdbStorage.push_back(TmpDbRecord);
               break;
           }
           break;
         case 'E':
           switch (FileRecord[C_SECTION_CODE+1]){
-          case 'A':
+          case 'A':/*
             TmpDbRecord = this->AcquireEnrRecord(FileRecord,&ErrorCode);
             TmpDbRecord.ID = CurrentID;
             this->Storage[CurrentID] = TmpDbRecord;
             CurrentID++;
             this->Statistics.Enroute_size++;
-            this->Statistics.GlobalSize++;
+            this->Statistics.GlobalSize++;*/
             break;
           default:
             break;
@@ -128,11 +131,8 @@ E_DbError StdDb::AcquireArinc424Files(std::string A424Dir){
           case 'A':
             if (FileRecord[21] != '0'){break;}
             TmpDbRecord = this->AcquireAptRecord(FileRecord,&ErrorCode);
-            TmpDbRecord.ID = CurrentID;
-            this->Storage[CurrentID] = TmpDbRecord;
-            CurrentID++;
-            this->Statistics.APT_size++;
-            this->Statistics.GlobalSize++;
+            TmpDbRecord.ID = this->Statistics.APT_size;
+            this->AptStorage.push_back(TmpDbRecord);
             break;
           default:
             break;
@@ -144,6 +144,9 @@ E_DbError StdDb::AcquireArinc424Files(std::string A424Dir){
     }
     A424File.close();
   }
+  this->Statistics.APT_size = this->AptStorage.size();
+  this->Statistics.NDB_size = this->NdbStorage.size();
+  this->Statistics.VHF_size = this->VhfStorage.size();
   return NO_ERROR;
 }
 
@@ -252,11 +255,32 @@ DbRecord_t StdDb::AcquireVhfRecord(std::string FileRecord, E_DbError* ReturnCode
  */
 std::vector<DbRecord_t> StdDb::Search(std::string Searchkey){
   std::vector<DbRecord_t> output;
+  if (false/*this->DbIsSorted*/){}
+  else{
+    output = this->LinearSearch(Searchkey);
+  }
+  return output;
+}
+
+std::vector<DbRecord_t> StdDb::LinearSearch(std::string Searchkey){
+  std::vector<DbRecord_t> output;
   std::string TmpString;
-  for (int i = 1; i< this->Statistics.GlobalSize; i++){
-    TmpString = this->Storage[i].ICAO;
+  for (int i = 1; i< this->Statistics.APT_size; i++){
+    TmpString = this->AptStorage.at(i).ICAO;
     if (TmpString == Searchkey){
-      output.push_back(this->Storage[i]);
+      output.push_back(this->AptStorage.at(i));
+    }
+  }
+  for (int i = 1; i< this->Statistics.NDB_size; i++){
+    TmpString = this->NdbStorage.at(i).ICAO;
+    if (TmpString == Searchkey){
+      output.push_back(this->NdbStorage.at(i));
+    }
+  }
+  for (int i = 1; i< this->Statistics.VHF_size; i++){
+    TmpString = this->VhfStorage.at(i).ICAO;
+    if (TmpString == Searchkey){
+      output.push_back(this->VhfStorage.at(i));
     }
   }
   return output;
@@ -390,25 +414,36 @@ std::map<std::string, uint32_t> StdDb::getStatistics(){
   return output;
 }
 
-std::vector<DbRecord_t> StdDb::List(E_LIST_TYPE ListType){
-  int i = 0, C = 0;
+std::vector<DbRecord_t> StdDb::GetList(E_LIST_TYPE ListType, uint32_t StartNumber,
+                                       uint32_t RequiredElements){
   std::vector<DbRecord_t> output;
+  uint64_t I = 0;
+  StartNumber = StartNumber - 1;
+  if (!this->DbIsSorted){return output;}
+  output.reserve(RequiredElements);
   switch (ListType){
-    case VHF_LIST:
-      output.reserve(this->Statistics.VHF_size);
-      for (i = 0; i < this->Statistics.GlobalSize; i++){
-        if (this->Storage[i].Class == VOR || this->Storage[i].Class == VORDME ||
-            this->Storage[i].Class == DME || this->Storage[i].Class == VORTAC ||
-            this->Storage[i].Class == ILS || this->Storage[i].Class == ILSDME ||
-            this->Storage[i].Class == TACAN){
-          output[C] = this->Storage[i];
-          C++;
-        }
-      }
-      break;
-    default:
-      break;
+  case VHF_LIST:
+    if (StartNumber > this->Statistics.VHF_size){return output;}
+    for (I = 0; I < RequiredElements; I++){
+      output.push_back(this->VhfStorage.at(I+StartNumber));
+    }
+    break;
+  case NDB_LIST:
+    if (StartNumber > this->Statistics.NDB_size){return output;}
+    for (I = 0; I < RequiredElements; I++){
+      output.push_back(this->NdbStorage.at(I+StartNumber));
+    }
+    break;
+  case APT_LIST:
+    if (StartNumber > this->Statistics.APT_size){return output;}
+    for (I = 0; I < RequiredElements; I++){
+      output.push_back(this->AptStorage.at(I+StartNumber));
+    }
+    break;
+  default:
+    break;
   }
+
   return output;
 }
 
@@ -417,30 +452,22 @@ bool StdDb::SortTwoRecords(const DbRecord_t Record1,const DbRecord_t Record2){
   if (Record1.ListType < Record2.ListType){return true;}
   if (Record1.ListType > Record2.ListType){return false;}
   if (Record1.ListType == Record2.ListType){
-    if (Name1 <= Name2){return true;}
-    if (Name1 > Name2){return false;}
+    if (Name1 <= Name2){return false;}
+    if (Name1 > Name2){return true;}
   }
   return false;
 }
 
-void StdDb::SortDatabase(){
+void StdDb::SortDatabase(std::vector<DbRecord_t>* MyStorage){
   bool Swapped = false;
-  uint64_t Iteration = 0;
-  float progress = 0, old_progress = 0;
-  int i = 0, start = 0, end = this->Statistics.GlobalSize-1;
+  int i = 0, start = 0, end = MyStorage->size()-1;
   DbRecord_t AUX;
   do{
-    progress = (float)Iteration/(this->Statistics.GlobalSize/2)*100;
-    if ((progress - old_progress) > 0.1){
-      printf("\r %.2f %", progress);
-      old_progress = progress;
-    }
-    Iteration++;
-    for (i = start; i <= end; i++){
-      if (this->SortTwoRecords(this->Storage[i], this->Storage[i+1])){
-        AUX = this->Storage[i];
-        this->Storage[i] = this->Storage[i+1];
-        this->Storage[i+1] = AUX;
+    for (i = start; i < end; i++){
+      if (this->SortTwoRecords(MyStorage->at(i), MyStorage->at(i+1))){
+        AUX = MyStorage->at(i);
+        MyStorage->at(i) = MyStorage->at(i+1);
+        MyStorage->at(i+1) = AUX;
         Swapped = true;
       }
     }
@@ -448,14 +475,14 @@ void StdDb::SortDatabase(){
     Swapped = false;
     end--;
     for (i = end; i > start; i--){
-      if (this->SortTwoRecords(this->Storage[i], this->Storage[i-1])){
-        AUX = this->Storage[i];
-        this->Storage[i] = this->Storage[i-1];
-        this->Storage[i-1] = AUX;
+      if (this->SortTwoRecords(MyStorage->at(i), MyStorage->at(i+1))){
+        AUX = MyStorage->at(i);
+        MyStorage->at(i) = MyStorage->at(i+1);
+        MyStorage->at(i+1) = AUX;
         Swapped = true;
       }
     }
     start++;
   } while (Swapped);
-    
+  return;
 }

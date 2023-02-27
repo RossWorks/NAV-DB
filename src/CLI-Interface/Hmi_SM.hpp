@@ -6,19 +6,8 @@
 #include "../Common/CommonSettings.hpp"
 #include "../StdDb/StdDb.hpp"
 #include "../Presentation/Presentation.hpp"
-
-enum HMI_State{
-    HMI_START,
-    HMI_INIT_DB,
-    HMI_SHOW_STATISTICS,
-    HMI_SEARCH,
-    HMI_SHOW_RESULTS,
-    HMI_DETAIL_RESULT,
-    HMI_END,
-    HMI_TERMINATE
-};
-
-
+#include "./Hmi_Support.hpp"
+#include "./Hmi_Types.hpp"
 
 class Hmi_SM{
 private:

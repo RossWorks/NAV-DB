@@ -27,7 +27,8 @@ project NavDb is
     case Mode is
       when "debug" =>
         Cpp_switches := ("-std=c++17",
-                         "-g");
+                         "-g",
+                         "-pthread");
       when "release" =>
         Cpp_switches := ("-std=c++17");  
     end case;

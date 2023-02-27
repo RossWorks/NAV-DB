@@ -11,6 +11,7 @@
 #include <map>
 #include <list>
 #include <math.h>
+#include <thread>
 
 #include "./DbCommonTypes.hpp"
 #include "../Common/CommonUtils.hpp"
@@ -47,10 +48,10 @@ typedef struct StdDbStatistics{
 
 class StdDb{
 private:
-  std::vector<DbRecord_t> Storage; ///vector storing the info read form the A424 files
+  ///vectors storing the info read form the A424 files, separated by type
+  std::vector<DbRecord_t> AptStorage, NdbStorage, VhfStorage, WpStorage; 
   StdDbStat_t Statistics; ///struct storing some stats of the Storage vector
   bool DbIsSorted;
-
   /**
    * @brief Get the Source Files Size
    * @return the bytes size to be allocated in RAM for the DB 
@@ -112,7 +113,7 @@ private:
   /**
    * @brief sorts the Database witha cocktail sort 
    */
-  void SortDatabase();
+  void SortDatabase(std::vector<DbRecord_t>* MyStorage);
 
   /**
    * @brief Tells if the first record comes after the second one
@@ -122,6 +123,7 @@ private:
    * @return false if Record2 comes before Record1
    */
   bool SortTwoRecords(const DbRecord_t Record1, const DbRecord_t Record2);
+
 public:
   StdDb();
   ~StdDb(){}
@@ -146,12 +148,15 @@ public:
    */
   std::vector<DbRecord_t> Search(std::string Searchkey);
 
+  std::vector<DbRecord_t> LinearSearch(std::string Searchkey);
+
   /**
    * @brief Returns a list of all Points of type ListType 
    * @param ListType 
    * @return std::vector<DbRecord_t> 
    */
-  std::vector<DbRecord_t> List(E_LIST_TYPE ListType);
+  std::vector<DbRecord_t> GetList(E_LIST_TYPE ListType, uint32_t StartNumber,
+                                  uint32_t RequiredElements);
 };
 
 #endif 

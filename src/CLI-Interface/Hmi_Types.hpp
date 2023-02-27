@@ -1,0 +1,16 @@
+#ifndef HMI_TYPES
+#define HMI_TYPES
+
+enum HMI_State{
+    HMI_START,
+    HMI_INIT_DB,
+    HMI_SHOW_STATISTICS,
+    HMI_SEARCH,
+    HMI_SHOW_RESULTS,
+    HMI_DETAIL_RESULT,
+    HMI_LIST,
+    HMI_END,
+    HMI_TERMINATE
+};
+
+#endif

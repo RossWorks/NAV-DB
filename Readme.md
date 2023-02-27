@@ -16,5 +16,10 @@ At the end of the loading phase, the tool allows the user to enter a search key.
 ### Search
 The Search key must be Upper case (all strings in Db are Uppercase). The Tool will search the Db for any point which ICAO code mach exactly the search key.<br>
 When the search is completed, the user is presented with a brief list of the search result. To get a more detailed look of one of the search results, type "#" followed by the number  of the search result to inspect
+### Lists browsing
+The Tool can report 10 element of a given list (VHF,APT, NDB) when prompted with a `#XXXNNN` prompt, where XXX is a three chars command such as VHF, NDB or APT and NNN is a number telling the tool where to start fetching results. Examples:<br>
+* `#VHF143`
+* `#APT1543`
+* `#NDB13`
 ### Closing
 Just type `QUITNOW` at any time to close the generation tool.

@@ -9,7 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceRoot}/bin/NavDbDebug.bin",
-            "args": ["./Settings/Fast.ini"],
+            "args": ["./Graphs/Debug.ini"],
             "stopAtEntry": true,
             "cwd": "..",
             "environment": [],
