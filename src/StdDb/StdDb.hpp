@@ -40,6 +40,7 @@ typedef struct Record
   E_AptPubMil AptUsage;
   bool AptIfrCapable;
   int TimeZoneOffset;
+  char RecommendedNavaid[5];
 }DbRecord_t;
 
 typedef struct StdDbStatistics{
@@ -150,13 +151,15 @@ public:
 
   std::vector<DbRecord_t> LinearSearch(std::string Searchkey);
 
+  uint32_t GetClosestMatch(std::string OrderFromKey, E_LIST_TYPE ListType);
+
   /**
    * @brief Returns a list of all Points of type ListType 
    * @param ListType 
    * @return std::vector<DbRecord_t> 
    */
   std::vector<DbRecord_t> GetList(E_LIST_TYPE ListType, uint32_t StartNumber,
-                                  uint32_t RequiredElements);
+                                  uint32_t RequiredElements, std::string OrderFromKey);
 };
 
 #endif 

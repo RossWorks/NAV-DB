@@ -92,12 +92,12 @@ E_DbError StdDb::AcquireArinc424Files(std::string A424Dir){
   this->Statistics.APT_size = 0;
   this->Statistics.NDB_size = 0;
   this->Statistics.VHF_size = 0;
+  this->Statistics.Enroute_size = 0;
   for (const auto FileName: SearchingPath){
     A424File.open(FileName.path(),std::ios_base::in);
-    while (getline(A424File,FileRecord))
-    {
+    while (getline(A424File,FileRecord)){
       ClearDbRecord(&TmpDbRecord);
-      //if (FileRecord[C_CONT_INDEX] != 0){continue;}
+      if ((FileRecord[C_CONT_INDEX] - '0') > 1){continue;}
       switch(FileRecord[C_SECTION_CODE]){
         case 'D':
           switch(FileRecord[C_SECTION_CODE+1]){
@@ -115,13 +115,10 @@ E_DbError StdDb::AcquireArinc424Files(std::string A424Dir){
           break;
         case 'E':
           switch (FileRecord[C_SECTION_CODE+1]){
-          case 'A':/*
+          case 'A':
             TmpDbRecord = this->AcquireEnrRecord(FileRecord,&ErrorCode);
-            TmpDbRecord.ID = CurrentID;
-            this->Storage[CurrentID] = TmpDbRecord;
-            CurrentID++;
-            this->Statistics.Enroute_size++;
-            this->Statistics.GlobalSize++;*/
+            TmpDbRecord.ID = this->Statistics.Enroute_size;;
+            this->WpStorage.push_back(TmpDbRecord);
             break;
           default:
             break;
@@ -147,6 +144,7 @@ E_DbError StdDb::AcquireArinc424Files(std::string A424Dir){
   this->Statistics.APT_size = this->AptStorage.size();
   this->Statistics.NDB_size = this->NdbStorage.size();
   this->Statistics.VHF_size = this->VhfStorage.size();
+  this->Statistics.Enroute_size = this->WpStorage.size();
   return NO_ERROR;
 }
 
@@ -283,6 +281,12 @@ std::vector<DbRecord_t> StdDb::LinearSearch(std::string Searchkey){
       output.push_back(this->VhfStorage.at(i));
     }
   }
+  for (int i = 1; i< this->Statistics.Enroute_size; i++){
+    TmpString = this->WpStorage.at(i).ICAO;
+    if (TmpString == Searchkey){
+      output.push_back(this->WpStorage.at(i));
+    }
+  }
   return output;
 }
 
@@ -333,11 +337,10 @@ void StdDb::ClearDbRecord( DbRecord_t *Record){
  */
 DbRecord_t StdDb::AcquireEnrRecord(std::string FileRecord, E_DbError* ReturnCode){
   DbRecord_t output;
+  output.Class = WAYPOINT;
   output.ListType = WP_LIST;
-  for (int i = 0; i < 6; i++){
-    output.ICAO[i] = FileRecord[C_ICAO_IDENT+i];
-  }
-  output.ICAO[5] = '\0';
+  ReadIcaoCode(output.ICAO, FileRecord, C_ICAO_IDENT, 5);
+  ReadIcaoCode(output.CountryCode, FileRecord, C_COUNTRY_CODE, 2);
   output.Lat = ReadLat(FileRecord, C_NAVAID_LAT);
   output.Lon = ReadLon(FileRecord, C_NAVAID_LON);
   return output;
@@ -401,6 +404,7 @@ DbRecord_t StdDb::AcquireAptRecord(std::string FileRecord, E_DbError* ReturnCode
     output.TimeZoneOffset += FileRecord[C_APT_TIMEZONE+1]-'0'*10;
     output.TimeZoneOffset += FileRecord[C_APT_TIMEZONE+2]-'0';
   }
+  ReadIcaoCode(output.RecommendedNavaid,FileRecord,64,4);
   return output;
 }
 
@@ -415,11 +419,14 @@ std::map<std::string, uint32_t> StdDb::getStatistics(){
 }
 
 std::vector<DbRecord_t> StdDb::GetList(E_LIST_TYPE ListType, uint32_t StartNumber,
-                                       uint32_t RequiredElements){
+                                       uint32_t RequiredElements, std::string OrderFromKey){
   std::vector<DbRecord_t> output;
   uint64_t I = 0;
   StartNumber = StartNumber - 1;
   if (!this->DbIsSorted){return output;}
+  if (OrderFromKey != ""){
+    StartNumber = this->GetClosestMatch(OrderFromKey, ListType);
+  }
   output.reserve(RequiredElements);
   switch (ListType){
   case VHF_LIST:
@@ -440,11 +447,49 @@ std::vector<DbRecord_t> StdDb::GetList(E_LIST_TYPE ListType, uint32_t StartNumbe
       output.push_back(this->AptStorage.at(I+StartNumber));
     }
     break;
+  case WP_LIST:
+    if (StartNumber > this->Statistics.Enroute_size){return output;}
+    for (I = 0; I < RequiredElements; I++){
+      output.push_back(this->WpStorage.at(I+StartNumber));
+    }
+    break;
   default:
     break;
   }
 
   return output;
+}
+
+uint32_t StdDb::GetClosestMatch(std::string OrderFromKey, E_LIST_TYPE ListType){
+  uint32_t Index = 0;
+  if (!this->DbIsSorted){return 0;}
+  switch (ListType) {
+    case APT_LIST:
+      for (DbRecord_t Element: this->AptStorage){
+        if (OrderFromKey <= std::string(Element.ICAO)){return Index;}
+        Index++;
+      }
+      break;
+    case NDB_LIST:
+      for (DbRecord_t Element: this->NdbStorage){
+        if (OrderFromKey <= std::string(Element.ICAO)){return Index;}
+        Index++;
+      }
+      break;
+    case VHF_LIST:
+      for (DbRecord_t Element: this->VhfStorage){
+        if (OrderFromKey <= std::string(Element.ICAO)){return Index;}
+        Index++;
+      }
+      break;
+    case WP_LIST:
+      for (DbRecord_t Element: this->WpStorage){
+        if (OrderFromKey <= std::string(Element.ICAO)){return Index;}
+        Index++;
+      }
+      break; 
+  }
+  return Index;
 }
 
 bool StdDb::SortTwoRecords(const DbRecord_t Record1,const DbRecord_t Record2){

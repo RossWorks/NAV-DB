@@ -6,6 +6,6 @@
 #include "../StdDb/DbCommonTypes.hpp"
 
 HMI_State ParseCommand(std::string Command, std::string* SearchKey,
-                       uint32_t* Index, E_LIST_TYPE* STDList);
+                       uint32_t* Index, E_LIST_TYPE* STDList, std::string *OrderFromKey);
 
 #endif

@@ -13,6 +13,7 @@ typedef enum NavAidClass{
   VOR,
   VORDME,
   VORTAC,
+  WAYPOINT
 } E_NavAidClass;
 
 enum E_LIST_TYPE{
