@@ -10,23 +10,7 @@ std::string PresentSearchResult(std::vector<DbRecord_t> List){
     output += "LIST EMPTY\n";
   }
   for (DbRecord_t element: List){
-    switch (element.Class){
-    case  UNKNOWN : WpType = "\e[05;31mUNK   "; break;
-    case  APT     : WpType = "\e[01;36mAPT   "; break;
-    case  NDB     : WpType = "\e[01;31mNDB   "; break;
-    case  VOR     : WpType = "\e[01;32mVOR   "; break;
-    case  DME     : WpType = "\e[01;32mDME   "; break;
-    case  VORDME  : WpType = "\e[01;32mVORDME"; break;
-    case  TACAN   : WpType = "\e[01;32mTACAN "; break;
-    case  VORTAC  : WpType = "\e[01;32mVORTAC"; break;
-    case  ILS     : WpType = "\e[01;33mILS   "; break;
-    case  ILSDME  : WpType = "\e[01;33mILSDME"; break;
-    case  MILTAC  : WpType = "\e[01;31mMILTAC"; break;
-    case  MLSDME  : WpType = "\e[01;33mMLSDME"; break;
-    case  WAYPOINT: WpType = "\e[01;35mWPT   "; break;
-    default       : WpType = "\e[05;31mUNK   "; break;
-    }
-    WpType += "\e[m";
+    WpType = PrintClass(element.Class);
     sprintf(TmpString,"%2i -> |%-8s|%-8s|%s|\n",
             I,
             element.ICAO,
@@ -41,6 +25,7 @@ std::string PresentSearchResult(std::vector<DbRecord_t> List){
 std::string PresentVHF(DbRecord_t VHF){
   std::string output = "";
   output += "NAME:    \t" + std::string(VHF.ICAO) + "\n";
+  output += "CLASS:   \t" + PrintClass(VHF.Class) + "\n";
   output += "REGION:  \t" + std::string(VHF.CountryCode) + "\n";
   if (VHF.Class == VOR || VHF.Class == VORDME ||VHF.Class == TACAN ||
       VHF.Class == VORTAC){

@@ -3,8 +3,10 @@
 
 #include <string>
 #include <stdint.h>
+#include <map>
 
 #include "../Common/CommonUtils.hpp"
+#include "../StdDb/DbCommonTypes.hpp"
 
 enum E_CoordPrecision{
     DECIMAL_DEGREES,
@@ -12,9 +14,31 @@ enum E_CoordPrecision{
     DEGREES_MINUTES_SECONDS
 };
 
+enum E_TermColors{
+  CLEAR,
+  BOLD,
+  MAGENTA,
+  RED,
+  ORANGE,
+  AMBER,
+  YELLOW,
+  GREEN,
+  CYAN,
+  BLUE,
+  INDIGO,
+  WHITE,
+  BLACK
+};
+
+extern std::map <E_TermColors, std::string> ForeColors;
+
+//extern std::map <E_TermColors, std::string> BackColors;
+
 std::string RenderFrequency(uint32_t Frequency);
 
 std::string RenderCoord(double Coord, bool IsLat);
 
 std::string PrintFloat(float number, int decimals);
+
+std::string PrintClass(E_NavAidClass Class);
 #endif

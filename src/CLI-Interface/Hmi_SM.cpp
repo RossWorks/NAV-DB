@@ -67,21 +67,29 @@ HMI_State Hmi_SM::ExecuteStep(){
       break;
     case HMI_DETAIL_RESULT:
       if (MySettings.GetTermClearSetting()){system("clear");}
-      switch (this->SearchResults.at(ResultIndex-1).ListType){
-      case VHF_LIST:
-        std::cout << PresentVHF(this->SearchResults.at(ResultIndex-1));
-        break;
-      case NDB_LIST:
-        std::cout << PresentNDB(this->SearchResults.at(ResultIndex-1));
-        break;
-      case APT_LIST:
-        std::cout << PresentAPT(this->SearchResults.at(ResultIndex-1));
-        break;
-      case WP_LIST:
-        std::cout << PresentWPT(this->SearchResults.at(ResultIndex-1));
-        break;
-      default:
-        break;
+      try{
+        MyList = this->SearchResults.at(ResultIndex-1).ListType;
+      }
+      catch(const std::out_of_range &DetailedResultOutOfRange){
+        NextStep = HMI_SEARCH;
+        this->State = NextStep;
+        return NextStep;
+      }
+      switch (MyList){
+        case VHF_LIST:
+          std::cout << PresentVHF(this->SearchResults.at(ResultIndex-1));
+          break;
+        case NDB_LIST:
+          std::cout << PresentNDB(this->SearchResults.at(ResultIndex-1));
+          break;
+        case APT_LIST:
+          std::cout << PresentAPT(this->SearchResults.at(ResultIndex-1));
+          break;
+        case WP_LIST:
+          std::cout << PresentWPT(this->SearchResults.at(ResultIndex-1));
+          break;
+        default:
+          break;
       }
       NextStep = HMI_SEARCH;
       break;
