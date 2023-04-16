@@ -164,9 +164,10 @@ DbRecord_t StdDb::AcquireNdbRecord(std::string FileRecord, E_DbError* ReturnCode
     output.CountryCode[i] = FileRecord[C_COUNTRY_CODE+i];
   }
   output.CountryCode[2] = '\0';
-  output.Freq = 0;
+  output.Freq.Value = 0;
+  output.Freq.Status = true;
   for (uint8_t i=0; i<5; i++){
-    output.Freq += (FileRecord[C_FREQ+i]-48)*pow(10,6-i);
+    output.Freq.Value += (FileRecord[C_FREQ+i]-48)*pow(10,6-i);
   }
   switch (FileRecord[C_NAVAID_CLASS]){
     case 'H':
@@ -224,11 +225,12 @@ DbRecord_t StdDb::AcquireVhfRecord(std::string FileRecord, E_DbError* ReturnCode
       }
     break;
   }
-  output.Freq = 0;
+  output.Freq.Status = true;
+  output.Freq.Value  = 0;
   for (uint8_t i=0; i<5; i++){
-    output.Freq += (FileRecord[C_FREQ+i]-48)*pow(10,8-i);
+    output.Freq.Value += (FileRecord[C_FREQ+i]-48)*pow(10,8-i);
   }
-  Freq2Channel(output.Freq, &output.Channel, &output.ChMode);
+  Freq2Channel(output.Freq.Value, &output.Channel, &output.ChMode);
   output.Lat = ReadLat(FileRecord, C_NAVAID_LAT);
   output.Lon = ReadLon(FileRecord, C_NAVAID_LON);
   output.DmeLat = ReadLat(FileRecord, C_DME_LAT);
@@ -324,12 +326,14 @@ void StdDb::ClearDbRecord( DbRecord_t *Record){
   Record->ChMode      = X;
   Record->Class       = UNKNOWN;
   for (i=0; i<3; i++){Record->CountryCode[i] = '\0';}
-  Record->Freq        = 0;
+  Record->Freq.Value  = 0;
+  Record->Freq.Status = false;
   for (i=0; i<5; i++){Record->ICAO[i] = '\0';}
   Record->ID = 0;
   Record->Lat = 0.0;
   Record->Lon = 0.0;
-  Record->MagVar = 0.0;
+  Record->MagVar.Value = 0.0;
+  Record->MagVar.Status = false;
 }
 
 /**

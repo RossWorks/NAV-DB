@@ -25,27 +25,29 @@ double ReadLon(std::string FileRecord, char StartIndex){
     return output;
 }
 
-float ReadMagVar(std::string FileRecord, char StartIndex){
-  float output = 0.0;
+Validated_Float ReadMagVar(std::string FileRecord, char StartIndex){
+  Validated_Float output = {0.0, false};
   for (uint8_t i = 0; i < 4; i++){
     if(FileRecord[StartIndex+1+i] != ' '){
-      output += (FileRecord[StartIndex+1+i]-48) * pow(10,2-i);
+      output.Value += (FileRecord[StartIndex+1+i]-48) * pow(10,2-i);
+      output.Status = true;
     }
   }
   if (FileRecord[StartIndex] == 'W'){
-    output *= -1;
+    output.Value *= -1;
   }
   return output;
 }
 
-int ReadElev(std::string FileRecord, char StartIndex){
-  int output = 0;
+Validated_Integer ReadElev(std::string FileRecord, char StartIndex){
+  Validated_Integer output = {0, false};
   for (uint8_t i = 0; i<4; i++){
     if (FileRecord[StartIndex+1+i] == ' '){continue;}
-      output += (FileRecord[StartIndex+1+i]-48) * pow(10,4-i);
+    output.Value += (FileRecord[StartIndex+1+i]-48) * pow(10,3-i);
+    output.Status = true;
     }
-  if (FileRecord[StartIndex] == '-'){output *= -1;}
-  return 0;
+  if (FileRecord[StartIndex] == '-'){output.Value *= -1;}
+  return output;
 }
 
 void ReadIcaoCode(char* output, std::string FileRecord, char StartIndex, char MaxLen){

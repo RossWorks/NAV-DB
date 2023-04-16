@@ -38,10 +38,10 @@ std::string PresentVHF(DbRecord_t VHF){
       VHF.Class == VORTAC){
     output += "DME LAT:\t" + RenderCoord(VHF.DmeLat, true) + "\n";
     output += "DME LON:\t" + RenderCoord(VHF.DmeLon, false) + "\n";
-    output += "DME ELEV:\t" + std::to_string(VHF.DmeElev) + "\n";
+    output += "DME ELEV:\t" + PrintValidatedInteger(VHF.DmeElev) + "\n";
   }
   if (VHF.Class != DME){
-    output += "MAG VAR:\t" + std::string(VHF.MagVar >= 0 ? "E" : "W") + PrintFloat(abs(VHF.MagVar),2) + "\n";
+    output += "MAG VAR:\t" + PrintMagVar(VHF.MagVar) + "\n";
   }
   output += "RANGE:\t";
   switch (VHF.VhfRange){
@@ -78,9 +78,9 @@ std::string PresentAPT(DbRecord_t APT){
   output += "REGION:  \t" + std::string(APT.CountryCode) + "\n";
   output += "LATITUDE:\t" + RenderCoord(APT.Lat, true) + "\n";
   output += "LONGITUDE:\t" + RenderCoord(APT.Lon, false) + "\n";
-  output += "ELEVEATION:\t" + std::to_string(APT.Elev) + "\n";
+  output += "ELEVEATION:\t" + PrintValidatedInteger(APT.Elev) + "\n";
   output += "REC NAVAID:\t" + std::string(APT.RecommendedNavaid) + "\n";
-  output += "MAG VAR:\t" + std::string(APT.MagVar >= 0 ? "E" : "W") + PrintFloat(abs(APT.MagVar),2) + "\n";
+  output += "MAG VAR:\t" + PrintMagVar(APT.MagVar) + "\n";
   output += "USAGE:\t\t";
   switch (APT.AptUsage){
   case CIVIL:    output += "CIVIL"; break;
@@ -110,7 +110,7 @@ std::string PresentNDB(DbRecord_t NDB){
   output += "LATITUDE:\t" + RenderCoord(NDB.Lat, true) + "\n";
   output += "LONGITUDE:\t" + RenderCoord(NDB.Lon,false) + "\n";
   output += "FREQUENCY:\t" + RenderFrequency(NDB.Freq) + "\n";
-  output += "MAG VAR:\t" + std::string(NDB.MagVar >= 0 ? "E" : "W") + PrintFloat(abs(NDB.MagVar),2) + "\n";
+  output += "MAG VAR:\t" + PrintMagVar(NDB.MagVar) + "\n";
   return output;
 }
 
@@ -120,7 +120,7 @@ std::string PresentWPT(DbRecord_t WPT){
   output += "REGION:  \t" + std::string(WPT.CountryCode) + "\n";
   output += "LATITUDE:\t" + RenderCoord(WPT.Lat, true) + "\n";
   output += "LONGITUDE:\t" + RenderCoord(WPT.Lon,false) + "\n";
-  output += "MAG VAR:\t" + std::string(WPT.MagVar >= 0 ? "E" : "W") + PrintFloat(abs(WPT.MagVar),2) + "\n";
+  output += "MAG VAR:\t" + PrintMagVar(WPT.MagVar) + "\n";
   return output;
 }
 

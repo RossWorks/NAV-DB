@@ -15,23 +15,26 @@ std::map <E_TermColors, std::string> ForeColors ={
   {BLACK,  "\e[38;5;m"}
 };
 
-std::string RenderFrequency(uint32_t Frequency){
+std::string RenderFrequency(Validated_Integer Frequency){
   std::string output;
-  if (Frequency >= 1e6){
-    output = std::to_string((float)Frequency/1e6).substr(0,6) + " MHz";
+  if (!Frequency.Status){
+    output = InvalidText(6);
+    return output;
   }
-  else if (Frequency >= 1e3){
-    output = std::to_string((float)Frequency/1e3).substr(0,6) + " kHz";
+  if (Frequency.Value >= 1e6){
+    output = std::to_string((float)Frequency.Value/1e6).substr(0,6) + " MHz";
+  }
+  else if (Frequency.Value >= 1e3){
+    output = std::to_string((float)Frequency.Value/1e3).substr(0,6) + " kHz";
   }  
   return output;
 }
 
 std::string RenderCoord(double Coord, bool IsLat){
   std::string output;
-  int degrees = static_cast<int>(Coord);
+  int degrees = int(Coord);
   float minutes = 0.0;
   minutes = std::abs(Coord - (float)degrees) * 60;
-  //minutes = (static_cast<int>(minutes*100))/100;
   output  = std::to_string(abs(degrees)) + "° " + PrintFloat(minutes,2) + "'";
   if (IsLat){
     (degrees<0 ? output = "S"+output : output = "N"+output);
@@ -70,4 +73,33 @@ std::string PrintClass(E_NavAidClass Class){
     }
     output += ForeColors[CLEAR];
     return output;
+}
+
+std::string PrintMagVar(Validated_Float MagVar){
+  std::string output("");
+  if (!MagVar.Status){output = InvalidText(5); return output;}
+  output = (MagVar.Value >= 0 ? "E " : "W ") + PrintFloat(abs(MagVar.Value),2)+ "°";
+  return output;
+}
+
+std::string InvalidText(uint32_t Size){
+  std::string output("");
+  int C = 0;
+  output =  ForeColors[AMBER];
+  for (C=0; C<Size; C++){
+    output += "-";
+  }
+  output += ForeColors[CLEAR];
+  return output; 
+}
+
+std::string PrintValidatedInteger(Validated_Integer Var){
+  std::string output = "";
+  if (Var.Status){
+    output = std::to_string(Var.Value);
+  }
+  else{
+    output = InvalidText(5);
+  }
+  return output;
 }

@@ -17,8 +17,7 @@
 #include "../Common/CommonUtils.hpp"
 #include "./StdDbUtils.hpp"
 
-typedef struct Record
-{
+typedef struct Record{
   uint32_t ID;
   char ICAO[6];
   char LongName[C_LONG_NAME_LEN+1];
@@ -28,10 +27,10 @@ typedef struct Record
   E_NavAidClass Class;
   double Lat, Lon;
   double DmeLat, DmeLon;
-  int Elev, DmeElev;
-  float MagVar;
+  Validated_Integer Elev, DmeElev;
+  Validated_Float MagVar;
   E_LIST_TYPE ListType;
-  uint32_t Freq;
+  Validated_Integer Freq;
   uint8_t Channel;
   E_ChannelMode ChMode;
   E_VhfRange VhfRange;

@@ -1,5 +1,6 @@
 #ifndef DB_COMMON_TYPES
 #define DB_COMMON_TYPES
+
 typedef enum NavAidClass{
   UNKNOWN,
   APT,
@@ -57,6 +58,21 @@ typedef enum DbErrorCode{
   OUT_OF_MEMORY,
   RECORD_MALFORMED
 } E_DbError;
+
+struct Validated_Float{
+  float Value;
+  bool Status;
+};
+
+struct Validated_Integer{
+  uint32_t Value;
+  bool Status;
+};
+
+struct Validated_Double{
+  double Value;
+  bool Status;
+};
 
 const char C_SECTION_CODE     =  4;
 const char C_SUBSECTION_CODE  =  5;
