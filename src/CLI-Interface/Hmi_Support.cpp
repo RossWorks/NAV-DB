@@ -47,6 +47,11 @@ HMI_State ParseCommand(std::string Command, std::string* SearchKey,
       }
       return HMI_LIST;
     }
+    if (Command.substr(1,5) == "BUILD"){
+      if(Command.substr(6,1) == "B"){*Index = 1;}
+      else{*Index = 0;}
+      return HMI_BUILD_DB;
+    }
     try{
       TmpInt = std::stoi(Command.substr(1,Command.size()));
       *Index = TmpInt;

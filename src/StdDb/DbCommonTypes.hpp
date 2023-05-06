@@ -1,6 +1,12 @@
 #ifndef DB_COMMON_TYPES
 #define DB_COMMON_TYPES
 
+#include <stdint.h>
+
+#define DB_HEADER_SIZE_IN_BYTES 28
+#define TABLE_ROW_SIZE_IN_BYTES 32
+#define TABLE_HEADER_SIZE_IN_BYTES 4
+
 typedef enum NavAidClass{
   UNKNOWN,
   APT,
@@ -101,4 +107,13 @@ const char C_APT_TIMEZONE     = 81;
 const char C_APT_LONG_NAME    = 93;
 const char C_VHF_FIGURE_MERIT = 84;
 const char C_BLANK_CHAR       = ' ';
+
+const char C_ICD_VHF_OBJECT_ID_BYTEPOS    =  0;
+const char C_ICD_VHF_COUNTRY_CODE_BYTEPOS =  8;
+const char C_ICD_VHF_OBJECT_TYPE_BYTEPOS  = 12;
+const char C_ICD_VHF_LAT_BYTEPOS          = 16;
+const char C_ICD_VHF_LON_BYTEPOS          = 20;
+const char C_ICD_VHF_MAGVAR_BYTEPOS       = 24;
+const char C_ICD_VHF_FREQ_BYTEPOS         = 28;
+
 #endif

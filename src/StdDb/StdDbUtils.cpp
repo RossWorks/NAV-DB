@@ -60,3 +60,20 @@ void ReadIcaoCode(char* output, std::string FileRecord, char StartIndex, char Ma
   }
   output[MaxLen] = '\0';
 }
+
+std::string GenerateDbName(int DbVersion, int DbCycle){
+  std::string output;
+  std::string strDbCycle;
+  int Year = 0, Month = 0, Day = 0;
+  using Clock = std::chrono::system_clock;
+  std::chrono::time_point<Clock> Now = std::chrono::system_clock::now();
+  std::chrono::year_month_day MyDate = std::chrono::floor<std::chrono::days>(Now);
+  std::cout << Now.time_since_epoch()<<"\n";
+  DbCycle == 0 ? strDbCycle = "XXXX" : strDbCycle = std::to_string(DbCycle);
+  Year  = static_cast<int>(MyDate.year());
+  Month = static_cast<unsigned>(MyDate.month());
+  Day   = static_cast<unsigned>(MyDate.day());
+  output = "STDDB." + std::to_string(DbVersion) + "." + strDbCycle + "_" +
+           std::to_string(Year)+"_"+std::to_string(Month)+"_"+std::to_string(Day) + '\0';
+  return output;
+}

@@ -13,6 +13,7 @@ HMI_State Hmi_SM::ExecuteStep(){
   HMI_State NextStep = HMI_TERMINATE;
   E_DbError SpareError = IO_ERROR;
   uint32_t TmpInt = 0;
+  static bool MakeLitteEndian = true;
   std::string UserInput(""), OrderFromKey("");
   E_LIST_TYPE MyList = VHF_LIST;
   static uint32_t ResultIndex = 0;
@@ -57,6 +58,10 @@ HMI_State Hmi_SM::ExecuteStep(){
           ResultIndex = TmpInt;
           NextStep = HMI_DETAIL_RESULT;
           break;
+        case HMI_BUILD_DB:
+          MakeLitteEndian = (TmpInt == 0);
+          NextStep = HMI_BUILD_DB;
+          break;
         default:
           break;
       }
@@ -91,6 +96,10 @@ HMI_State Hmi_SM::ExecuteStep(){
         default:
           break;
       }
+      NextStep = HMI_SEARCH;
+      break;
+    case HMI_BUILD_DB:
+      this->StdDbPointer->BuildStdDB(C_DbGenerationPath, MakeLitteEndian);
       NextStep = HMI_SEARCH;
       break;
     default:

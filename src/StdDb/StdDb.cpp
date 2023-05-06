@@ -535,3 +535,74 @@ void StdDb::SortDatabase(std::vector<DbRecord_t>* MyStorage){
   } while (Swapped);
   return;
 }
+
+E_DbError StdDb::BuildStdDB(std::string Path, bool isLittleEndian){
+  std::string Filename = GenerateDbName(01,0);
+  Filename += (isLittleEndian ? "_LE" : "_BE");
+  std::ofstream OuputFile(Path+Filename,std::ios_base::out);
+  int CRC32 = 0, Index = 0, C = 0, SemiCircleCoord = 0, int_MagVar = 0;
+  uint32_t* PositionPtr = nullptr;
+  uint8_t SingleRowBuffer[TABLE_ROW_SIZE_IN_BYTES] = {0};
+  std::vector<uint8_t> FileBuffer;
+  FileBuffer.reserve(DB_HEADER_SIZE_IN_BYTES +
+                     TABLE_HEADER_SIZE_IN_BYTES +
+                     TABLE_ROW_SIZE_IN_BYTES*this->Statistics.VHF_size);
+  for (DbRecord_t element: this->VhfStorage){
+    for (C=C_ICD_VHF_OBJECT_ID_BYTEPOS; C<(C_ICD_VHF_OBJECT_ID_BYTEPOS+6); C++){
+      SingleRowBuffer[C] = element.ICAO[C-C_ICD_VHF_OBJECT_ID_BYTEPOS];
+    }
+    for (C=C_ICD_VHF_COUNTRY_CODE_BYTEPOS; C<(C_ICD_VHF_COUNTRY_CODE_BYTEPOS+4); C++){
+      SingleRowBuffer[C] = element.CountryCode[C-C_ICD_VHF_COUNTRY_CODE_BYTEPOS];
+    }
+    switch (element.Class){
+      case UNKNOWN:  SingleRowBuffer[C_ICD_VHF_OBJECT_TYPE_BYTEPOS] = 0; break;
+      case APT:      SingleRowBuffer[C_ICD_VHF_OBJECT_TYPE_BYTEPOS] = 0; break;
+      case DME:      SingleRowBuffer[C_ICD_VHF_OBJECT_TYPE_BYTEPOS] = 2; break;
+      case ILS:      SingleRowBuffer[C_ICD_VHF_OBJECT_TYPE_BYTEPOS] = 8; break;
+      case ILSDME:   SingleRowBuffer[C_ICD_VHF_OBJECT_TYPE_BYTEPOS] = 7; break;
+      case MILTAC:   SingleRowBuffer[C_ICD_VHF_OBJECT_TYPE_BYTEPOS] = 6; break;
+      case MLSDME:   SingleRowBuffer[C_ICD_VHF_OBJECT_TYPE_BYTEPOS] = 0; break;
+      case NDB:      SingleRowBuffer[C_ICD_VHF_OBJECT_TYPE_BYTEPOS] = 0; break;
+      case TACAN:    SingleRowBuffer[C_ICD_VHF_OBJECT_TYPE_BYTEPOS] = 4; break;
+      case VOR:      SingleRowBuffer[C_ICD_VHF_OBJECT_TYPE_BYTEPOS] = 1; break;
+      case VORDME:   SingleRowBuffer[C_ICD_VHF_OBJECT_TYPE_BYTEPOS] = 3; break;
+      case VORTAC:   SingleRowBuffer[C_ICD_VHF_OBJECT_TYPE_BYTEPOS] = 5; break;
+      case WAYPOINT: SingleRowBuffer[C_ICD_VHF_OBJECT_TYPE_BYTEPOS] = 0; break;
+    }
+    SemiCircleCoord = (int)(element.Lat*(pow(2,31))/180.0);
+    if (isLittleEndian){
+      WriteLittleEndian<int>(SemiCircleCoord,SingleRowBuffer+C_ICD_VHF_LAT_BYTEPOS);
+    }
+    else{
+      WriteBigEndian<int>(SemiCircleCoord,SingleRowBuffer+C_ICD_VHF_LAT_BYTEPOS);
+    }
+    SemiCircleCoord = (int)(element.Lon*(pow(2,31))/180.0);
+    if (isLittleEndian){
+      WriteLittleEndian<int>(SemiCircleCoord,SingleRowBuffer+C_ICD_VHF_LON_BYTEPOS);
+    }
+    else{
+      WriteBigEndian<int>(SemiCircleCoord,SingleRowBuffer+C_ICD_VHF_LON_BYTEPOS);
+    }
+    int_MagVar = (int)(element.MagVar.Value*100.0);
+    if (isLittleEndian){
+      WriteLittleEndian<int>(int_MagVar,SingleRowBuffer+C_ICD_VHF_MAGVAR_BYTEPOS);
+    }
+    else{
+      WriteBigEndian<int>(int_MagVar,SingleRowBuffer+C_ICD_VHF_MAGVAR_BYTEPOS);
+    }
+    if (isLittleEndian){
+      WriteLittleEndian<int>(element.Freq.Value,SingleRowBuffer+C_ICD_VHF_FREQ_BYTEPOS);
+    }
+    else{
+      WriteBigEndian<int>(element.Freq.Value,SingleRowBuffer+C_ICD_VHF_FREQ_BYTEPOS);
+    }
+    for (int i=0; i<32; i++){
+      FileBuffer.push_back(SingleRowBuffer[i]);
+    }
+  }
+  for (C=0; C<FileBuffer.size(); C++){
+    OuputFile.put(FileBuffer[C]);
+  }
+  OuputFile.close();
+  return NO_ERROR;
+}

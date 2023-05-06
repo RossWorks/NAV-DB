@@ -159,6 +159,8 @@ public:
    */
   std::vector<DbRecord_t> GetList(E_LIST_TYPE ListType, uint32_t StartNumber,
                                   uint32_t RequiredElements, std::string OrderFromKey);
+
+  E_DbError BuildStdDB(std::string Path, bool isLittleEndian = true);
 };
 
 #endif 

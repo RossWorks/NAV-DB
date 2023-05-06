@@ -26,11 +26,11 @@ project NavDb is
   package Compiler is
     case Mode is
       when "debug" =>
-        Cpp_switches := ("-std=c++17",
+        Cpp_switches := ("-std=c++20",
                          "-g",
                          "-pthread");
       when "release" =>
-        Cpp_switches := ("-std=c++17");  
+        Cpp_switches := ("-std=c++20");  
     end case;
     for Default_Switches("C++") use Cpp_switches;
   end Compiler;
