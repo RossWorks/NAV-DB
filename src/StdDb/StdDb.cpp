@@ -610,7 +610,7 @@ E_DbError StdDb::BuildStdDB(std::string Path, bool isLittleEndian){
   for (DbRecord_t element: this->WpStorage){
     WriteNdbRecordToBuffer(element, WptRowBuffer, isLittleEndian);
     for (Index = 0; Index < WPT_TABLE_ROW_SIZE_IN_BYTES; Index++){
-      NdbTable.push_back(NdbRowBuffer[Index]);
+      WptTable.push_back(WptRowBuffer[Index]);
     }
   }
   if (isLittleEndian){
