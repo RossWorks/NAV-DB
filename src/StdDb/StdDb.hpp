@@ -17,31 +17,6 @@
 #include "../Common/CommonUtils.hpp"
 #include "./StdDbUtils.hpp"
 
-typedef struct Record{
-  uint32_t ID;
-  char ICAO[6];
-  char LongName[C_LONG_NAME_LEN+1];
-  char CountryCode[3];
-  char DMEident[5];
-  char IATA[4];
-  E_NavAidClass Class;
-  double Lat, Lon;
-  double DmeLat, DmeLon;
-  Validated_Integer Elev, DmeElev;
-  Validated_Float MagVar;
-  E_LIST_TYPE ListType;
-  Validated_Integer Freq;
-  uint8_t Channel;
-  E_ChannelMode ChMode;
-  E_VhfRange VhfRange;
-  E_Surf_Type LongRwySurfType;
-  uint32_t LongestRWYlength;
-  E_AptPubMil AptUsage;
-  bool AptIfrCapable;
-  int TimeZoneOffset;
-  char RecommendedNavaid[5];
-}DbRecord_t;
-
 typedef struct StdDbStatistics{
   uint32_t VHF_size, NDB_size, Enroute_size, GlobalSize,APT_size;
 } StdDbStat_t;

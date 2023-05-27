@@ -4,7 +4,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-
+#include <stdint.h>
 enum LOG_LEVEL{LOG_ERROR, LOG_WARN, LOG_INFO};
 
 class Settings{

@@ -17,7 +17,15 @@ Validated_Integer ReadElev(std::string FileRecord, char StartIndex);
 
 void ReadIcaoCode(char* output, std::string FileRecord, char StartIndex, char MaxLen);
 
-std::string GenerateDbName(int DbVersion = 0, int DbCycle = 0);
+std::string GenerateDbName(int DbVersion, int DbCycle, bool isLittleEndian);
+
+void WriteNdbRecordToBuffer(const DbRecord_t NdbRecord, unsigned char* FileBuffer, bool isLittleEndian);
+
+void WriteWptRecordToBuffer(const DbRecord_t WptRecord, unsigned char* FileBuffer, bool isLittleEndian);
+
+void WriteVhfRecordToBuffer(const DbRecord_t VhfRecord, unsigned char* FileBufferStart, bool isLittleEndian);
+
+void WriteAptRecordToBuffer(const DbRecord_t AptRecord, unsigned char* FileBuffer, bool isLittleEndian);
 
 template<typename T> void WriteBigEndian(T Data, unsigned char* DestionationStart);
 

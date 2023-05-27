@@ -236,6 +236,9 @@ DbRecord_t StdDb::AcquireVhfRecord(std::string FileRecord, E_DbError* ReturnCode
   output.DmeLat = ReadLat(FileRecord, C_DME_LAT);
   output.DmeLon = ReadLon(FileRecord, C_DME_LON);
   output.DmeElev = ReadElev(FileRecord, C_DME_ELEV);
+  if (output.Lat == output.DmeLat && output.Lon == output.DmeLon){
+    output.DMEisCollocated = true;
+  }
   switch (FileRecord[C_VHF_FIGURE_MERIT]){
     case TERMINAL       : output.VhfRange = TERMINAL; break;
     case LOW_ALT        : output.VhfRange = LOW_ALT; break;
@@ -334,6 +337,7 @@ void StdDb::ClearDbRecord( DbRecord_t *Record){
   Record->Lon = 0.0;
   Record->MagVar.Value = 0.0;
   Record->MagVar.Status = false;
+  Record->DMEisCollocated = false;
 }
 
 /**
@@ -537,72 +541,136 @@ void StdDb::SortDatabase(std::vector<DbRecord_t>* MyStorage){
 }
 
 E_DbError StdDb::BuildStdDB(std::string Path, bool isLittleEndian){
-  std::string Filename = GenerateDbName(01,0);
-  Filename += (isLittleEndian ? "_LE" : "_BE");
+  std::string Filename = GenerateDbName(1, 0, isLittleEndian);
+  const char C_DBNAME[12] = "NAV-DB_TEST";
   std::ofstream OuputFile(Path+Filename,std::ios_base::out);
-  int CRC32 = 0, Index = 0, C = 0, SemiCircleCoord = 0, int_MagVar = 0;
+  int CRC32 = 0, Index = 0, C = 0, SemiCircleCoord = 0;
   uint32_t* PositionPtr = nullptr;
-  uint8_t SingleRowBuffer[TABLE_ROW_SIZE_IN_BYTES] = {0};
-  std::vector<uint8_t> FileBuffer;
-  FileBuffer.reserve(DB_HEADER_SIZE_IN_BYTES +
-                     TABLE_HEADER_SIZE_IN_BYTES +
-                     TABLE_ROW_SIZE_IN_BYTES*this->Statistics.VHF_size);
+  uint8_t VhfRowBuffer[VHF_TABLE_ROW_SIZE_IN_BYTES] = {0};
+  uint8_t AptRowBuffer[APT_TABLE_ROW_SIZE_IN_BYTES] = {0};
+  uint8_t NdbRowBuffer[NDB_TABLE_ROW_SIZE_IN_BYTES] = {0};
+  uint8_t WptRowBuffer[WPT_TABLE_ROW_SIZE_IN_BYTES] = {0};
+  std::vector<uint8_t> VhfTable, AptTable, NdbTable, WptTable;
+  unsigned char VhfHeader[TABLE_HEADER_SIZE_IN_BYTES] = {0};
+  unsigned char AptHeader[TABLE_HEADER_SIZE_IN_BYTES] = {0};
+  unsigned char NdbHeader[TABLE_HEADER_SIZE_IN_BYTES] = {0};
+  unsigned char WptHeader[TABLE_HEADER_SIZE_IN_BYTES] = {0};
+  unsigned char DbHeader[DB_HEADER_SIZE_IN_BYTES]     = {0};
+  VhfTable.reserve(VHF_TABLE_ROW_SIZE_IN_BYTES*this->Statistics.VHF_size);
+  AptTable.reserve(APT_TABLE_ROW_SIZE_IN_BYTES*this->Statistics.APT_size);
+  NdbTable.reserve(NDB_TABLE_ROW_SIZE_IN_BYTES*this->Statistics.NDB_size);
+  WptTable.reserve(WPT_TABLE_ROW_SIZE_IN_BYTES*this->Statistics.Enroute_size);
+
+  /*Airport records preparation*/
+  for (DbRecord_t element: this->AptStorage){
+    WriteAptRecordToBuffer(element, AptRowBuffer, isLittleEndian);
+    for (Index = 0; Index < APT_TABLE_ROW_SIZE_IN_BYTES; Index++){
+      AptTable.push_back(AptRowBuffer[Index]);
+    }
+  }
+  if (isLittleEndian){
+    WriteLittleEndian<int>(1, AptHeader);
+    WriteLittleEndian<int>(this->Statistics.APT_size, AptHeader+4);
+  }else{
+    WriteBigEndian<int>(1, AptHeader);
+    WriteBigEndian<int>(this->Statistics.APT_size, AptHeader+4);
+  }
+
+  /*VHF navaid records preparation*/
   for (DbRecord_t element: this->VhfStorage){
-    for (C=C_ICD_VHF_OBJECT_ID_BYTEPOS; C<(C_ICD_VHF_OBJECT_ID_BYTEPOS+6); C++){
-      SingleRowBuffer[C] = element.ICAO[C-C_ICD_VHF_OBJECT_ID_BYTEPOS];
-    }
-    for (C=C_ICD_VHF_COUNTRY_CODE_BYTEPOS; C<(C_ICD_VHF_COUNTRY_CODE_BYTEPOS+4); C++){
-      SingleRowBuffer[C] = element.CountryCode[C-C_ICD_VHF_COUNTRY_CODE_BYTEPOS];
-    }
-    switch (element.Class){
-      case UNKNOWN:  SingleRowBuffer[C_ICD_VHF_OBJECT_TYPE_BYTEPOS] = 0; break;
-      case APT:      SingleRowBuffer[C_ICD_VHF_OBJECT_TYPE_BYTEPOS] = 0; break;
-      case DME:      SingleRowBuffer[C_ICD_VHF_OBJECT_TYPE_BYTEPOS] = 2; break;
-      case ILS:      SingleRowBuffer[C_ICD_VHF_OBJECT_TYPE_BYTEPOS] = 8; break;
-      case ILSDME:   SingleRowBuffer[C_ICD_VHF_OBJECT_TYPE_BYTEPOS] = 7; break;
-      case MILTAC:   SingleRowBuffer[C_ICD_VHF_OBJECT_TYPE_BYTEPOS] = 6; break;
-      case MLSDME:   SingleRowBuffer[C_ICD_VHF_OBJECT_TYPE_BYTEPOS] = 0; break;
-      case NDB:      SingleRowBuffer[C_ICD_VHF_OBJECT_TYPE_BYTEPOS] = 0; break;
-      case TACAN:    SingleRowBuffer[C_ICD_VHF_OBJECT_TYPE_BYTEPOS] = 4; break;
-      case VOR:      SingleRowBuffer[C_ICD_VHF_OBJECT_TYPE_BYTEPOS] = 1; break;
-      case VORDME:   SingleRowBuffer[C_ICD_VHF_OBJECT_TYPE_BYTEPOS] = 3; break;
-      case VORTAC:   SingleRowBuffer[C_ICD_VHF_OBJECT_TYPE_BYTEPOS] = 5; break;
-      case WAYPOINT: SingleRowBuffer[C_ICD_VHF_OBJECT_TYPE_BYTEPOS] = 0; break;
-    }
-    SemiCircleCoord = (int)(element.Lat*(pow(2,31))/180.0);
-    if (isLittleEndian){
-      WriteLittleEndian<int>(SemiCircleCoord,SingleRowBuffer+C_ICD_VHF_LAT_BYTEPOS);
-    }
-    else{
-      WriteBigEndian<int>(SemiCircleCoord,SingleRowBuffer+C_ICD_VHF_LAT_BYTEPOS);
-    }
-    SemiCircleCoord = (int)(element.Lon*(pow(2,31))/180.0);
-    if (isLittleEndian){
-      WriteLittleEndian<int>(SemiCircleCoord,SingleRowBuffer+C_ICD_VHF_LON_BYTEPOS);
-    }
-    else{
-      WriteBigEndian<int>(SemiCircleCoord,SingleRowBuffer+C_ICD_VHF_LON_BYTEPOS);
-    }
-    int_MagVar = (int)(element.MagVar.Value*100.0);
-    if (isLittleEndian){
-      WriteLittleEndian<int>(int_MagVar,SingleRowBuffer+C_ICD_VHF_MAGVAR_BYTEPOS);
-    }
-    else{
-      WriteBigEndian<int>(int_MagVar,SingleRowBuffer+C_ICD_VHF_MAGVAR_BYTEPOS);
-    }
-    if (isLittleEndian){
-      WriteLittleEndian<int>(element.Freq.Value,SingleRowBuffer+C_ICD_VHF_FREQ_BYTEPOS);
-    }
-    else{
-      WriteBigEndian<int>(element.Freq.Value,SingleRowBuffer+C_ICD_VHF_FREQ_BYTEPOS);
-    }
-    for (int i=0; i<32; i++){
-      FileBuffer.push_back(SingleRowBuffer[i]);
+    WriteVhfRecordToBuffer(element, VhfRowBuffer, isLittleEndian);
+    for (Index = 0; Index < VHF_TABLE_ROW_SIZE_IN_BYTES; Index++){
+      VhfTable.push_back(VhfRowBuffer[Index]);
     }
   }
-  for (C=0; C<FileBuffer.size(); C++){
-    OuputFile.put(FileBuffer[C]);
+  if (isLittleEndian){
+    WriteLittleEndian<int>(2, VhfHeader);
+    WriteLittleEndian<int>(this->Statistics.VHF_size, VhfHeader+4);
+  }else{
+    WriteBigEndian<int>(2, VhfHeader);
+    WriteBigEndian<int>(this->Statistics.VHF_size, VhfHeader+4);
   }
+
+  /*NDB records preparation*/
+  for (DbRecord_t element: this->NdbStorage){
+    WriteNdbRecordToBuffer(element, NdbRowBuffer, isLittleEndian);
+    for (Index = 0; Index < NDB_TABLE_ROW_SIZE_IN_BYTES; Index++){
+      NdbTable.push_back(NdbRowBuffer[Index]);
+    }
+  }
+  if (isLittleEndian){
+    WriteLittleEndian<int>(3, NdbHeader);
+    WriteLittleEndian<int>(this->Statistics.NDB_size, NdbHeader+4);
+  }else{
+    WriteBigEndian<int>(3, NdbHeader);
+    WriteBigEndian<int>(this->Statistics.NDB_size, NdbHeader+4);
+  }
+
+  /*WPT records preparation*/
+  for (DbRecord_t element: this->WpStorage){
+    WriteNdbRecordToBuffer(element, WptRowBuffer, isLittleEndian);
+    for (Index = 0; Index < WPT_TABLE_ROW_SIZE_IN_BYTES; Index++){
+      NdbTable.push_back(NdbRowBuffer[Index]);
+    }
+  }
+  if (isLittleEndian){
+    WriteLittleEndian<int>(3, WptHeader);
+    WriteLittleEndian<int>(this->Statistics.Enroute_size, WptHeader+4);
+  }else{
+    WriteBigEndian<int>(3, WptHeader);
+    WriteBigEndian<int>(this->Statistics.Enroute_size, WptHeader+4);
+  }
+  
+  /*Saving DB name*/
+  for (C=0; C<12; C++){
+    DbHeader[C] = C_DBNAME[C];
+  }
+
+  /*Database CRC saving*/
+  if (isLittleEndian){
+    WriteLittleEndian<int>(830666, DbHeader+12);
+  }else{
+    WriteBigEndian<int>(830666, DbHeader+12);
+  }
+
+  /*Writing DB header to file*/
+  for (C=0; C<DB_HEADER_SIZE_IN_BYTES; C++){
+    OuputFile.put(DbHeader[C]);
+  }
+  
+  /*Writing Airports header & storage to file*/
+  for (C=0; C<TABLE_HEADER_SIZE_IN_BYTES; C++){
+    OuputFile.put(AptHeader[C]);
+  }
+  for (C=0; C<AptTable.size(); C++){
+    OuputFile.put(AptTable[C]);
+  }
+
+  /*Writing VHF navaids header & storage to file*/
+  for (C=0; C<TABLE_HEADER_SIZE_IN_BYTES; C++){
+    OuputFile.put(VhfHeader[C]);
+  }
+  for (C=0; C<VhfTable.size(); C++){
+    OuputFile.put(VhfTable[C]);
+  }
+
+  /*Writing NDB header & storage to file*/
+  for (C=0; C<TABLE_HEADER_SIZE_IN_BYTES; C++){
+    OuputFile.put(NdbHeader[C]);
+  }
+  for (C=0; C<NdbTable.size(); C++){
+    OuputFile.put(NdbTable[C]);
+  }
+
+  /*Writing WPT header & storage to file*/
+  for (C=0; C<TABLE_HEADER_SIZE_IN_BYTES; C++){
+    OuputFile.put(WptHeader[C]);
+  }
+  for (C=0; C<WptTable.size(); C++){
+    OuputFile.put(WptTable[C]);
+  }
+
+  /*Closing file*/
   OuputFile.close();
   return NO_ERROR;
 }
