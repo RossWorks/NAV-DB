@@ -10,23 +10,8 @@ std::string PresentSearchResult(std::vector<DbRecord_t> List){
     output += "LIST EMPTY\n";
   }
   for (DbRecord_t element: List){
-    switch (element.Class){
-    case  UNKNOWN : WpType = "\e[05;31mUNK   "; break;
-    case  APT     : WpType = "\e[01;36mAPT   "; break;
-    case  NDB     : WpType = "\e[01;31mNDB   "; break;
-    case  VOR     : WpType = "\e[01;32mVOR   "; break;
-    case  DME     : WpType = "\e[01;32mDME   "; break;
-    case  VORDME  : WpType = "\e[01;32mVORDME"; break;
-    case  TACAN   : WpType = "\e[01;32mTACAN "; break;
-    case  VORTAC  : WpType = "\e[01;32mVORTAC"; break;
-    case  ILS     : WpType = "\e[01;33mILS   "; break;
-    case  ILSDME  : WpType = "\e[01;33mILSDME"; break;
-    case  MILTAC  : WpType = "\e[01;31mMILTAC"; break;
-    case  MLSDME  : WpType = "\e[01;31mMLSDME"; break;
-    default       : WpType = "\e[05;31mUNK   "; break;
-    }
-    WpType += "\e[m";
-    sprintf(TmpString,"%i -> |%-8s|%-8s|%s|\n",
+    WpType = PrintClass(element.Class);
+    sprintf(TmpString,"%2i -> |%-8s|%-8s|%s|\n",
             I,
             element.ICAO,
             WpType.c_str(),
@@ -40,6 +25,7 @@ std::string PresentSearchResult(std::vector<DbRecord_t> List){
 std::string PresentVHF(DbRecord_t VHF){
   std::string output = "";
   output += "NAME:    \t" + std::string(VHF.ICAO) + "\n";
+  output += "CLASS:   \t" + PrintClass(VHF.Class) + "\n";
   output += "REGION:  \t" + std::string(VHF.CountryCode) + "\n";
   if (VHF.Class == VOR || VHF.Class == VORDME ||VHF.Class == TACAN ||
       VHF.Class == VORTAC){
@@ -52,10 +38,10 @@ std::string PresentVHF(DbRecord_t VHF){
       VHF.Class == VORTAC){
     output += "DME LAT:\t" + RenderCoord(VHF.DmeLat, true) + "\n";
     output += "DME LON:\t" + RenderCoord(VHF.DmeLon, false) + "\n";
-    output += "DME ELEV:\t" + std::to_string(VHF.DmeElev) + "\n";
+    output += "DME ELEV:\t" + PrintValidatedInteger(VHF.DmeElev) + "\n";
   }
   if (VHF.Class != DME){
-    output += "MAG VAR:\t" + std::string(VHF.MagVar >= 0 ? "E" : "W") + std::to_string(abs(VHF.MagVar)) + "\n";
+    output += "MAG VAR:\t" + PrintMagVar(VHF.MagVar) + "\n";
   }
   output += "RANGE:\t";
   switch (VHF.VhfRange){
@@ -86,15 +72,15 @@ std::string PresentVHF(DbRecord_t VHF){
 
 std::string PresentAPT(DbRecord_t APT){
   std::string output = "";
-  output += "NAME:    \t" + std::string(APT.ICAO) + "\n";
-  output += "LONG NAME:\t" + std::string(APT.LongName) + "\n";
+  output += "ICAO CODE:\t" + std::string(APT.ICAO) + "\n";
   output += "IATA CODE:\t" + std::string(APT.IATA) + "\n";
+  output += "LONG NAME:\t" + std::string(APT.LongName) + "\n";
   output += "REGION:  \t" + std::string(APT.CountryCode) + "\n";
   output += "LATITUDE:\t" + RenderCoord(APT.Lat, true) + "\n";
   output += "LONGITUDE:\t" + RenderCoord(APT.Lon, false) + "\n";
-  output += "ELEVEATION:\t" + std::to_string(APT.Elev) + "\n";
-  output += "FREQUENCY:\t" + RenderFrequency(APT.Freq) + "\n";
-  output += "MAG VAR:\t" + std::string(APT.MagVar >= 0 ? "E" : "W") + std::to_string(abs(APT.MagVar)) + "\n";
+  output += "ELEVEATION:\t" + PrintValidatedInteger(APT.Elev) + "\n";
+  output += "REC NAVAID:\t" + std::string(APT.RecommendedNavaid) + "\n";
+  output += "MAG VAR:\t" + PrintMagVar(APT.MagVar) + "\n";
   output += "USAGE:\t\t";
   switch (APT.AptUsage){
   case CIVIL:    output += "CIVIL"; break;
@@ -124,11 +110,21 @@ std::string PresentNDB(DbRecord_t NDB){
   output += "LATITUDE:\t" + RenderCoord(NDB.Lat, true) + "\n";
   output += "LONGITUDE:\t" + RenderCoord(NDB.Lon,false) + "\n";
   output += "FREQUENCY:\t" + RenderFrequency(NDB.Freq) + "\n";
-  output += "MAG VAR:\t" + std::string(NDB.MagVar >= 0 ? "E" : "W") + std::to_string(abs(NDB.MagVar)) + "\n";
+  output += "MAG VAR:\t" + PrintMagVar(NDB.MagVar) + "\n";
   return output;
 }
 
-std::string presentVhfList(std::vector<DbRecord_t> List){
+std::string PresentWPT(DbRecord_t WPT){
+  std::string output = "";
+  output += "NAME:    \t" + std::string(WPT.ICAO) + "\n";
+  output += "REGION:  \t" + std::string(WPT.CountryCode) + "\n";
+  output += "LATITUDE:\t" + RenderCoord(WPT.Lat, true) + "\n";
+  output += "LONGITUDE:\t" + RenderCoord(WPT.Lon,false) + "\n";
+  output += "MAG VAR:\t" + PrintMagVar(WPT.MagVar) + "\n";
+  return output;
+}
+
+std::string PresentList(std::vector<DbRecord_t> List){
   std::string output("");
   return output;
 }

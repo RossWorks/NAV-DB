@@ -1,3 +1,77 @@
+#ifndef DB_COMMON_TYPES
+#define DB_COMMON_TYPES
+
+#include <stdint.h>
+
+#define DB_HEADER_SIZE_IN_BYTES 28
+#define VHF_TABLE_ROW_SIZE_IN_BYTES 40
+#define APT_TABLE_ROW_SIZE_IN_BYTES 32
+#define NDB_TABLE_ROW_SIZE_IN_BYTES 28
+#define WPT_TABLE_ROW_SIZE_IN_BYTES 16
+#define TABLE_HEADER_SIZE_IN_BYTES 8
+
+const char C_SECTION_CODE     =  4;
+const char C_SUBSECTION_CODE  =  5;
+const char C_APT_ICAO_IDENT   =  6;
+const char C_APT_SUBSECTION   = 12;
+const char C_ICAO_IDENT       = 13;
+const char C_APT_IATA_IDENT   = 13;
+const char C_COUNTRY_CODE     = 19;
+const char C_CONT_INDEX       = 21;
+const char C_FREQ             = 22;
+const char C_NAVAID_CLASS     = 27;
+const char C_APT_RWY_LONG     = 27;
+const char C_LONG_NAME_LEN    = 30;
+const char C_APT_IS_IFR       = 30;
+const char C_APT_RWY_SURFACE  = 31;
+const char C_NAVAID_LAT       = 32;
+const char C_NAVAID_LON       = 41;
+const char C_APT_MAGVAR       = 51;
+const char C_DME_LAT          = 55;
+const char C_APT_ELEV         = 56;
+const char C_DME_LON          = 64;
+const char C_NAVAID_MAGVAR    = 74;
+const char C_DME_ELEV         = 79;
+const char C_APT_USE          = 80;
+const char C_APT_TIMEZONE     = 81;
+const char C_APT_LONG_NAME    = 93;
+const char C_VHF_FIGURE_MERIT = 84;
+const char C_BLANK_CHAR       = ' ';
+
+/*VHF Field positions*/
+const char C_ICD_VHF_OBJECT_ID_BYTEPOS    =  0;
+const char C_ICD_VHF_COUNTRY_CODE_BYTEPOS =  8;
+const char C_ICD_VHF_OBJECT_TYPE_BYTEPOS  = 12;
+const char C_ICD_VHF_DME_COL_BYTEPOS      = 13;
+const char C_ICD_VHF_LAT_BYTEPOS          = 16;
+const char C_ICD_VHF_LON_BYTEPOS          = 20;
+const char C_ICD_VHF_MAGVAR_BYTEPOS       = 24;
+const char C_ICD_VHF_FREQ_BYTEPOS         = 28;
+const char C_ICD_VHF_DME_LAT_BYTEPOS      = 32;
+const char C_ICD_VHF_DME_LON_BYTEPOS      = 36;
+
+/*APT Field positions*/
+const char C_ICD_APT_OBJECT_ID_BYTEPOS    =  0;
+const char C_ICD_APT_COUNTRY_CODE_BYTEPOS =  8;
+const char C_ICD_APT_IATA_CODE_BYTEPOS    = 12;
+const char C_ICD_APT_MAGVAR_BYTEPOS       = 16;
+const char C_ICD_APT_LAT_BYTEPOS          = 20;
+const char C_ICD_APT_LON_BYTEPOS          = 24;
+const char C_ICD_APT_ELEVATION_BYTEPOS    = 28;
+
+/*NDB Field positions*/
+const char C_ICD_NDB_OBJECT_ID_BYTEPOS    =  0;
+const char C_ICD_NDB_COUNTRY_CODE_BYTEPOS =  8;
+const char C_ICD_NDB_LAT_BYTEPOS          = 12;
+const char C_ICD_NDB_LON_BYTEPOS          = 16;
+const char C_ICD_NDB_MAGVAR_BYTEPOS       = 20;
+const char C_ICD_NDB_FREQ_BYTEPOS         = 24;
+
+/*Waypoints Filed positions*/
+const char C_ICD_WPT_OBJECT_ID_BYTEPOS    =  0;
+const char C_ICD_WPT_LAT_BYTEPOS          =  8;
+const char C_ICD_WPT_LON_BYTEPOS          = 12;
+
 typedef enum NavAidClass{
   UNKNOWN,
   APT,
@@ -11,6 +85,7 @@ typedef enum NavAidClass{
   VOR,
   VORDME,
   VORTAC,
+  WAYPOINT
 } E_NavAidClass;
 
 enum E_LIST_TYPE{
@@ -55,30 +130,45 @@ typedef enum DbErrorCode{
   RECORD_MALFORMED
 } E_DbError;
 
-const char C_SECTION_CODE     =  4;
-const char C_SUBSECTION_CODE  =  5;
-const char C_APT_ICAO_IDENT   =  6;
-const char C_APT_SUBSECTION   = 12;
-const char C_ICAO_IDENT       = 13;
-const char C_APT_IATA_IDENT   = 13;
-const char C_COUNTRY_CODE     = 19;
-const char C_CONT_INDEX       = 21;
-const char C_FREQ             = 22;
-const char C_NAVAID_CLASS     = 27;
-const char C_APT_RWY_LONG     = 27;
-const char C_LONG_NAME_LEN    = 30;
-const char C_APT_IS_IFR       = 30;
-const char C_APT_RWY_SURFACE  = 31;
-const char C_NAVAID_LAT       = 32;
-const char C_NAVAID_LON       = 41;
-const char C_APT_MAGVAR       = 51;
-const char C_DME_LAT          = 55;
-const char C_APT_ELEV         = 56;
-const char C_DME_LON          = 64;
-const char C_NAVAID_MAGVAR    = 74;
-const char C_DME_ELEV         = 79;
-const char C_APT_USE          = 80;
-const char C_APT_TIMEZONE     = 81;
-const char C_APT_LONG_NAME    = 93;
-const char C_VHF_FIGURE_MERIT = 84;
-const char C_BLANK_CHAR       = ' ';
+struct Validated_Float{
+  float Value;
+  bool Status;
+};
+
+struct Validated_Integer{
+  uint32_t Value;
+  bool Status;
+};
+
+struct Validated_Double{
+  double Value;
+  bool Status;
+};
+
+typedef struct Record{
+  uint32_t ID;
+  char ICAO[6];
+  char LongName[C_LONG_NAME_LEN+1];
+  char CountryCode[3];
+  char DMEident[5];
+  char IATA[4];
+  E_NavAidClass Class;
+  double Lat, Lon;
+  double DmeLat, DmeLon;
+  Validated_Integer Elev, DmeElev;
+  Validated_Float MagVar;
+  E_LIST_TYPE ListType;
+  Validated_Integer Freq;
+  uint8_t Channel;
+  E_ChannelMode ChMode;
+  E_VhfRange VhfRange;
+  E_Surf_Type LongRwySurfType;
+  uint32_t LongestRWYlength;
+  E_AptPubMil AptUsage;
+  bool AptIfrCapable;
+  int TimeZoneOffset;
+  char RecommendedNavaid[5];
+  bool DMEisCollocated;
+}DbRecord_t;
+
+#endif

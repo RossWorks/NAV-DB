@@ -15,4 +15,7 @@ std::string PresentVHF(DbRecord_t VHF);
 std::string PresentAPT(DbRecord_t APT);
 
 std::string PresentNDB(DbRecord_t NDB);
+
+std::string PresentWPT(DbRecord_t WPT);
+
 #endif

@@ -40,11 +40,16 @@ uint32_t StdDb::GetSourceFilesSize(std::string A424Dir){
 E_DbError StdDb::StdDbInitialization(bool SortDb, std::string A424Folder){
   E_DbError output = NO_ERROR;
   uint32_t NewDBSize = this->GetSourceFilesSize(A424Folder);
-  if (NewDBSize > this->Storage.max_size()){
-    output = OUT_OF_MEMORY;
-    return output;
+  try{
+    this->AptStorage.reserve(NewDBSize);
+    this->NdbStorage.reserve(NewDBSize);
+    this->VhfStorage.reserve(NewDBSize);
+    //this->WpStorage.reserve(NewDBSize);
   }
-  this->Storage.reserve(NewDBSize);
+  catch (const std::length_error& StdDbAllocationFailure){
+    std::cout << "Not enough memory to allocate all Database\n";
+    return OUT_OF_MEMORY;
+  }
   this->Statistics.APT_size = 0;
   this->Statistics.Enroute_size = 0;
   this->Statistics.GlobalSize = 0;
@@ -56,7 +61,9 @@ E_DbError StdDb::StdDbInitialization(bool SortDb, std::string A424Folder){
   }
   if (SortDb){
     std::cout << "Sorting Db...\n";
-    this->SortDatabase();
+    SortDatabase(&(this->AptStorage));
+    SortDatabase(&(this->NdbStorage));
+    SortDatabase(&(this->VhfStorage));
     std::cout << "DONE\n";
     this->DbIsSorted = true;
   }
@@ -81,32 +88,28 @@ E_DbError StdDb::AcquireArinc424Files(std::string A424Dir){
   std::string FileRecord;
   DbRecord_t TmpDbRecord;
   E_DbError ErrorCode = RECORD_MALFORMED;
-  uint32_t CurrentID = 1;
   FileRecord.reserve(135);
+  this->Statistics.APT_size = 0;
+  this->Statistics.NDB_size = 0;
+  this->Statistics.VHF_size = 0;
+  this->Statistics.Enroute_size = 0;
   for (const auto FileName: SearchingPath){
     A424File.open(FileName.path(),std::ios_base::in);
-    while (getline(A424File,FileRecord))
-    {
+    while (getline(A424File,FileRecord)){
       ClearDbRecord(&TmpDbRecord);
-      //if (FileRecord[C_CONT_INDEX] != 0){continue;}
+      if ((FileRecord[C_CONT_INDEX] - '0') > 1){continue;}
       switch(FileRecord[C_SECTION_CODE]){
         case 'D':
           switch(FileRecord[C_SECTION_CODE+1]){
             case C_BLANK_CHAR:
               TmpDbRecord = this->AcquireVhfRecord(FileRecord,&ErrorCode);
-              TmpDbRecord.ID = CurrentID;
-              this->Storage[CurrentID] = TmpDbRecord;
-              CurrentID++;
-              this->Statistics.VHF_size++;
-              this->Statistics.GlobalSize++;
+              TmpDbRecord.ID = this->Statistics.VHF_size;
+              this->VhfStorage.push_back(TmpDbRecord);
               break;
             case 'B':
               TmpDbRecord = this->AcquireNdbRecord(FileRecord,&ErrorCode);
-              TmpDbRecord.ID = CurrentID;
-              this->Storage[CurrentID] = TmpDbRecord;
-              CurrentID++;
-              this->Statistics.NDB_size++;
-              this->Statistics.GlobalSize++;
+              TmpDbRecord.ID = this->Statistics.NDB_size;
+              this->NdbStorage.push_back(TmpDbRecord);
               break;
           }
           break;
@@ -114,11 +117,8 @@ E_DbError StdDb::AcquireArinc424Files(std::string A424Dir){
           switch (FileRecord[C_SECTION_CODE+1]){
           case 'A':
             TmpDbRecord = this->AcquireEnrRecord(FileRecord,&ErrorCode);
-            TmpDbRecord.ID = CurrentID;
-            this->Storage[CurrentID] = TmpDbRecord;
-            CurrentID++;
-            this->Statistics.Enroute_size++;
-            this->Statistics.GlobalSize++;
+            TmpDbRecord.ID = this->Statistics.Enroute_size;;
+            this->WpStorage.push_back(TmpDbRecord);
             break;
           default:
             break;
@@ -128,11 +128,8 @@ E_DbError StdDb::AcquireArinc424Files(std::string A424Dir){
           case 'A':
             if (FileRecord[21] != '0'){break;}
             TmpDbRecord = this->AcquireAptRecord(FileRecord,&ErrorCode);
-            TmpDbRecord.ID = CurrentID;
-            this->Storage[CurrentID] = TmpDbRecord;
-            CurrentID++;
-            this->Statistics.APT_size++;
-            this->Statistics.GlobalSize++;
+            TmpDbRecord.ID = this->Statistics.APT_size;
+            this->AptStorage.push_back(TmpDbRecord);
             break;
           default:
             break;
@@ -144,6 +141,10 @@ E_DbError StdDb::AcquireArinc424Files(std::string A424Dir){
     }
     A424File.close();
   }
+  this->Statistics.APT_size = this->AptStorage.size();
+  this->Statistics.NDB_size = this->NdbStorage.size();
+  this->Statistics.VHF_size = this->VhfStorage.size();
+  this->Statistics.Enroute_size = this->WpStorage.size();
   return NO_ERROR;
 }
 
@@ -163,9 +164,10 @@ DbRecord_t StdDb::AcquireNdbRecord(std::string FileRecord, E_DbError* ReturnCode
     output.CountryCode[i] = FileRecord[C_COUNTRY_CODE+i];
   }
   output.CountryCode[2] = '\0';
-  output.Freq = 0;
+  output.Freq.Value = 0;
+  output.Freq.Status = true;
   for (uint8_t i=0; i<5; i++){
-    output.Freq += (FileRecord[C_FREQ+i]-48)*pow(10,6-i);
+    output.Freq.Value += (FileRecord[C_FREQ+i]-48)*pow(10,6-i);
   }
   switch (FileRecord[C_NAVAID_CLASS]){
     case 'H':
@@ -223,16 +225,20 @@ DbRecord_t StdDb::AcquireVhfRecord(std::string FileRecord, E_DbError* ReturnCode
       }
     break;
   }
-  output.Freq = 0;
+  output.Freq.Status = true;
+  output.Freq.Value  = 0;
   for (uint8_t i=0; i<5; i++){
-    output.Freq += (FileRecord[C_FREQ+i]-48)*pow(10,8-i);
+    output.Freq.Value += (FileRecord[C_FREQ+i]-48)*pow(10,8-i);
   }
-  Freq2Channel(output.Freq, &output.Channel, &output.ChMode);
+  Freq2Channel(output.Freq.Value, &output.Channel, &output.ChMode);
   output.Lat = ReadLat(FileRecord, C_NAVAID_LAT);
   output.Lon = ReadLon(FileRecord, C_NAVAID_LON);
   output.DmeLat = ReadLat(FileRecord, C_DME_LAT);
   output.DmeLon = ReadLon(FileRecord, C_DME_LON);
   output.DmeElev = ReadElev(FileRecord, C_DME_ELEV);
+  if (output.Lat == output.DmeLat && output.Lon == output.DmeLon){
+    output.DMEisCollocated = true;
+  }
   switch (FileRecord[C_VHF_FIGURE_MERIT]){
     case TERMINAL       : output.VhfRange = TERMINAL; break;
     case LOW_ALT        : output.VhfRange = LOW_ALT; break;
@@ -252,11 +258,38 @@ DbRecord_t StdDb::AcquireVhfRecord(std::string FileRecord, E_DbError* ReturnCode
  */
 std::vector<DbRecord_t> StdDb::Search(std::string Searchkey){
   std::vector<DbRecord_t> output;
+  if (false/*this->DbIsSorted*/){}
+  else{
+    output = this->LinearSearch(Searchkey);
+  }
+  return output;
+}
+
+std::vector<DbRecord_t> StdDb::LinearSearch(std::string Searchkey){
+  std::vector<DbRecord_t> output;
   std::string TmpString;
-  for (int i = 1; i< this->Statistics.GlobalSize; i++){
-    TmpString = this->Storage[i].ICAO;
+  for (int i = 1; i< this->Statistics.APT_size; i++){
+    TmpString = this->AptStorage.at(i).ICAO;
     if (TmpString == Searchkey){
-      output.push_back(this->Storage[i]);
+      output.push_back(this->AptStorage.at(i));
+    }
+  }
+  for (int i = 1; i< this->Statistics.NDB_size; i++){
+    TmpString = this->NdbStorage.at(i).ICAO;
+    if (TmpString == Searchkey){
+      output.push_back(this->NdbStorage.at(i));
+    }
+  }
+  for (int i = 1; i< this->Statistics.VHF_size; i++){
+    TmpString = this->VhfStorage.at(i).ICAO;
+    if (TmpString == Searchkey){
+      output.push_back(this->VhfStorage.at(i));
+    }
+  }
+  for (int i = 1; i< this->Statistics.Enroute_size; i++){
+    TmpString = this->WpStorage.at(i).ICAO;
+    if (TmpString == Searchkey){
+      output.push_back(this->WpStorage.at(i));
     }
   }
   return output;
@@ -296,12 +329,15 @@ void StdDb::ClearDbRecord( DbRecord_t *Record){
   Record->ChMode      = X;
   Record->Class       = UNKNOWN;
   for (i=0; i<3; i++){Record->CountryCode[i] = '\0';}
-  Record->Freq        = 0;
+  Record->Freq.Value  = 0;
+  Record->Freq.Status = false;
   for (i=0; i<5; i++){Record->ICAO[i] = '\0';}
   Record->ID = 0;
   Record->Lat = 0.0;
   Record->Lon = 0.0;
-  Record->MagVar = 0.0;
+  Record->MagVar.Value = 0.0;
+  Record->MagVar.Status = false;
+  Record->DMEisCollocated = false;
 }
 
 /**
@@ -309,11 +345,10 @@ void StdDb::ClearDbRecord( DbRecord_t *Record){
  */
 DbRecord_t StdDb::AcquireEnrRecord(std::string FileRecord, E_DbError* ReturnCode){
   DbRecord_t output;
+  output.Class = WAYPOINT;
   output.ListType = WP_LIST;
-  for (int i = 0; i < 6; i++){
-    output.ICAO[i] = FileRecord[C_ICAO_IDENT+i];
-  }
-  output.ICAO[5] = '\0';
+  ReadIcaoCode(output.ICAO, FileRecord, C_ICAO_IDENT, 5);
+  ReadIcaoCode(output.CountryCode, FileRecord, C_COUNTRY_CODE, 2);
   output.Lat = ReadLat(FileRecord, C_NAVAID_LAT);
   output.Lon = ReadLon(FileRecord, C_NAVAID_LON);
   return output;
@@ -377,6 +412,7 @@ DbRecord_t StdDb::AcquireAptRecord(std::string FileRecord, E_DbError* ReturnCode
     output.TimeZoneOffset += FileRecord[C_APT_TIMEZONE+1]-'0'*10;
     output.TimeZoneOffset += FileRecord[C_APT_TIMEZONE+2]-'0';
   }
+  ReadIcaoCode(output.RecommendedNavaid,FileRecord,64,4);
   return output;
 }
 
@@ -390,26 +426,78 @@ std::map<std::string, uint32_t> StdDb::getStatistics(){
   return output;
 }
 
-std::vector<DbRecord_t> StdDb::List(E_LIST_TYPE ListType){
-  int i = 0, C = 0;
+std::vector<DbRecord_t> StdDb::GetList(E_LIST_TYPE ListType, uint32_t StartNumber,
+                                       uint32_t RequiredElements, std::string OrderFromKey){
   std::vector<DbRecord_t> output;
+  uint64_t I = 0;
+  StartNumber = StartNumber - 1;
+  if (!this->DbIsSorted){return output;}
+  if (OrderFromKey != ""){
+    StartNumber = this->GetClosestMatch(OrderFromKey, ListType);
+  }
+  output.reserve(RequiredElements);
   switch (ListType){
-    case VHF_LIST:
-      output.reserve(this->Statistics.VHF_size);
-      for (i = 0; i < this->Statistics.GlobalSize; i++){
-        if (this->Storage[i].Class == VOR || this->Storage[i].Class == VORDME ||
-            this->Storage[i].Class == DME || this->Storage[i].Class == VORTAC ||
-            this->Storage[i].Class == ILS || this->Storage[i].Class == ILSDME ||
-            this->Storage[i].Class == TACAN){
-          output[C] = this->Storage[i];
-          C++;
-        }
+  case VHF_LIST:
+    if (StartNumber > this->Statistics.VHF_size){return output;}
+    for (I = 0; I < RequiredElements; I++){
+      output.push_back(this->VhfStorage.at(I+StartNumber));
+    }
+    break;
+  case NDB_LIST:
+    if (StartNumber > this->Statistics.NDB_size){return output;}
+    for (I = 0; I < RequiredElements; I++){
+      output.push_back(this->NdbStorage.at(I+StartNumber));
+    }
+    break;
+  case APT_LIST:
+    if (StartNumber > this->Statistics.APT_size){return output;}
+    for (I = 0; I < RequiredElements; I++){
+      output.push_back(this->AptStorage.at(I+StartNumber));
+    }
+    break;
+  case WP_LIST:
+    if (StartNumber > this->Statistics.Enroute_size){return output;}
+    for (I = 0; I < RequiredElements; I++){
+      output.push_back(this->WpStorage.at(I+StartNumber));
+    }
+    break;
+  default:
+    break;
+  }
+
+  return output;
+}
+
+uint32_t StdDb::GetClosestMatch(std::string OrderFromKey, E_LIST_TYPE ListType){
+  uint32_t Index = 0;
+  if (!this->DbIsSorted){return 0;}
+  switch (ListType) {
+    case APT_LIST:
+      for (DbRecord_t Element: this->AptStorage){
+        if (OrderFromKey <= std::string(Element.ICAO)){return Index;}
+        Index++;
       }
       break;
-    default:
+    case NDB_LIST:
+      for (DbRecord_t Element: this->NdbStorage){
+        if (OrderFromKey <= std::string(Element.ICAO)){return Index;}
+        Index++;
+      }
       break;
+    case VHF_LIST:
+      for (DbRecord_t Element: this->VhfStorage){
+        if (OrderFromKey <= std::string(Element.ICAO)){return Index;}
+        Index++;
+      }
+      break;
+    case WP_LIST:
+      for (DbRecord_t Element: this->WpStorage){
+        if (OrderFromKey <= std::string(Element.ICAO)){return Index;}
+        Index++;
+      }
+      break; 
   }
-  return output;
+  return Index;
 }
 
 bool StdDb::SortTwoRecords(const DbRecord_t Record1,const DbRecord_t Record2){
@@ -417,30 +505,22 @@ bool StdDb::SortTwoRecords(const DbRecord_t Record1,const DbRecord_t Record2){
   if (Record1.ListType < Record2.ListType){return true;}
   if (Record1.ListType > Record2.ListType){return false;}
   if (Record1.ListType == Record2.ListType){
-    if (Name1 <= Name2){return true;}
-    if (Name1 > Name2){return false;}
+    if (Name1 <= Name2){return false;}
+    if (Name1 > Name2){return true;}
   }
   return false;
 }
 
-void StdDb::SortDatabase(){
+void StdDb::SortDatabase(std::vector<DbRecord_t>* MyStorage){
   bool Swapped = false;
-  uint64_t Iteration = 0;
-  float progress = 0, old_progress = 0;
-  int i = 0, start = 0, end = this->Statistics.GlobalSize-1;
+  int i = 0, start = 0, end = MyStorage->size()-1;
   DbRecord_t AUX;
   do{
-    progress = (float)Iteration/(this->Statistics.GlobalSize/2)*100;
-    if ((progress - old_progress) > 0.1){
-      printf("\r %.2f %", progress);
-      old_progress = progress;
-    }
-    Iteration++;
-    for (i = start; i <= end; i++){
-      if (this->SortTwoRecords(this->Storage[i], this->Storage[i+1])){
-        AUX = this->Storage[i];
-        this->Storage[i] = this->Storage[i+1];
-        this->Storage[i+1] = AUX;
+    for (i = start; i < end; i++){
+      if (this->SortTwoRecords(MyStorage->at(i), MyStorage->at(i+1))){
+        AUX = MyStorage->at(i);
+        MyStorage->at(i) = MyStorage->at(i+1);
+        MyStorage->at(i+1) = AUX;
         Swapped = true;
       }
     }
@@ -448,14 +528,149 @@ void StdDb::SortDatabase(){
     Swapped = false;
     end--;
     for (i = end; i > start; i--){
-      if (this->SortTwoRecords(this->Storage[i], this->Storage[i-1])){
-        AUX = this->Storage[i];
-        this->Storage[i] = this->Storage[i-1];
-        this->Storage[i-1] = AUX;
+      if (this->SortTwoRecords(MyStorage->at(i), MyStorage->at(i+1))){
+        AUX = MyStorage->at(i);
+        MyStorage->at(i) = MyStorage->at(i+1);
+        MyStorage->at(i+1) = AUX;
         Swapped = true;
       }
     }
     start++;
   } while (Swapped);
-    
+  return;
+}
+
+E_DbError StdDb::BuildStdDB(std::string Path, bool isLittleEndian){
+  std::string Filename = GenerateDbName(1, 0, isLittleEndian);
+  const char C_DBNAME[12] = "NAV-DB_TEST";
+  std::ofstream OuputFile(Path+Filename,std::ios_base::out);
+  int CRC32 = 0, Index = 0, C = 0, SemiCircleCoord = 0;
+  uint32_t* PositionPtr = nullptr;
+  uint8_t VhfRowBuffer[VHF_TABLE_ROW_SIZE_IN_BYTES] = {0};
+  uint8_t AptRowBuffer[APT_TABLE_ROW_SIZE_IN_BYTES] = {0};
+  uint8_t NdbRowBuffer[NDB_TABLE_ROW_SIZE_IN_BYTES] = {0};
+  uint8_t WptRowBuffer[WPT_TABLE_ROW_SIZE_IN_BYTES] = {0};
+  std::vector<uint8_t> VhfTable, AptTable, NdbTable, WptTable;
+  unsigned char VhfHeader[TABLE_HEADER_SIZE_IN_BYTES] = {0};
+  unsigned char AptHeader[TABLE_HEADER_SIZE_IN_BYTES] = {0};
+  unsigned char NdbHeader[TABLE_HEADER_SIZE_IN_BYTES] = {0};
+  unsigned char WptHeader[TABLE_HEADER_SIZE_IN_BYTES] = {0};
+  unsigned char DbHeader[DB_HEADER_SIZE_IN_BYTES]     = {0};
+  VhfTable.reserve(VHF_TABLE_ROW_SIZE_IN_BYTES*this->Statistics.VHF_size);
+  AptTable.reserve(APT_TABLE_ROW_SIZE_IN_BYTES*this->Statistics.APT_size);
+  NdbTable.reserve(NDB_TABLE_ROW_SIZE_IN_BYTES*this->Statistics.NDB_size);
+  WptTable.reserve(WPT_TABLE_ROW_SIZE_IN_BYTES*this->Statistics.Enroute_size);
+
+  /*Airport records preparation*/
+  for (DbRecord_t element: this->AptStorage){
+    WriteAptRecordToBuffer(element, AptRowBuffer, isLittleEndian);
+    for (Index = 0; Index < APT_TABLE_ROW_SIZE_IN_BYTES; Index++){
+      AptTable.push_back(AptRowBuffer[Index]);
+    }
+  }
+  if (isLittleEndian){
+    WriteLittleEndian<int>(1, AptHeader);
+    WriteLittleEndian<int>(this->Statistics.APT_size, AptHeader+4);
+  }else{
+    WriteBigEndian<int>(1, AptHeader);
+    WriteBigEndian<int>(this->Statistics.APT_size, AptHeader+4);
+  }
+
+  /*VHF navaid records preparation*/
+  for (DbRecord_t element: this->VhfStorage){
+    WriteVhfRecordToBuffer(element, VhfRowBuffer, isLittleEndian);
+    for (Index = 0; Index < VHF_TABLE_ROW_SIZE_IN_BYTES; Index++){
+      VhfTable.push_back(VhfRowBuffer[Index]);
+    }
+  }
+  if (isLittleEndian){
+    WriteLittleEndian<int>(2, VhfHeader);
+    WriteLittleEndian<int>(this->Statistics.VHF_size, VhfHeader+4);
+  }else{
+    WriteBigEndian<int>(2, VhfHeader);
+    WriteBigEndian<int>(this->Statistics.VHF_size, VhfHeader+4);
+  }
+
+  /*NDB records preparation*/
+  for (DbRecord_t element: this->NdbStorage){
+    WriteNdbRecordToBuffer(element, NdbRowBuffer, isLittleEndian);
+    for (Index = 0; Index < NDB_TABLE_ROW_SIZE_IN_BYTES; Index++){
+      NdbTable.push_back(NdbRowBuffer[Index]);
+    }
+  }
+  if (isLittleEndian){
+    WriteLittleEndian<int>(3, NdbHeader);
+    WriteLittleEndian<int>(this->Statistics.NDB_size, NdbHeader+4);
+  }else{
+    WriteBigEndian<int>(3, NdbHeader);
+    WriteBigEndian<int>(this->Statistics.NDB_size, NdbHeader+4);
+  }
+
+  /*WPT records preparation*/
+  for (DbRecord_t element: this->WpStorage){
+    WriteNdbRecordToBuffer(element, WptRowBuffer, isLittleEndian);
+    for (Index = 0; Index < WPT_TABLE_ROW_SIZE_IN_BYTES; Index++){
+      WptTable.push_back(WptRowBuffer[Index]);
+    }
+  }
+  if (isLittleEndian){
+    WriteLittleEndian<int>(4, WptHeader);
+    WriteLittleEndian<int>(this->Statistics.Enroute_size, WptHeader+4);
+  }else{
+    WriteBigEndian<int>(4, WptHeader);
+    WriteBigEndian<int>(this->Statistics.Enroute_size, WptHeader+4);
+  }
+  
+  /*Saving DB name*/
+  for (C=0; C<12; C++){
+    DbHeader[C] = C_DBNAME[C];
+  }
+
+  /*Database CRC saving*/
+  if (isLittleEndian){
+    WriteLittleEndian<int>(830666, DbHeader+20);
+  }else{
+    WriteBigEndian<int>(830666, DbHeader+20);
+  }
+
+  /*Writing DB header to file*/
+  for (C=0; C<DB_HEADER_SIZE_IN_BYTES; C++){
+    OuputFile.put(DbHeader[C]);
+  }
+  
+  /*Writing Airports header & storage to file*/
+  for (C=0; C<TABLE_HEADER_SIZE_IN_BYTES; C++){
+    OuputFile.put(AptHeader[C]);
+  }
+  for (C=0; C<AptTable.size(); C++){
+    OuputFile.put(AptTable[C]);
+  }
+
+  /*Writing VHF navaids header & storage to file*/
+  for (C=0; C<TABLE_HEADER_SIZE_IN_BYTES; C++){
+    OuputFile.put(VhfHeader[C]);
+  }
+  for (C=0; C<VhfTable.size(); C++){
+    OuputFile.put(VhfTable[C]);
+  }
+
+  /*Writing NDB header & storage to file*/
+  for (C=0; C<TABLE_HEADER_SIZE_IN_BYTES; C++){
+    OuputFile.put(NdbHeader[C]);
+  }
+  for (C=0; C<NdbTable.size(); C++){
+    OuputFile.put(NdbTable[C]);
+  }
+
+  /*Writing WPT header & storage to file*/
+  for (C=0; C<TABLE_HEADER_SIZE_IN_BYTES; C++){
+    OuputFile.put(WptHeader[C]);
+  }
+  for (C=0; C<WptTable.size(); C++){
+    OuputFile.put(WptTable[C]);
+  }
+
+  /*Closing file*/
+  OuputFile.close();
+  return NO_ERROR;
 }

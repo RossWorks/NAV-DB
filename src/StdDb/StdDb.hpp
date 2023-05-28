@@ -11,35 +11,11 @@
 #include <map>
 #include <list>
 #include <math.h>
+#include <thread>
 
 #include "./DbCommonTypes.hpp"
 #include "../Common/CommonUtils.hpp"
 #include "./StdDbUtils.hpp"
-
-typedef struct Record
-{
-  uint32_t ID;
-  char ICAO[6];
-  char LongName[C_LONG_NAME_LEN+1];
-  char CountryCode[3];
-  char DMEident[5];
-  char IATA[4];
-  E_NavAidClass Class;
-  double Lat, Lon;
-  double DmeLat, DmeLon;
-  int Elev, DmeElev;
-  float MagVar;
-  E_LIST_TYPE ListType;
-  uint32_t Freq;
-  uint8_t Channel;
-  E_ChannelMode ChMode;
-  E_VhfRange VhfRange;
-  E_Surf_Type LongRwySurfType;
-  uint32_t LongestRWYlength;
-  E_AptPubMil AptUsage;
-  bool AptIfrCapable;
-  int TimeZoneOffset;
-}DbRecord_t;
 
 typedef struct StdDbStatistics{
   uint32_t VHF_size, NDB_size, Enroute_size, GlobalSize,APT_size;
@@ -47,10 +23,10 @@ typedef struct StdDbStatistics{
 
 class StdDb{
 private:
-  std::vector<DbRecord_t> Storage; ///vector storing the info read form the A424 files
+  ///vectors storing the info read form the A424 files, separated by type
+  std::vector<DbRecord_t> AptStorage, NdbStorage, VhfStorage, WpStorage; 
   StdDbStat_t Statistics; ///struct storing some stats of the Storage vector
   bool DbIsSorted;
-
   /**
    * @brief Get the Source Files Size
    * @return the bytes size to be allocated in RAM for the DB 
@@ -112,7 +88,7 @@ private:
   /**
    * @brief sorts the Database witha cocktail sort 
    */
-  void SortDatabase();
+  void SortDatabase(std::vector<DbRecord_t>* MyStorage);
 
   /**
    * @brief Tells if the first record comes after the second one
@@ -122,6 +98,7 @@ private:
    * @return false if Record2 comes before Record1
    */
   bool SortTwoRecords(const DbRecord_t Record1, const DbRecord_t Record2);
+
 public:
   StdDb();
   ~StdDb(){}
@@ -146,12 +123,19 @@ public:
    */
   std::vector<DbRecord_t> Search(std::string Searchkey);
 
+  std::vector<DbRecord_t> LinearSearch(std::string Searchkey);
+
+  uint32_t GetClosestMatch(std::string OrderFromKey, E_LIST_TYPE ListType);
+
   /**
    * @brief Returns a list of all Points of type ListType 
    * @param ListType 
    * @return std::vector<DbRecord_t> 
    */
-  std::vector<DbRecord_t> List(E_LIST_TYPE ListType);
+  std::vector<DbRecord_t> GetList(E_LIST_TYPE ListType, uint32_t StartNumber,
+                                  uint32_t RequiredElements, std::string OrderFromKey);
+
+  E_DbError BuildStdDB(std::string Path, bool isLittleEndian = true);
 };
 
 #endif 
