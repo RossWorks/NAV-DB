@@ -614,10 +614,10 @@ E_DbError StdDb::BuildStdDB(std::string Path, bool isLittleEndian){
     }
   }
   if (isLittleEndian){
-    WriteLittleEndian<int>(3, WptHeader);
+    WriteLittleEndian<int>(4, WptHeader);
     WriteLittleEndian<int>(this->Statistics.Enroute_size, WptHeader+4);
   }else{
-    WriteBigEndian<int>(3, WptHeader);
+    WriteBigEndian<int>(4, WptHeader);
     WriteBigEndian<int>(this->Statistics.Enroute_size, WptHeader+4);
   }
   
@@ -628,9 +628,9 @@ E_DbError StdDb::BuildStdDB(std::string Path, bool isLittleEndian){
 
   /*Database CRC saving*/
   if (isLittleEndian){
-    WriteLittleEndian<int>(830666, DbHeader+12);
+    WriteLittleEndian<int>(830666, DbHeader+20);
   }else{
-    WriteBigEndian<int>(830666, DbHeader+12);
+    WriteBigEndian<int>(830666, DbHeader+20);
   }
 
   /*Writing DB header to file*/
