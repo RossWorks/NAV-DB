@@ -1,15 +1,25 @@
 project NavDb is
 
   type Mode_Type is ("debug", "release");
+  type Interface_Type is ("GUI", "CLI");
   Mode : Mode_Type := external ("mode", "debug");
+  Interface : Interface_Type := external ("interface", "CLI");
+  
   Cpp_switches := ();
+  GlobalSrc := ("./src/",
+                "./src/Common/",
+                "./src/StdDb/",
+                "./src/Presentation/");
+  CliSrc := ("./src/CLI-Interface/");
+  GuiSrc := ("./src/GUI-Interface/");
 
   for Languages use ("C++");
-  for source_dirs use ("./src/",
-                       "./src/Common/",
-                       "./src/StdDb/",
-                       "./src/Presentation/",
-                       "./src/CLI-Interface/");
+  case Interface is
+    when "CLI" =>
+      for source_dirs use GlobalSrc & CliSrc;
+    when "GUI" => 
+      for source_dirs use GlobalSrc & GuiSrc;
+  end case;
   for Object_Dir use "./obj";
   for Exec_dir use "./bin";
   for main use ("./src/main.cpp");
@@ -17,9 +27,15 @@ project NavDb is
   package Builder is
     case Mode is
       when "debug" =>
-        for Executable("main.cpp") use "NavDbDebug.bin";
+        case Interface is
+          when "CLI" => for Executable("main.cpp") use "NavDbDebug.bin";
+          when "GUI" => for Executable("main.cpp") use "NavDbGuiDebug.bin";
+        end case;
       when "release" =>
-        for Executable("main.cpp") use "NavDb.bin";
+        case Interface is
+          when "CLI" => for Executable("main.cpp") use "NavDb.bin";
+          when "GUI" => for Executable("main.cpp") use "NavDbGui.bin";
+        end case;
     end case;
   end Builder;
 
