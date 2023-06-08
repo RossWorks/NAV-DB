@@ -222,10 +222,10 @@ void WriteAptRecordToBuffer(const DbRecord_t AptRecord, unsigned char* FileBuffe
   }
   int_MagVar = (int)(AptRecord.MagVar.Value*100.0);
   if (isLittleEndian){
-    WriteLittleEndian<int>(int_MagVar,FileBuffer+C_ICD_VHF_MAGVAR_BYTEPOS);
+    WriteLittleEndian<int>(int_MagVar,FileBuffer+C_ICD_APT_MAGVAR_BYTEPOS);
   }
   else{
-    WriteBigEndian<int>(int_MagVar,FileBuffer+C_ICD_VHF_MAGVAR_BYTEPOS);
+    WriteBigEndian<int>(int_MagVar,FileBuffer+C_ICD_APT_MAGVAR_BYTEPOS);
   }
   SemiCircleCoord = (int)(AptRecord.Lat*(pow(2,31))/180.0);
   if (isLittleEndian){
@@ -242,9 +242,9 @@ void WriteAptRecordToBuffer(const DbRecord_t AptRecord, unsigned char* FileBuffe
     WriteBigEndian<int>(SemiCircleCoord,FileBuffer+C_ICD_APT_LON_BYTEPOS);
   }
   if (isLittleEndian){
-    WriteLittleEndian<int>(AptRecord.Elev.Value,FileBuffer+C_ICD_APT_LON_BYTEPOS);
+    WriteLittleEndian<int>(AptRecord.Elev.Value,FileBuffer+C_ICD_APT_ELEVATION_BYTEPOS);
   }
   else{
-    WriteBigEndian<int>(AptRecord.Elev.Value,FileBuffer+C_ICD_APT_LON_BYTEPOS);
+    WriteBigEndian<int>(AptRecord.Elev.Value,FileBuffer+C_ICD_APT_ELEVATION_BYTEPOS);
   }
 }
