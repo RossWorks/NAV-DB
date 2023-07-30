@@ -13,8 +13,12 @@ HMI_State ParseCommand(std::string Command, std::string* SearchKey,
         *OrderFromKey = Command.substr(5);
       }
       else if (Command.substr(4,1) == "/"){
-        *Index=std::stoi(Command.substr(5));
-      }
+        try{
+          *Index=std::stoi(Command.substr(5));
+        }
+        catch(std::invalid_argument& InvalidOrderFromIndexCast){
+          return HMI_SEARCH;
+        }      }
       return HMI_LIST;
     }
     if (Command.substr(1,3) == "APT"){
@@ -23,8 +27,12 @@ HMI_State ParseCommand(std::string Command, std::string* SearchKey,
         *OrderFromKey = Command.substr(5);
       }
       else if (Command.substr(4,1) == "/"){
-        *Index=std::stoi(Command.substr(5));
-      }
+        try{
+          *Index=std::stoi(Command.substr(5));
+        }
+        catch(std::invalid_argument& InvalidOrderFromIndexCast){
+          return HMI_SEARCH;
+        }      }
       return HMI_LIST;
     }
     if (Command.substr(1,3) == "NDB"){
@@ -33,7 +41,12 @@ HMI_State ParseCommand(std::string Command, std::string* SearchKey,
         *OrderFromKey = Command.substr(5);
       }
       else if (Command.substr(4,1) == "/"){
-        *Index=std::stoi(Command.substr(5));
+        try{
+          *Index=std::stoi(Command.substr(5));
+        }
+        catch(std::invalid_argument& InvalidOrderFromIndexCast){
+          return HMI_SEARCH;
+        }
       }
       return HMI_LIST;
     }
@@ -43,7 +56,12 @@ HMI_State ParseCommand(std::string Command, std::string* SearchKey,
         *OrderFromKey = Command.substr(5);
       }
       else if (Command.substr(4,1) == "/"){
-        *Index=std::stoi(Command.substr(5));
+        try{
+          *Index=std::stoi(Command.substr(5));
+        }
+        catch(std::invalid_argument& InvalidOrderFromIndexCast){
+          return HMI_SEARCH;
+        }
       }
       return HMI_LIST;
     }

@@ -47,7 +47,13 @@ HMI_State Hmi_SM::ExecuteStep(){
       NextStep = ParseCommand(UserInput, &(this->SearchKey), &TmpInt, &MyList, &OrderFromKey);
       switch (NextStep){
         case HMI_LIST:
+        try{
           this->SearchResults = this->StdDbPointer->GetList(MyList,TmpInt,10, OrderFromKey);
+        }
+        catch (std::invalid_argument& e){
+          std::cout <<"broke @ parseCmd\n";
+          std::cin;
+        }
           NextStep = HMI_SHOW_RESULTS;
           break;
         case HMI_SEARCH:
