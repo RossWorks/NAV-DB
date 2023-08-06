@@ -10,7 +10,7 @@ std::string PresentSearchResult(std::vector<DbRecord_t> List){
     output += "LIST EMPTY\n";
   }
   for (DbRecord_t element: List){
-    WpType = PrintClass(element.Class);
+    WpType = PrintClass(element.Class, true);
     sprintf(TmpString,"%2i -> |%-8s|%-8s|%s|\n",
             I,
             element.ICAO,
@@ -25,7 +25,7 @@ std::string PresentSearchResult(std::vector<DbRecord_t> List){
 std::string PresentVHF(DbRecord_t VHF){
   std::string output = "";
   output += "NAME:    \t" + std::string(VHF.ICAO) + "\n";
-  output += "CLASS:   \t" + PrintClass(VHF.Class) + "\n";
+  output += "CLASS:   \t" + PrintClass(VHF.Class, true) + "\n";
   output += "REGION:  \t" + std::string(VHF.CountryCode) + "\n";
   if (VHF.Class == VOR || VHF.Class == VORDME ||VHF.Class == TACAN ||
       VHF.Class == VORTAC){

@@ -42,7 +42,7 @@ std::string RenderCoord(double Coord, bool IsLat);
 
 std::string PrintFloat(float number, int decimals);
 
-std::string PrintClass(E_NavAidClass Class);
+std::string PrintClass(E_NavAidClass Class, bool ColorizeText);
 
 std::string PrintMagVar(Validated_Float MagVar);
 
