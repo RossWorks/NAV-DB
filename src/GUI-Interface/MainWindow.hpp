@@ -2,6 +2,7 @@
 #include <gtkmm/grid.h>
 #include <gtkmm/window.h>
 #include <gtkmm/entry.h>
+#include <gtkmm/image.h>
 #include <gtkmm/label.h>
 #include <iostream>
 #include "../StdDb/StdDb.hpp"
@@ -18,10 +19,14 @@ private:
   StdDb MyStdDb;
   StdDb* StdDbPtr = &MyStdDb;
 
+  /*Accesories widgets*/
+  Gtk::Image DbInfoIcon;
+
   /*Window widgets*/
   Gtk::Grid MainGrid;
   Gtk::Grid ResultsGrid;
   Gtk::Button CmdLoad;
+  Gtk::Button CmdDbInfo;
   Gtk::Button CmdSearch;
   Gtk::Entry TxtSearchKey;
   
@@ -35,4 +40,5 @@ private:
 
   void LoadDb_F();
   void SearchDb_F();
+  void GetDbInfo();
 };

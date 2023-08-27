@@ -4,14 +4,15 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/usr/include/gtkmm-4.0/",
+                "/usr/include/gtkmm-4.0/**",
+                "/usr/include/**",
                 "/usr/include/glibmm-2.68",
                 "/usr/include/sigc++-3.0"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",
-            "cStandard": "c20",
-            "cppStandard": "c++20",
+            "cStandard": "c17",
+            "cppStandard": "c++23",
             "intelliSenseMode": "linux-gcc-x64",
             "browse": {
                 "path": [
