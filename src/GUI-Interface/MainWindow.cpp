@@ -63,7 +63,7 @@ void MainWindow::SearchDb_F(){
 
   this->SearchResults.clear();
   this->SearchResults= MyStdDb.Search(Searchkey);
-  if (this->SearchResults.size()<1){return;}
+  if (this->SearchResults.size()<1){TxtSearchKey.set_text("LIST EMPTY");}
 
   try{
     this->LblIcao1.set_text(SearchResults.at(0).ICAO);
