@@ -24,9 +24,10 @@ typedef struct StdDbStatistics{
 class StdDb{
 private:
   ///vectors storing the info read form the A424 files, separated by type
-  std::vector<DbRecord_t> AptStorage, NdbStorage, VhfStorage, WpStorage; 
-  StdDbStat_t Statistics; ///struct storing some stats of the Storage vector
-  bool DbIsSorted;
+  std::vector<DbRecord_t> AptStorage, NdbStorage, VhfStorage, WpStorage;
+  StdDbStat_t Statistics; ///struct storing some stats of the Storage vectors
+  bool DbIsSorted, DbIsValid;
+
   /**
    * @brief Get the Source Files Size
    * @return the bytes size to be allocated in RAM for the DB 
@@ -86,9 +87,10 @@ private:
   void ClearDbRecord(DbRecord_t* Record);
 
   /**
-   * @brief sorts the Database witha cocktail sort 
+   * @brief sorts the Database witha cocktail sort
+   * @return E_DbError NO_ERROR if all good
    */
-  void SortDatabase(std::vector<DbRecord_t>* MyStorage);
+  E_DbError SortDatabase(std::vector<DbRecord_t>* MyStorage);
 
   /**
    * @brief Tells if the first record comes after the second one
@@ -98,6 +100,12 @@ private:
    * @return false if Record2 comes before Record1
    */
   bool SortTwoRecords(const DbRecord_t Record1, const DbRecord_t Record2);
+
+   /**
+   * @brief Clears the content of the Database
+   * @return E_DbError Always returns NO_ERROR
+   */
+  E_DbError DestroyDb();
 
 public:
   StdDb();
@@ -135,6 +143,13 @@ public:
   std::vector<DbRecord_t> GetList(E_LIST_TYPE ListType, uint32_t StartNumber,
                                   uint32_t RequiredElements, std::string OrderFromKey);
 
+  /**
+   * @brief Builds a DB file for the NavSys
+   * 
+   * @param Path where to put produced file
+   * @param isLittleEndian enforces little o big endianness
+   * @return E_DbError 
+   */
   E_DbError BuildStdDB(std::string Path, bool isLittleEndian = true);
 };
 

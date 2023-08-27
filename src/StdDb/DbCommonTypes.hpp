@@ -127,7 +127,9 @@ typedef enum DbErrorCode{
   NO_ERROR,
   IO_ERROR,
   OUT_OF_MEMORY,
-  RECORD_MALFORMED
+  RECORD_MALFORMED,
+  ALREADY_INITIALIZED,
+  DB_NOT_SORTED
 } E_DbError;
 
 struct Validated_Float{

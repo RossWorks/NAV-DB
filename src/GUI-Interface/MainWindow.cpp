@@ -12,8 +12,8 @@ MainWindow::MainWindow(){
   CmdLoad.signal_clicked().connect(sigc::mem_fun(*this, &MainWindow::LoadDb_F));
 
   CmdDbInfo.set_label("DB INFO");
+  //CmdDbInfo.set_child(DbInfoIcon);
   CmdDbInfo.set_sensitive(false);
-  //CmdDbInfo.add(DbInfoIcon);
   CmdDbInfo.signal_clicked().connect(sigc::mem_fun(*this, &MainWindow::GetDbInfo));
 
   CmdSearch.set_label("SEARCH");
@@ -47,7 +47,12 @@ MainWindow::MainWindow(){
 }
 
 void MainWindow::LoadDb_F(){
-  std::cout << "LOAD DB\n";
+  std::thread DbSorterThread(&MainWindow::LoadDb_Imp,this);
+  TxtSearchKey.set_text("LOAD DB");
+  DbSorterThread.detach();
+}
+
+void MainWindow::LoadDb_Imp(){
   this->MyStdDb.StdDbInitialization(true, "./Data/");
   CmdSearch.set_sensitive(true);
   CmdDbInfo.set_sensitive(true);

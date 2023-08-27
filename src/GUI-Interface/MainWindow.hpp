@@ -5,10 +5,12 @@
 #include <gtkmm/image.h>
 #include <gtkmm/label.h>
 #include <iostream>
+#include <exception>
+#include <thread>
+
 #include "../StdDb/StdDb.hpp"
 #include "../Common/CommonSettings.hpp"
 #include "../Presentation/Presentation.hpp"
-#include <exception>
 
 class MainWindow : public Gtk::Window{
 public:
@@ -27,6 +29,7 @@ private:
   Gtk::Grid ResultsGrid;
   Gtk::Button CmdLoad;
   Gtk::Button CmdDbInfo;
+  Gtk::Label LblDbInfoText;
   Gtk::Button CmdSearch;
   Gtk::Entry TxtSearchKey;
   
@@ -41,4 +44,5 @@ private:
   void LoadDb_F();
   void SearchDb_F();
   void GetDbInfo();
+  void LoadDb_Imp();
 };
