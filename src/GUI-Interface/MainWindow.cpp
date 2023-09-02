@@ -20,11 +20,16 @@ MainWindow::MainWindow(){
   CmdSearch.set_sensitive(false);
   CmdSearch.signal_clicked().connect(sigc::mem_fun(*this, &MainWindow::SearchDb_F));
 
+  CmdBuildDb.set_label("BUILD DB (LE)");
+  CmdBuildDb.set_sensitive(false);
+  CmdSearch.signal_clicked().connect(sigc::mem_fun(*this, &MainWindow::BuildDb_F));
+
   MainGrid.attach(ResultsGrid,0,0,2,1);
   MainGrid.attach(TxtSearchKey,0,1,1,1);
   MainGrid.attach(CmdLoad,1,1,1,1);
   MainGrid.attach(CmdSearch,2,1,1,1);
   MainGrid.attach(CmdDbInfo, 1,3,1,1);
+  MainGrid.attach(CmdBuildDb, 2,3,1,1);
   ResultsGrid.set_column_homogeneous();
   ResultsGrid.attach(LblIcao1,0,0,1,1);
   ResultsGrid.attach(LblIcao2,0,1,1,1);
@@ -56,6 +61,7 @@ void MainWindow::LoadDb_Imp(){
   this->MyStdDb.StdDbInitialization(true, "./Data/");
   CmdSearch.set_sensitive(true);
   CmdDbInfo.set_sensitive(true);
+  CmdBuildDb.set_sensitive(true);
 }
 
 void MainWindow::SearchDb_F(){
@@ -124,4 +130,8 @@ void MainWindow::SearchDb_F(){
 void MainWindow::GetDbInfo(){
   std::map<std::string, uint32_t> DbStats;
   DbStats = this->MyStdDb.getStatistics();
+}
+
+void MainWindow::BuildDb_F(){
+  this->MyStdDb.BuildStdDB("./DbGeneration/");
 }

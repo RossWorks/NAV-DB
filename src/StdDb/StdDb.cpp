@@ -67,9 +67,15 @@ E_DbError StdDb::StdDbInitialization(bool SortDb, std::string A424Folder){
   }
   if (SortDb){
     std::cout << "Sorting Db...\n";
-    SortDatabase(&(this->AptStorage));
-    SortDatabase(&(this->NdbStorage));
-    SortDatabase(&(this->VhfStorage));
+    std::thread AptSorter(&StdDb::SortDatabase, this, &(this->AptStorage));
+    std::thread VhfSorter(&StdDb::SortDatabase, this, &(this->VhfStorage));
+    std::thread NdbSorter(&StdDb::SortDatabase, this, &(this->NdbStorage));
+    // SortDatabase(&(this->AptStorage));
+    // SortDatabase(&(this->NdbStorage));
+    // SortDatabase(&(this->VhfStorage));
+    AptSorter.join();
+    VhfSorter.join();
+    NdbSorter.join();
     std::cout << "DONE\n";
     this->DbIsSorted = true;
   }

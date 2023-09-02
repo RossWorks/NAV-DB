@@ -32,6 +32,7 @@ private:
   Gtk::Label LblDbInfoText;
   Gtk::Button CmdSearch;
   Gtk::Entry TxtSearchKey;
+  Gtk::Button CmdBuildDb;
   
   /*Start of result presentation widgets*/
   Gtk::Label LblIcao1, LblCountry1, LblType1, LblLongName1;
@@ -45,4 +46,5 @@ private:
   void SearchDb_F();
   void GetDbInfo();
   void LoadDb_Imp();
+  void BuildDb_F();
 };
