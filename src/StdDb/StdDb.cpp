@@ -2,6 +2,7 @@
 
 StdDb::StdDb(){
   this->DbIsSorted = false;
+  this->DbIsValid  = false;
 }
 
 /**
@@ -40,6 +41,7 @@ uint32_t StdDb::GetSourceFilesSize(std::string A424Dir){
 E_DbError StdDb::StdDbInitialization(bool SortDb, std::string A424Folder){
   E_DbError output = NO_ERROR;
   uint32_t NewDBSize = this->GetSourceFilesSize(A424Folder);
+  if(this->DbIsValid){this->DestroyDb();}
   try{
     this->AptStorage.reserve(NewDBSize);
     this->NdbStorage.reserve(NewDBSize);
@@ -48,6 +50,8 @@ E_DbError StdDb::StdDbInitialization(bool SortDb, std::string A424Folder){
   }
   catch (const std::length_error& StdDbAllocationFailure){
     std::cout << "Not enough memory to allocate all Database\n";
+    this->DbIsSorted = false;
+    this->DbIsValid  = false;
     return OUT_OF_MEMORY;
   }
   this->Statistics.APT_size = 0;
@@ -57,16 +61,25 @@ E_DbError StdDb::StdDbInitialization(bool SortDb, std::string A424Folder){
   this->Statistics.VHF_size = 0;
   output = this->AcquireArinc424Files(A424Folder);
   if (output != NO_ERROR){
+    this->DbIsSorted = false;
+    this->DbIsValid  = false;
     return output;
   }
   if (SortDb){
     std::cout << "Sorting Db...\n";
-    SortDatabase(&(this->AptStorage));
-    SortDatabase(&(this->NdbStorage));
-    SortDatabase(&(this->VhfStorage));
+    std::thread AptSorter(&StdDb::SortDatabase, this, &(this->AptStorage));
+    std::thread VhfSorter(&StdDb::SortDatabase, this, &(this->VhfStorage));
+    std::thread NdbSorter(&StdDb::SortDatabase, this, &(this->NdbStorage));
+    // SortDatabase(&(this->AptStorage));
+    // SortDatabase(&(this->NdbStorage));
+    // SortDatabase(&(this->VhfStorage));
+    AptSorter.join();
+    VhfSorter.join();
+    NdbSorter.join();
     std::cout << "DONE\n";
     this->DbIsSorted = true;
   }
+  this->DbIsValid  = true;
   return output;
 }
 
@@ -464,7 +477,6 @@ std::vector<DbRecord_t> StdDb::GetList(E_LIST_TYPE ListType, uint32_t StartNumbe
   default:
     break;
   }
-
   return output;
 }
 
@@ -511,10 +523,11 @@ bool StdDb::SortTwoRecords(const DbRecord_t Record1,const DbRecord_t Record2){
   return false;
 }
 
-void StdDb::SortDatabase(std::vector<DbRecord_t>* MyStorage){
+E_DbError StdDb::SortDatabase(std::vector<DbRecord_t>* MyStorage){
   bool Swapped = false;
   int i = 0, start = 0, end = MyStorage->size()-1;
   DbRecord_t AUX;
+  if (this->DbIsSorted){return NO_ERROR;};
   do{
     for (i = start; i < end; i++){
       if (this->SortTwoRecords(MyStorage->at(i), MyStorage->at(i+1))){
@@ -537,7 +550,7 @@ void StdDb::SortDatabase(std::vector<DbRecord_t>* MyStorage){
     }
     start++;
   } while (Swapped);
-  return;
+  return NO_ERROR;
 }
 
 E_DbError StdDb::BuildStdDB(std::string Path, bool isLittleEndian){
@@ -672,5 +685,15 @@ E_DbError StdDb::BuildStdDB(std::string Path, bool isLittleEndian){
 
   /*Closing file*/
   OuputFile.close();
+  return NO_ERROR;
+}
+
+E_DbError StdDb::DestroyDb(){
+  this->DbIsSorted = false;
+  this->DbIsValid  = false;
+  this->AptStorage.clear();
+  this->NdbStorage.clear();
+  this->VhfStorage.clear();
+  this->WpStorage.clear();
   return NO_ERROR;
 }

@@ -32,19 +32,19 @@ enum E_TermColors{
 
 extern std::map <E_TermColors, std::string> ForeColors;
 
-std::string InvalidText(uint32_t Size);
+std::string InvalidText(uint32_t Size, bool ColorizeText);
 
 //extern std::map <E_TermColors, std::string> BackColors;
 
-std::string RenderFrequency(Validated_Integer Frequency);
+std::string RenderFrequency(Validated_Integer Frequency, bool ColorizeText);
 
 std::string RenderCoord(double Coord, bool IsLat);
 
 std::string PrintFloat(float number, int decimals);
 
-std::string PrintClass(E_NavAidClass Class);
+std::string PrintClass(E_NavAidClass Class, bool ColorizeText);
 
-std::string PrintMagVar(Validated_Float MagVar);
+std::string PrintMagVar(Validated_Float MagVar, bool ColorizeText);
 
-std::string PrintValidatedInteger(Validated_Integer Var);
+std::string PrintValidatedInteger(Validated_Integer Var, bool ColorizeText);
 #endif

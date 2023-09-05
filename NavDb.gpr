@@ -1,37 +1,114 @@
 project NavDb is
 
   type Mode_Type is ("debug", "release");
+  type Interface_Type is ("GUI", "CLI");
   Mode : Mode_Type := external ("mode", "debug");
-  Cpp_switches := ();
+  Interface : Interface_Type := external ("interface", "CLI");
+  
+  Cpp_switches   := ("-std=c++20","-pthread");
+  GTKmm_switches := ("-I/usr/include/gtkmm-4.0",
+                     "-I/usr/lib64/gtkmm-4.0/include",
+                     "-I/usr/include/giomm-2.68",
+                     "-I/usr/lib64/giomm-2.68/include",
+                     "-I/usr/include/glib-2.0",
+                     "-I/usr/lib64/glib-2.0/include",
+                     "-I/usr/include/sysprof-4",
+                     "-I/usr/include/libmount",
+                     "-I/usr/include/blkid",
+                     "-I/usr/include/glibmm-2.68",
+                     "-I/usr/lib64/glibmm-2.68/include",
+                     "-I/usr/include/sigc++-3.0",
+                     "-I/usr/lib64/sigc++-3.0/include",
+                     "-I/usr/include/gtk-4.0",
+                     "-I/usr/include/pango-1.0",
+                     "-I/usr/include/harfbuzz",
+                     "-I/usr/include/freetype2",
+                     "-I/usr/include/libpng16",
+                     "-I/usr/include/fribidi",
+                     "-I/usr/include/libxml2",
+                     "-I/usr/include/cairo",
+                     "-I/usr/include/pixman-1",
+                     "-I/usr/include/gdk-pixbuf-2.0",
+                     "-I/usr/include/graphene-1.0",
+                     "-I/usr/lib64/graphene-1.0/include",
+                     "-I/usr/include/gio-unix-2.0",
+                     "-I/usr/include/cairomm-1.16",
+                     "-I/usr/lib64/cairomm-1.16/include",
+                     "-I/usr/include/pangomm-2.48",
+                     "-I/usr/lib64/pangomm-2.48/include",
+                     "-I/usr/include/gtk-4.0/unix-print",
+                     "-mfpmath=sse",
+                     "-msse",
+                     "-msse2",
+                     "-pthread",
+                     "-lgtkmm-4.0",
+                     "-lpangomm-2.48",
+                     "-lgiomm-2.68",
+                     "-lglibmm-2.68",
+                     "-lcairomm-1.16",
+                     "-lsigc-3.0",
+                     "-lgtk-4",
+                     "-lpangocairo-1.0",
+                     "-lpango-1.0",
+                     "-lharfbuzz",
+                     "-lgdk_pixbuf-2.0",
+                     "-lcairo-gobject",
+                     "-lcairo",
+                     "-lgraphene-1.0",
+                     "-lgio-2.0",
+                     "-lgobject-2.0",
+                     "-lglib-2.0");
+
+  GlobalSrc := ("./src/",
+                "./src/Common/",
+                "./src/StdDb/",
+                "./src/Presentation/");
+  CliSrc := ("./src/CLI-Interface/");
+  GuiSrc := ("./src/GUI-Interface/");
 
   for Languages use ("C++");
-  for source_dirs use ("./src/",
-                       "./src/Common/",
-                       "./src/StdDb/",
-                       "./src/Presentation/",
-                       "./src/CLI-Interface/");
+  case Interface is
+    when "CLI" =>
+      for source_dirs use GlobalSrc & CliSrc;
+      for main use ("./src/main.cpp");
+    when "GUI" => 
+      for source_dirs use GlobalSrc & GuiSrc;
+      for main use ("./src/main_GUI.cpp");
+  end case;
   for Object_Dir use "./obj";
   for Exec_dir use "./bin";
-  for main use ("./src/main.cpp");
 
   package Builder is
     case Mode is
       when "debug" =>
-        for Executable("main.cpp") use "NavDbDebug.bin";
+        case Interface is
+          when "CLI" => for Executable("main.cpp") use "NavDbDebug.bin";
+          when "GUI" => for Executable("main_GUI.cpp") use "NavDbGuiDebug.bin";
+        end case;
       when "release" =>
-        for Executable("main.cpp") use "NavDb.bin";
+        case Interface is
+          when "CLI" => for Executable("main.cpp") use "NavDb.bin";
+          when "GUI" => for Executable("main_GUI.cpp") use "NavDbGui.bin";
+        end case;
     end case;
   end Builder;
 
   package Compiler is
     case Mode is
       when "debug" =>
-        Cpp_switches := ("-std=c++20",
-                         "-g",
-                         "-pthread");
+        Cpp_switches := Cpp_switches & ("-g");
       when "release" =>
-        Cpp_switches := ("-std=c++20");  
+        null;
     end case;
-    for Default_Switches("C++") use Cpp_switches;
+    for Default_Switches("C++") use Cpp_switches & GTKmm_switches;
   end Compiler;
+
+  package Binder is
+    for Switches ("C++") use GTKmm_switches;
+  end Binder;
+
+  package Linker is
+    for Switches ("C++") use GTKmm_switches;
+  end Linker;
+
 end NavDb;

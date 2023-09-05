@@ -2,6 +2,7 @@
 #define HMI_SUPPORT
 
 #include <string>
+#include <stdexcept>
 #include "./Hmi_Types.hpp"
 #include "../StdDb/DbCommonTypes.hpp"
 

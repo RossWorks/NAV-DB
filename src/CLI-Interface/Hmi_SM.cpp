@@ -47,7 +47,13 @@ HMI_State Hmi_SM::ExecuteStep(){
       NextStep = ParseCommand(UserInput, &(this->SearchKey), &TmpInt, &MyList, &OrderFromKey);
       switch (NextStep){
         case HMI_LIST:
+        try{
           this->SearchResults = this->StdDbPointer->GetList(MyList,TmpInt,10, OrderFromKey);
+        }
+        catch (std::invalid_argument& e){
+          std::cout <<"broke @ parseCmd\n";
+          std::cin;
+        }
           NextStep = HMI_SHOW_RESULTS;
           break;
         case HMI_SEARCH:
@@ -82,16 +88,16 @@ HMI_State Hmi_SM::ExecuteStep(){
       }
       switch (MyList){
         case VHF_LIST:
-          std::cout << PresentVHF(this->SearchResults.at(ResultIndex-1));
+          std::cout << PresentVHF(this->SearchResults.at(ResultIndex-1), true);
           break;
         case NDB_LIST:
-          std::cout << PresentNDB(this->SearchResults.at(ResultIndex-1));
+          std::cout << PresentNDB(this->SearchResults.at(ResultIndex-1), true);
           break;
         case APT_LIST:
-          std::cout << PresentAPT(this->SearchResults.at(ResultIndex-1));
+          std::cout << PresentAPT(this->SearchResults.at(ResultIndex-1), true);
           break;
         case WP_LIST:
-          std::cout << PresentWPT(this->SearchResults.at(ResultIndex-1));
+          std::cout << PresentWPT(this->SearchResults.at(ResultIndex-1), true);
           break;
         default:
           break;

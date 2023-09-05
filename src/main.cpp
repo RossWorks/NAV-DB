@@ -3,12 +3,13 @@
 #include "./Presentation/Presentation.hpp"
 #include "./Common/CommonSettings.hpp"
 #include "./CLI-Interface/Hmi_SM.hpp"
-//#include <gtkmm-4.0/gtkmm.h>
-
 
 int main(int argc, char* argv[])
 {
-  std::string SettingFile(argv[1]);
+  std::string SettingFile = "";
+  if (argc>1){
+    SettingFile = std::string(argv[1]);
+  }
   StdDb MyStdDb;
   Hmi_SM HMI(SettingFile, &MyStdDb);
   HMI_State HMIstate = HMI_START;

@@ -10,7 +10,7 @@ std::string PresentSearchResult(std::vector<DbRecord_t> List){
     output += "LIST EMPTY\n";
   }
   for (DbRecord_t element: List){
-    WpType = PrintClass(element.Class);
+    WpType = PrintClass(element.Class, true);
     sprintf(TmpString,"%2i -> |%-8s|%-8s|%s|\n",
             I,
             element.ICAO,
@@ -22,26 +22,26 @@ std::string PresentSearchResult(std::vector<DbRecord_t> List){
   return output;
 }
 
-std::string PresentVHF(DbRecord_t VHF){
+std::string PresentVHF(DbRecord_t VHF, bool ColorizeText){
   std::string output = "";
   output += "NAME:    \t" + std::string(VHF.ICAO) + "\n";
-  output += "CLASS:   \t" + PrintClass(VHF.Class) + "\n";
+  output += "CLASS:   \t" + PrintClass(VHF.Class, ColorizeText) + "\n";
   output += "REGION:  \t" + std::string(VHF.CountryCode) + "\n";
   if (VHF.Class == VOR || VHF.Class == VORDME ||VHF.Class == TACAN ||
       VHF.Class == VORTAC){
     output += "LATITUDE:\t" + RenderCoord(VHF.Lat, true) + "\n";
     output += "LONGITUDE:\t" + RenderCoord(VHF.Lon, false) + "\n";
   }
-  output += "FREQUENCY:\t" + RenderFrequency(VHF.Freq) + "\n";
+  output += "FREQUENCY:\t" + RenderFrequency(VHF.Freq, ColorizeText) + "\n";
   output += "CHANNEL:\t" + std::to_string(VHF.Channel) + " " + (VHF.ChMode == X ? "X" : "Y") + "\n";
   if (VHF.Class == VORDME || VHF.Class == DME || VHF.Class == TACAN || 
       VHF.Class == VORTAC){
     output += "DME LAT:\t" + RenderCoord(VHF.DmeLat, true) + "\n";
     output += "DME LON:\t" + RenderCoord(VHF.DmeLon, false) + "\n";
-    output += "DME ELEV:\t" + PrintValidatedInteger(VHF.DmeElev) + "\n";
+    output += "DME ELEV:\t" + PrintValidatedInteger(VHF.DmeElev, ColorizeText) + "\n";
   }
   if (VHF.Class != DME){
-    output += "MAG VAR:\t" + PrintMagVar(VHF.MagVar) + "\n";
+    output += "MAG VAR:\t" + PrintMagVar(VHF.MagVar, ColorizeText) + "\n";
   }
   output += "RANGE:\t";
   switch (VHF.VhfRange){
@@ -70,7 +70,7 @@ std::string PresentVHF(DbRecord_t VHF){
   return output;
 }
 
-std::string PresentAPT(DbRecord_t APT){
+std::string PresentAPT(DbRecord_t APT, bool ColorizeText){
   std::string output = "";
   output += "ICAO CODE:\t" + std::string(APT.ICAO) + "\n";
   output += "IATA CODE:\t" + std::string(APT.IATA) + "\n";
@@ -78,9 +78,9 @@ std::string PresentAPT(DbRecord_t APT){
   output += "REGION:  \t" + std::string(APT.CountryCode) + "\n";
   output += "LATITUDE:\t" + RenderCoord(APT.Lat, true) + "\n";
   output += "LONGITUDE:\t" + RenderCoord(APT.Lon, false) + "\n";
-  output += "ELEVEATION:\t" + PrintValidatedInteger(APT.Elev) + "\n";
+  output += "ELEVEATION:\t" + PrintValidatedInteger(APT.Elev, ColorizeText) + " ft\n";
   output += "REC NAVAID:\t" + std::string(APT.RecommendedNavaid) + "\n";
-  output += "MAG VAR:\t" + PrintMagVar(APT.MagVar) + "\n";
+  output += "MAG VAR:\t" + PrintMagVar(APT.MagVar, ColorizeText) + "\n";
   output += "USAGE:\t\t";
   switch (APT.AptUsage){
   case CIVIL:    output += "CIVIL"; break;
@@ -103,24 +103,24 @@ std::string PresentAPT(DbRecord_t APT){
   return output;
 }
 
-std::string PresentNDB(DbRecord_t NDB){
+std::string PresentNDB(DbRecord_t NDB, bool ColorizeText){
   std::string output = "";
   output += "NAME:    \t" + std::string(NDB.ICAO) + "\n";
   output += "REGION:  \t" + std::string(NDB.CountryCode) + "\n";
   output += "LATITUDE:\t" + RenderCoord(NDB.Lat, true) + "\n";
   output += "LONGITUDE:\t" + RenderCoord(NDB.Lon,false) + "\n";
-  output += "FREQUENCY:\t" + RenderFrequency(NDB.Freq) + "\n";
-  output += "MAG VAR:\t" + PrintMagVar(NDB.MagVar) + "\n";
+  output += "FREQUENCY:\t" + RenderFrequency(NDB.Freq, ColorizeText) + "\n";
+  output += "MAG VAR:\t" + PrintMagVar(NDB.MagVar, ColorizeText) + "\n";
   return output;
 }
 
-std::string PresentWPT(DbRecord_t WPT){
+std::string PresentWPT(DbRecord_t WPT, bool ColorizeText){
   std::string output = "";
   output += "NAME:    \t" + std::string(WPT.ICAO) + "\n";
   output += "REGION:  \t" + std::string(WPT.CountryCode) + "\n";
   output += "LATITUDE:\t" + RenderCoord(WPT.Lat, true) + "\n";
   output += "LONGITUDE:\t" + RenderCoord(WPT.Lon,false) + "\n";
-  output += "MAG VAR:\t" + PrintMagVar(WPT.MagVar) + "\n";
+  output += "MAG VAR:\t" + PrintMagVar(WPT.MagVar, ColorizeText) + "\n";
   return output;
 }
 
