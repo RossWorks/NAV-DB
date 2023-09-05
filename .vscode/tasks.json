@@ -14,6 +14,15 @@
       ],
       "group": "build",
       "label": "Build current project"
+    },
+    {
+      "type": "gnat",
+      "taskKind": "buildProject",
+      "problemMatcher": [
+        "$ada"
+      ],
+      "group": "build",
+      "label": "ada: Build current project"
     }
   ]
 }

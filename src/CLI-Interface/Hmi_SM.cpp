@@ -88,16 +88,16 @@ HMI_State Hmi_SM::ExecuteStep(){
       }
       switch (MyList){
         case VHF_LIST:
-          std::cout << PresentVHF(this->SearchResults.at(ResultIndex-1));
+          std::cout << PresentVHF(this->SearchResults.at(ResultIndex-1), true);
           break;
         case NDB_LIST:
-          std::cout << PresentNDB(this->SearchResults.at(ResultIndex-1));
+          std::cout << PresentNDB(this->SearchResults.at(ResultIndex-1), true);
           break;
         case APT_LIST:
-          std::cout << PresentAPT(this->SearchResults.at(ResultIndex-1));
+          std::cout << PresentAPT(this->SearchResults.at(ResultIndex-1), true);
           break;
         case WP_LIST:
-          std::cout << PresentWPT(this->SearchResults.at(ResultIndex-1));
+          std::cout << PresentWPT(this->SearchResults.at(ResultIndex-1), true);
           break;
         default:
           break;

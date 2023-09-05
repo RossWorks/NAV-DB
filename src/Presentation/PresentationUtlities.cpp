@@ -15,10 +15,10 @@ std::map <E_TermColors, std::string> ForeColors ={
   {BLACK,  "\e[38;5;m"}
 };
 
-std::string RenderFrequency(Validated_Integer Frequency){
+std::string RenderFrequency(Validated_Integer Frequency, bool ColorizeText){
   std::string output;
   if (!Frequency.Status){
-    output = InvalidText(6);
+    output = InvalidText(6,ColorizeText);
     return output;
   }
   if (Frequency.Value >= 1e6){
@@ -75,31 +75,31 @@ std::string PrintClass(E_NavAidClass Class, bool ColorizeText){
     return output;
 }
 
-std::string PrintMagVar(Validated_Float MagVar){
+std::string PrintMagVar(Validated_Float MagVar, bool ColorizeText){
   std::string output("");
-  if (!MagVar.Status){output = InvalidText(5); return output;}
+  if (!MagVar.Status){output = InvalidText(5,ColorizeText); return output;}
   output = (MagVar.Value >= 0 ? "E " : "W ") + PrintFloat(abs(MagVar.Value),2)+ "°";
   return output;
 }
 
-std::string InvalidText(uint32_t Size){
+std::string InvalidText(uint32_t Size, bool ColorizeText){
   std::string output("");
   int C = 0;
-  output =  ForeColors[AMBER];
+  if (ColorizeText){output =  ForeColors[AMBER];}
   for (C=0; C<Size; C++){
     output += "-";
   }
-  output += ForeColors[CLEAR];
+  if (ColorizeText){output += ForeColors[CLEAR];}
   return output; 
 }
 
-std::string PrintValidatedInteger(Validated_Integer Var){
+std::string PrintValidatedInteger(Validated_Integer Var, bool ColorizeText){
   std::string output = "";
   if (Var.Status){
     output = std::to_string(Var.Value);
   }
   else{
-    output = InvalidText(5);
+    output = InvalidText(5,ColorizeText);
   }
   return output;
 }

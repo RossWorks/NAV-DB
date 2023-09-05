@@ -10,12 +10,12 @@
 
 std::string PresentSearchResult(std::vector<DbRecord_t> Result);
 
-std::string PresentVHF(DbRecord_t VHF);
+std::string PresentVHF(DbRecord_t VHF, bool ColoorizeText);
 
-std::string PresentAPT(DbRecord_t APT);
+std::string PresentAPT(DbRecord_t APT, bool ColoorizeText);
 
-std::string PresentNDB(DbRecord_t NDB);
+std::string PresentNDB(DbRecord_t NDB, bool ColoorizeText);
 
-std::string PresentWPT(DbRecord_t WPT);
+std::string PresentWPT(DbRecord_t WPT, bool ColoorizeText);
 
 #endif

@@ -11,6 +11,7 @@
 #include "../StdDb/StdDb.hpp"
 #include "../Common/CommonSettings.hpp"
 #include "../Presentation/Presentation.hpp"
+#include "./DetailedResultWindow.hpp"
 
 class MainWindow : public Gtk::Window{
 public:
@@ -20,6 +21,9 @@ private:
   Settings MySettings;
   StdDb MyStdDb;
   StdDb* StdDbPtr = &MyStdDb;
+  
+  /*Auxiliary windows*/
+  DetailedResultWindow PopUpWindow;
 
   /*Accesories widgets*/
   Gtk::Image DbInfoIcon;
@@ -35,11 +39,11 @@ private:
   Gtk::Button CmdBuildDb;
   
   /*Start of result presentation widgets*/
-  Gtk::Label LblIcao1, LblCountry1, LblType1, LblLongName1;
-  Gtk::Label LblIcao2, LblCountry2, LblType2, LblLongName2;
-  Gtk::Label LblIcao3, LblCountry3, LblType3, LblLongName3;
-  Gtk::Label LblIcao4, LblCountry4, LblType4, LblLongName4;
-  Gtk::Label LblIcao5, LblCountry5, LblType5, LblLongName5;
+  Gtk::Label LblIcao1, LblCountry1, LblType1; Gtk::Button CmdDetResults1;
+  Gtk::Label LblIcao2, LblCountry2, LblType2; Gtk::Button CmdDetResults2;
+  Gtk::Label LblIcao3, LblCountry3, LblType3; Gtk::Button CmdDetResults3;
+  Gtk::Label LblIcao4, LblCountry4, LblType4; Gtk::Button CmdDetResults4;
+  Gtk::Label LblIcao5, LblCountry5, LblType5; Gtk::Button CmdDetResults5;
   /*End   of result presentation widgets*/
 
   void LoadDb_F();
@@ -47,4 +51,10 @@ private:
   void GetDbInfo();
   void LoadDb_Imp();
   void BuildDb_F();
+
+  void DetRes1();
+  void DetRes2();
+  void DetRes3();
+  void DetRes4();
+  void DetRes5();
 };
