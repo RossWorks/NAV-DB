@@ -4,11 +4,15 @@
       "label": "Build project",
       "type": "process",
       "command": "gprbuild",
-      "problemMatcher": []
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
     },
     {
       "type": "gprbuild",
-      "projectFile": "${config:ada.projectFile}",
+      "projectFile": "NavDb.gpr",
       "problemMatcher": [
         "$ada"
       ],

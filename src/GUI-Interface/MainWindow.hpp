@@ -17,6 +17,9 @@ class MainWindow : public Gtk::Window{
 public:
   MainWindow();
 private:
+  Glib::RefPtr<Pango::Context> WidgetContext;
+  Pango::FontDescription TextFontDescriptor;
+
   std::vector<DbRecord_t> SearchResults;
   Settings MySettings;
   StdDb MyStdDb;

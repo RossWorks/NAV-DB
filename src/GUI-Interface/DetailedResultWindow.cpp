@@ -1,11 +1,18 @@
 #include "./DetailedResultWindow.hpp"
 
 DetailedResultWindow::DetailedResultWindow(){
+
+  auto context = TxtSearchDetails.get_pango_context();
+  auto font = context->get_font_description();
+  font.set_family("B612");
+  font.set_size(14*PANGO_SCALE);
+  context->set_font_description(font);
+
   set_child(MainGrid);
   set_modal();
   set_hide_on_close(true);
   set_resizable(false);
-  set_decorated(false);
+  //set_decorated(false);
 
   CmdExit.set_label("RETURN");
   CmdExit.signal_clicked().connect(sigc::mem_fun(*this, &DetailedResultWindow::hide));
