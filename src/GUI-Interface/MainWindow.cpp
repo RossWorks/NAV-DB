@@ -10,10 +10,6 @@ MainWindow::MainWindow(){
   CmdLoad.set_label("_LOAD DB");
   CmdLoad.set_use_underline(true);
   CmdLoad.signal_clicked().connect(sigc::mem_fun(*this, &MainWindow::LoadDb_F));
-  WidgetContext = CmdLoad.get_pango_context();
-  TextFontDescriptor = WidgetContext->get_font_description();
-  TextFontDescriptor.set_family("B612");
-  WidgetContext->set_font_description(TextFontDescriptor);
 
   CmdDbInfo.set_label("DB INFO");
   //CmdDbInfo.set_child(DbInfoIcon);
@@ -77,6 +73,11 @@ MainWindow::MainWindow(){
   ResultsGrid.attach(CmdDetResults4,3,3,1,1);
   ResultsGrid.attach(CmdDetResults5,3,4,1,1);
   
+  for (int Index = 0; Index < 5; Index++){
+    SetWidgetFont(IcaoArray[Index], StandardFont);
+    SetWidgetFont(TypeArray[Index], StandardFont);
+    SetWidgetFont(CountryArray[Index], StandardFont);
+  }
 }
 
 void MainWindow::LoadDb_F(){
@@ -95,10 +96,6 @@ void MainWindow::LoadDb_Imp(){
 void MainWindow::SearchDb_F(){
   int Index = 0;
   std::string Searchkey = this->TxtSearchKey.get_text();
-  Gtk::Label* IcaoArray[5] = {&LblIcao1, &LblIcao2, &LblIcao3, & LblIcao4, &LblIcao5};
-  Gtk::Label* CountryArray[5] = {&LblCountry1, &LblCountry2, &LblCountry3, & LblCountry4, &LblCountry5};
-  Gtk::Label* TypeArray[5] = {&LblType1, &LblType2, &LblType3, &LblType4, &LblType5};
-  Gtk::Button* DetResArray[5] = {&CmdDetResults1, &CmdDetResults2, &CmdDetResults3, &CmdDetResults4, &CmdDetResults5};
   this->SearchResults.clear();
   this->SearchResults= MyStdDb.Search(Searchkey);
   if (this->SearchResults.size()<1){TxtSearchKey.set_text("LIST EMPTY");}
@@ -107,7 +104,7 @@ void MainWindow::SearchDb_F(){
       IcaoArray[Index]->set_text(SearchResults.at(Index).ICAO);
       DetResArray[Index]->show();
       CountryArray[Index]->set_text(SearchResults.at(Index).CountryCode);
-      TypeArray[Index]->set_text(PrintClass(SearchResults.at(0).Class,false));
+      TypeArray[Index]->set_text(PrintClass(SearchResults.at(Index).Class,false));
     }
     else{
       IcaoArray[Index]->set_text("");

@@ -12,6 +12,8 @@
 #include "../Common/CommonSettings.hpp"
 #include "../Presentation/Presentation.hpp"
 #include "./DetailedResultWindow.hpp"
+#include "./GuiDecorations.hpp"
+#include "GuiConstants.hpp"
 
 class MainWindow : public Gtk::Window{
 public:
@@ -47,6 +49,12 @@ private:
   Gtk::Label LblIcao3, LblCountry3, LblType3; Gtk::Button CmdDetResults3;
   Gtk::Label LblIcao4, LblCountry4, LblType4; Gtk::Button CmdDetResults4;
   Gtk::Label LblIcao5, LblCountry5, LblType5; Gtk::Button CmdDetResults5;
+
+
+  Gtk::Label* IcaoArray[5] = {&LblIcao1, &LblIcao2, &LblIcao3, & LblIcao4, &LblIcao5};
+  Gtk::Label* CountryArray[5] = {&LblCountry1, &LblCountry2, &LblCountry3, & LblCountry4, &LblCountry5};
+  Gtk::Label* TypeArray[5] = {&LblType1, &LblType2, &LblType3, &LblType4, &LblType5};
+  Gtk::Button* DetResArray[5] = {&CmdDetResults1, &CmdDetResults2, &CmdDetResults3, &CmdDetResults4, &CmdDetResults5};
   /*End   of result presentation widgets*/
 
   void LoadDb_F();
