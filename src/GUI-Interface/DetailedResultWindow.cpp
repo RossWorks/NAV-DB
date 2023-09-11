@@ -33,6 +33,7 @@ void DetailedResultWindow::PopulateResult(DbRecord_t SearchResult){
     case APT_LIST: output = PresentAPT(SearchResult, false); break;
     case VHF_LIST: output = PresentVHF(SearchResult, false); break;
     case NDB_LIST: output = PresentNDB(SearchResult, false); break;
+    case WP_LIST:  output = PresentWPT(SearchResult, false); break;
     default:       output = "ERROR IN PRESENTATION";  break;
   }
   TxtSearchDetails.set_text(Glib::ustring(output));
