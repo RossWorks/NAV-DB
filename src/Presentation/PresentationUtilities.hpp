@@ -38,7 +38,7 @@ std::string InvalidText(uint32_t Size, bool ColorizeText);
 
 std::string RenderFrequency(Validated_Integer Frequency, bool ColorizeText);
 
-std::string RenderCoord(double Coord, bool IsLat);
+std::string RenderCoord(Validated_Double Coord, bool IsLat);
 
 std::string PrintFloat(float number, int decimals);
 

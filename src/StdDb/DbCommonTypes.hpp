@@ -10,33 +10,35 @@
 #define WPT_TABLE_ROW_SIZE_IN_BYTES 16
 #define TABLE_HEADER_SIZE_IN_BYTES 8
 
-const char C_SECTION_CODE     =  4;
-const char C_SUBSECTION_CODE  =  5;
-const char C_APT_ICAO_IDENT   =  6;
-const char C_APT_SUBSECTION   = 12;
-const char C_ICAO_IDENT       = 13;
+const char C_APT_ELEV         = 56;
 const char C_APT_IATA_IDENT   = 13;
-const char C_COUNTRY_CODE     = 19;
-const char C_CONT_INDEX       = 21;
-const char C_FREQ             = 22;
-const char C_NAVAID_CLASS     = 27;
-const char C_APT_RWY_LONG     = 27;
-const char C_LONG_NAME_LEN    = 30;
+const char C_APT_ICAO_IDENT   =  6;
 const char C_APT_IS_IFR       = 30;
+const char C_APT_LONG_NAME    = 93;
+const char C_APT_MAGVAR       = 51;
+const char C_APT_RWY_LONG     = 27;
 const char C_APT_RWY_SURFACE  = 31;
+const char C_APT_SUBSECTION   = 12;
+const char C_APT_TIMEZONE     = 81;
+const char C_APT_USE          = 80;
+const char C_BLANK_CHAR       = ' ';
+const char C_CONT_INDEX       = 21;
+const char C_COUNTRY_CODE     = 19;
+const char C_DME_ELEV         = 79;
+const char C_DME_LAT          = 55;
+const char C_DME_LON          = 64;
+const char C_FREQ             = 22;
+const char C_ICAO_IDENT       = 13;
+const char C_LONG_NAME_LEN    = 30;
+const char C_NAVAID_CLASS     = 27;
 const char C_NAVAID_LAT       = 32;
 const char C_NAVAID_LON       = 41;
-const char C_APT_MAGVAR       = 51;
-const char C_DME_LAT          = 55;
-const char C_APT_ELEV         = 56;
-const char C_DME_LON          = 64;
 const char C_NAVAID_MAGVAR    = 74;
-const char C_DME_ELEV         = 79;
-const char C_APT_USE          = 80;
-const char C_APT_TIMEZONE     = 81;
-const char C_APT_LONG_NAME    = 93;
+const char C_SECTION_CODE     =  4;
+const char C_SUBSECTION_CODE  =  5;
 const char C_VHF_FIGURE_MERIT = 84;
-const char C_BLANK_CHAR       = ' ';
+const char C_RWY_LATITUDE     = 32;
+const char C_RWY_LONGITUDE    = 41;
 
 /*VHF Field positions*/
 const char C_ICD_VHF_OBJECT_ID_BYTEPOS    =  0;
@@ -149,14 +151,14 @@ struct Validated_Double{
 
 typedef struct Record{
   uint32_t ID;
-  char ICAO[6];
-  char LongName[C_LONG_NAME_LEN+1];
-  char CountryCode[3];
-  char DMEident[5];
-  char IATA[4];
+  std::string ICAO;
+  std::string LongName;
+  std::string CountryCode;
+  std::string DMEident;
+  std::string IATA;
   E_NavAidClass Class;
-  double Lat, Lon;
-  double DmeLat, DmeLon;
+  Validated_Double Lat, Lon;
+  Validated_Double DmeLat, DmeLon;
   Validated_Integer Elev, DmeElev;
   Validated_Float MagVar;
   E_LIST_TYPE ListType;
@@ -169,8 +171,17 @@ typedef struct Record{
   E_AptPubMil AptUsage;
   bool AptIfrCapable;
   int TimeZoneOffset;
-  char RecommendedNavaid[5];
+  std::string RecommendedNavaid;
   bool DMEisCollocated;
 }DbRecord_t;
+
+typedef struct{
+  uint32_t ID;
+  std::string AssAirport;
+  Validated_Float Bearing;
+  Validated_Double Lat, Lon;
+  E_Surf_Type SurfaceType;
+  Validated_Integer Elev, Length;
+} RwyRecord_t;
 
 #endif

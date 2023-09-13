@@ -30,11 +30,11 @@ std::string RenderFrequency(Validated_Integer Frequency, bool ColorizeText){
   return output;
 }
 
-std::string RenderCoord(double Coord, bool IsLat){
+std::string RenderCoord(Validated_Double Coord, bool IsLat){
   std::string output;
-  int degrees = int(Coord);
+  int degrees = int(Coord.Value);
   float minutes = 0.0;
-  minutes = std::abs(Coord - (float)degrees) * 60;
+  minutes = std::abs(Coord.Value - (float)degrees) * 60;
   output  = std::to_string(abs(degrees)) + "° " + PrintFloat(minutes,2) + "'";
   if (IsLat){
     (degrees<0 ? output = "S"+output : output = "N"+output);

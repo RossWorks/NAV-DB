@@ -19,12 +19,14 @@
 
 typedef struct StdDbStatistics{
   uint32_t VHF_size, NDB_size, Enroute_size, GlobalSize,APT_size;
+  uint32_t RWY_size;
 } StdDbStat_t;
 
 class StdDb{
 private:
   ///vectors storing the info read form the A424 files, separated by type
   std::vector<DbRecord_t> AptStorage, NdbStorage, VhfStorage, WpStorage;
+  std::vector<DbRecord_t> RwyStorage;
   StdDbStat_t Statistics; ///struct storing some stats of the Storage vectors
   bool DbIsSorted, DbIsValid;
 
@@ -72,6 +74,13 @@ private:
    */
   DbRecord_t AcquireAptRecord(std::string FileRecord, E_DbError* ReturnCode);
 
+  /**
+   * @brief Reads a Arinc 424 record containg a runway
+   * @param FileRecord the record to be read
+   * @param ReturnCode outcome of the operation
+   * @return Rwyrecord_t The acquired information
+   */
+  RwyRecord_t AcquireRwyRecord(std::string FileRecord, E_DbError* ReturnCode);
   /**
    * @brief Computes DME channel from a Mhz frequency 
    * @param Freq The navaid frequency

@@ -46,7 +46,7 @@ E_DbError StdDb::StdDbInitialization(bool SortDb, std::string A424Folder){
     this->AptStorage.reserve(NewDBSize);
     this->NdbStorage.reserve(NewDBSize);
     this->VhfStorage.reserve(NewDBSize);
-    //this->WpStorage.reserve(NewDBSize);
+    this->WpStorage.reserve(NewDBSize);
   }
   catch (const std::length_error& StdDbAllocationFailure){
     std::cout << "Not enough memory to allocate all Database\n";
@@ -70,12 +70,11 @@ E_DbError StdDb::StdDbInitialization(bool SortDb, std::string A424Folder){
     std::thread AptSorter(&StdDb::SortDatabase, this, &(this->AptStorage));
     std::thread VhfSorter(&StdDb::SortDatabase, this, &(this->VhfStorage));
     std::thread NdbSorter(&StdDb::SortDatabase, this, &(this->NdbStorage));
-    // SortDatabase(&(this->AptStorage));
-    // SortDatabase(&(this->NdbStorage));
-    // SortDatabase(&(this->VhfStorage));
+    std::thread WpSorter(&StdDb::SortDatabase, this, &(this->WpStorage));
     AptSorter.join();
     VhfSorter.join();
     NdbSorter.join();
+    WpSorter.join();
     std::cout << "DONE\n";
     this->DbIsSorted = true;
   }
@@ -100,6 +99,7 @@ E_DbError StdDb::AcquireArinc424Files(std::string A424Dir){
   std::ifstream A424File;
   std::string FileRecord;
   DbRecord_t TmpDbRecord;
+  RwyRecord_t TmpRwyRecord;
   E_DbError ErrorCode = RECORD_MALFORMED;
   FileRecord.reserve(135);
   this->Statistics.APT_size = 0;
@@ -132,20 +132,27 @@ E_DbError StdDb::AcquireArinc424Files(std::string A424Dir){
             TmpDbRecord = this->AcquireEnrRecord(FileRecord,&ErrorCode);
             TmpDbRecord.ID = this->Statistics.Enroute_size;;
             this->WpStorage.push_back(TmpDbRecord);
+            this->Statistics.Enroute_size++;
             break;
           default:
             break;
           }
         case 'P':
           switch (FileRecord[C_APT_SUBSECTION]){
-          case 'A':
-            if (FileRecord[21] != '0'){break;}
-            TmpDbRecord = this->AcquireAptRecord(FileRecord,&ErrorCode);
-            TmpDbRecord.ID = this->Statistics.APT_size;
-            this->AptStorage.push_back(TmpDbRecord);
-            break;
-          default:
-            break;
+            case 'A':
+              if (FileRecord[21] != '0'){break;}
+              TmpDbRecord = this->AcquireAptRecord(FileRecord,&ErrorCode);
+              TmpDbRecord.ID = this->Statistics.APT_size;
+              this->AptStorage.push_back(TmpDbRecord);
+              break;
+            case 'G':
+              if (FileRecord[21] != '0'){break;}
+              TmpRwyRecord = this->AcquireRwyRecord(FileRecord,&ErrorCode);
+              TmpRwyRecord.ID = this->Statistics.APT_size;
+              this->RwyStorage.push_back(TmpDbRecord);
+              break;
+            default:
+              break;
           }
           break;
         default:
@@ -249,7 +256,7 @@ DbRecord_t StdDb::AcquireVhfRecord(std::string FileRecord, E_DbError* ReturnCode
   output.DmeLat = ReadLat(FileRecord, C_DME_LAT);
   output.DmeLon = ReadLon(FileRecord, C_DME_LON);
   output.DmeElev = ReadElev(FileRecord, C_DME_ELEV);
-  if (output.Lat == output.DmeLat && output.Lon == output.DmeLon){
+  if (output.Lat.Value == output.DmeLat.Value && output.Lon.Value == output.DmeLon.Value){
     output.DMEisCollocated = true;
   }
   switch (FileRecord[C_VHF_FIGURE_MERIT]){
@@ -346,10 +353,9 @@ void StdDb::ClearDbRecord( DbRecord_t *Record){
   Record->Freq.Status = false;
   for (i=0; i<5; i++){Record->ICAO[i] = '\0';}
   Record->ID = 0;
-  Record->Lat = 0.0;
-  Record->Lon = 0.0;
-  Record->MagVar.Value = 0.0;
-  Record->MagVar.Status = false;
+  Record->Lat = {0.0, false};
+  Record->Lon = {0.0, false};
+  Record->MagVar = {0.0, false};
   Record->DMEisCollocated = false;
 }
 
@@ -360,8 +366,8 @@ DbRecord_t StdDb::AcquireEnrRecord(std::string FileRecord, E_DbError* ReturnCode
   DbRecord_t output;
   output.Class = WAYPOINT;
   output.ListType = WP_LIST;
-  ReadIcaoCode(output.ICAO, FileRecord, C_ICAO_IDENT, 5);
-  ReadIcaoCode(output.CountryCode, FileRecord, C_COUNTRY_CODE, 2);
+  output.ICAO = ReadIcaoCode(FileRecord, C_ICAO_IDENT, 5);
+  output.CountryCode = ReadIcaoCode(FileRecord, C_COUNTRY_CODE, 2);
   output.Lat = ReadLat(FileRecord, C_NAVAID_LAT);
   output.Lon = ReadLon(FileRecord, C_NAVAID_LON);
   return output;
@@ -375,20 +381,14 @@ DbRecord_t StdDb::AcquireAptRecord(std::string FileRecord, E_DbError* ReturnCode
   int i = 0;
   output.Class = APT;
   output.ListType = APT_LIST;
-  ReadIcaoCode(output.CountryCode, FileRecord, 10, 2);
-  ReadIcaoCode(output.ICAO, FileRecord, C_APT_ICAO_IDENT, 4);
-  for (i = 0; i < C_LONG_NAME_LEN; i++){
-    output.LongName[i] = FileRecord[C_APT_LONG_NAME+i];
-  }
-  output.LongName[C_LONG_NAME_LEN] = '\0';
+  output.CountryCode = ReadIcaoCode(FileRecord, 10, 2);
+  output.ICAO = ReadIcaoCode(FileRecord, C_APT_ICAO_IDENT, 4);
+  output.LongName = ReadIcaoCode(FileRecord, C_APT_LONG_NAME, C_LONG_NAME_LEN);
   output.Lat = ReadLat(FileRecord, C_NAVAID_LAT);
   output.Lon = ReadLon(FileRecord, C_NAVAID_LON);
   output.Elev= ReadElev(FileRecord, C_APT_ELEV);
   output.MagVar = ReadMagVar(FileRecord, C_APT_MAGVAR);
-  for (i=0; i<3; i++){
-    output.IATA[i] = FileRecord[C_APT_IATA_IDENT+i];
-  }
-  output.IATA[3] = '\0';
+  output.IATA = ReadIcaoCode(FileRecord, C_APT_IATA_IDENT, 3);
   output.LongestRWYlength = 0;
   for (i=0; i<3; i++){
     if (FileRecord[C_APT_RWY_LONG+i]!= ' '){
@@ -397,18 +397,18 @@ DbRecord_t StdDb::AcquireAptRecord(std::string FileRecord, E_DbError* ReturnCode
   }
   output.AptIfrCapable = (FileRecord[C_APT_IS_IFR] == 'Y');
   switch (FileRecord[C_APT_RWY_SURFACE]){
-  case 'H': output.LongRwySurfType = HARD_SURFACE;break;
-  case 'S': output.LongRwySurfType = SOFT_SURFACE;break;
-  case 'W': output.LongRwySurfType = WATER_SURFACE;break;
-  case 'U': output.LongRwySurfType = UNDEF_SURFACE;break;
-  default : output.LongRwySurfType = UNDEF_SURFACE;break;
+    case 'H': output.LongRwySurfType = HARD_SURFACE;  break;
+    case 'S': output.LongRwySurfType = SOFT_SURFACE;  break;
+    case 'W': output.LongRwySurfType = WATER_SURFACE; break;
+    case 'U': output.LongRwySurfType = UNDEF_SURFACE; break;
+    default : output.LongRwySurfType = UNDEF_SURFACE; break;
   }
   switch (FileRecord[C_APT_USE]){
-  case 'C': output.AptUsage = CIVIL;break;
-  case 'M': output.AptUsage = MILITARY;break;
-  case 'P': output.AptUsage = PRIVATE;break;
-  case 'J': output.AptUsage = JOINT;break;
-  default : output.AptUsage = PRIVATE;break;
+    case 'C': output.AptUsage = CIVIL;    break;
+    case 'M': output.AptUsage = MILITARY; break;
+    case 'P': output.AptUsage = PRIVATE;  break;
+    case 'J': output.AptUsage = JOINT;    break;
+    default : output.AptUsage = PRIVATE;  break;
   }
   output.TimeZoneOffset = 0;
   if (FileRecord[C_APT_TIMEZONE] == ' '){}
@@ -425,7 +425,7 @@ DbRecord_t StdDb::AcquireAptRecord(std::string FileRecord, E_DbError* ReturnCode
     output.TimeZoneOffset += FileRecord[C_APT_TIMEZONE+1]-'0'*10;
     output.TimeZoneOffset += FileRecord[C_APT_TIMEZONE+2]-'0';
   }
-  ReadIcaoCode(output.RecommendedNavaid,FileRecord,64,4);
+  output.RecommendedNavaid = ReadIcaoCode(FileRecord, 64, 4);
   return output;
 }
 
@@ -686,6 +686,16 @@ E_DbError StdDb::BuildStdDB(std::string Path, bool isLittleEndian){
   /*Closing file*/
   OuputFile.close();
   return NO_ERROR;
+}
+
+RwyRecord_t StdDb::AcquireRwyRecord(std::string FileRecord, E_DbError* ReturnCode){
+  RwyRecord_t output;
+  output.AssAirport = ReadIcaoCode(FileRecord,6,4);
+  output.Lat = ReadLat(FileRecord, C_RWY_LATITUDE);
+  output.Lon = ReadLon(FileRecord, C_RWY_LONGITUDE);
+  output.Bearing   = ReadRwyBearing(FileRecord,27);
+  //output.MagVar = ReadMagVar(FileRecord, C_NAVAID_MAGVAR);
+  return output; 
 }
 
 E_DbError StdDb::DestroyDb(){

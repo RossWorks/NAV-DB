@@ -1,27 +1,29 @@
 #include "./StdDbUtils.hpp"
 
-double ReadLat(std::string FileRecord, char StartIndex){
-    double output = 0.0;
-    output = (FileRecord[StartIndex+1]-48)*10 +
-             (FileRecord[StartIndex+2]-48)+
-             (float)(FileRecord[StartIndex+3]-48)/6+
-             (float)(FileRecord[StartIndex+4]-48)/60;
+Validated_Double ReadLat(std::string FileRecord, char StartIndex){
+    Validated_Double output = {0.0, false};
+    output.Value = (FileRecord[StartIndex+1]-48)*10 +
+                   (FileRecord[StartIndex+2]-48)+
+            (float)(FileRecord[StartIndex+3]-48)/6+
+            (float)(FileRecord[StartIndex+4]-48)/60;
     if (FileRecord[StartIndex] == 'S'){
-      output *= -1;
+      output.Value *= -1;
     }
+    output.Status = true;
     return output;
 }
 
-double ReadLon(std::string FileRecord, char StartIndex){
-    double output = 0.0;
-    output = (FileRecord[StartIndex+1]-48)*100 +
-             (FileRecord[StartIndex+2]-48)*10+
-             (FileRecord[StartIndex+3]-48)*1+
-             (float)(FileRecord[StartIndex+4]-48)/6+
-             (float)(FileRecord[StartIndex+5]-48)/60;
+Validated_Double ReadLon(std::string FileRecord, char StartIndex){
+    Validated_Double output = {0.0, false};
+    output.Value = (FileRecord[StartIndex+1]-48)*100 +
+                   (FileRecord[StartIndex+2]-48)*10+
+                   (FileRecord[StartIndex+3]-48)*1+
+            (float)(FileRecord[StartIndex+4]-48)/6+
+            (float)(FileRecord[StartIndex+5]-48)/60;
     if (FileRecord[StartIndex] == 'W'){
-      output *= -1;
+      output.Value *= -1;
     }
+    output.Status = true;
     return output;
 }
 
@@ -50,15 +52,18 @@ Validated_Integer ReadElev(std::string FileRecord, char StartIndex){
   return output;
 }
 
-void ReadIcaoCode(char* output, std::string FileRecord, char StartIndex, char MaxLen){
+Validated_Integer ReadRwyLength(std::string FileRecord, char StartIndex){
+  Validated_Integer output = {0, false};
+  output.Value = std::stoi(FileRecord.substr(StartIndex, 5));
+  output.Status = true;
+  return output;
+}
+
+std::string ReadIcaoCode(std::string FileRecord, char StartIndex, char MaxLen){
   int C = 0;
-  for(C=0; C<MaxLen; C++){
-    if (output[C] != ' '){
-      output[C] = FileRecord[StartIndex+C];
-    }
-    else{output[C] = '\0';}
-  }
-  output[MaxLen] = '\0';
+  std::string output = "";
+  output = FileRecord.substr(StartIndex, MaxLen);
+  return output;
 }
 
 std::string GenerateDbName(int DbVersion, int DbCycle, bool isLittleEndian){
@@ -108,14 +113,14 @@ void WriteVhfRecordToBuffer(const DbRecord_t VhfRecord, unsigned char* FileBuffe
   else{
     FileBuffer[C_ICD_VHF_DME_COL_BYTEPOS] = 0;
   }
-  SemiCircleCoord = (int)(VhfRecord.Lat*(pow(2,31))/180.0);
+  SemiCircleCoord = (int)(VhfRecord.Lat.Value*(pow(2,31))/180.0);
   if (isLittleEndian){
     WriteLittleEndian<int>(SemiCircleCoord,FileBuffer+C_ICD_VHF_LAT_BYTEPOS);
   }
   else{
     WriteBigEndian<int>(SemiCircleCoord,FileBuffer+C_ICD_VHF_LAT_BYTEPOS);
   }
-  SemiCircleCoord = (int)(VhfRecord.Lon*(pow(2,31))/180.0);
+  SemiCircleCoord = (int)(VhfRecord.Lon.Value*(pow(2,31))/180.0);
   if (isLittleEndian){
     WriteLittleEndian<int>(SemiCircleCoord,FileBuffer+C_ICD_VHF_LON_BYTEPOS);
   }
@@ -135,14 +140,14 @@ void WriteVhfRecordToBuffer(const DbRecord_t VhfRecord, unsigned char* FileBuffe
   else{
     WriteBigEndian<int>(VhfRecord.Freq.Value,FileBuffer+C_ICD_VHF_FREQ_BYTEPOS);
   }
-  SemiCircleCoord = (int)(VhfRecord.DmeLat*(pow(2,31))/180.0);
+  SemiCircleCoord = (int)(VhfRecord.DmeLat.Value*(pow(2,31))/180.0);
   if (isLittleEndian){
     WriteLittleEndian<int>(SemiCircleCoord,FileBuffer+C_ICD_VHF_DME_LAT_BYTEPOS);
   }
   else{
     WriteBigEndian<int>(SemiCircleCoord,FileBuffer+C_ICD_VHF_DME_LAT_BYTEPOS);
   }
-  SemiCircleCoord = (int)(VhfRecord.DmeLon*(pow(2,31))/180.0);
+  SemiCircleCoord = (int)(VhfRecord.DmeLon.Value*(pow(2,31))/180.0);
   if (isLittleEndian){
     WriteLittleEndian<int>(SemiCircleCoord,FileBuffer+C_ICD_VHF_DME_LON_BYTEPOS);
   }
@@ -159,14 +164,14 @@ void WriteNdbRecordToBuffer(const DbRecord_t NdbRecord, unsigned char* FileBuffe
   for (C=C_ICD_NDB_COUNTRY_CODE_BYTEPOS; C<(C_ICD_NDB_COUNTRY_CODE_BYTEPOS+4); C++){
     FileBuffer[C] = NdbRecord.CountryCode[C-C_ICD_NDB_COUNTRY_CODE_BYTEPOS];
   }
-  SemiCircleCoord = (int)(NdbRecord.Lat*(pow(2,31))/180.0);
+  SemiCircleCoord = (int)(NdbRecord.Lat.Value*(pow(2,31))/180.0);
   if (isLittleEndian){
     WriteLittleEndian<int>(SemiCircleCoord,FileBuffer+C_ICD_NDB_LAT_BYTEPOS);
   }
   else{
     WriteBigEndian<int>(SemiCircleCoord,FileBuffer+C_ICD_NDB_LAT_BYTEPOS);
   }
-  SemiCircleCoord = (int)(NdbRecord.Lon*(pow(2,31))/180.0);
+  SemiCircleCoord = (int)(NdbRecord.Lon.Value*(pow(2,31))/180.0);
   if (isLittleEndian){
     WriteLittleEndian<int>(SemiCircleCoord,FileBuffer+C_ICD_NDB_LON_BYTEPOS);
   }
@@ -193,14 +198,14 @@ void WriteWptRecordToBuffer(const DbRecord_t WptRecord, unsigned char* FileBuffe
   for (C=0; C<C_ICD_WPT_OBJECT_ID_BYTEPOS+6; C++){
     FileBuffer[C] = WptRecord.ICAO[C-C_ICD_WPT_OBJECT_ID_BYTEPOS];
   }
-  SemiCircleCoord = (int)(WptRecord.Lat*(pow(2,31))/180.0);
+  SemiCircleCoord = (int)(WptRecord.Lat.Value*(pow(2,31))/180.0);
   if (isLittleEndian){
     WriteLittleEndian<int>(SemiCircleCoord,FileBuffer+C_ICD_WPT_LAT_BYTEPOS);
   }
   else{
     WriteBigEndian<int>(SemiCircleCoord,FileBuffer+C_ICD_WPT_LAT_BYTEPOS);
   }
-  SemiCircleCoord = (int)(WptRecord.Lon*(pow(2,31))/180.0);
+  SemiCircleCoord = (int)(WptRecord.Lon.Value*(pow(2,31))/180.0);
   if (isLittleEndian){
     WriteLittleEndian<int>(SemiCircleCoord,FileBuffer+C_ICD_WPT_LON_BYTEPOS);
   }
@@ -227,14 +232,14 @@ void WriteAptRecordToBuffer(const DbRecord_t AptRecord, unsigned char* FileBuffe
   else{
     WriteBigEndian<int>(int_MagVar,FileBuffer+C_ICD_APT_MAGVAR_BYTEPOS);
   }
-  SemiCircleCoord = (int)(AptRecord.Lat*(pow(2,31))/180.0);
+  SemiCircleCoord = (int)(AptRecord.Lat.Value*(pow(2,31))/180.0);
   if (isLittleEndian){
     WriteLittleEndian<int>(SemiCircleCoord,FileBuffer+C_ICD_APT_LAT_BYTEPOS);
   }
   else{
     WriteBigEndian<int>(SemiCircleCoord,FileBuffer+C_ICD_APT_LAT_BYTEPOS);
   }
-  SemiCircleCoord = (int)(AptRecord.Lon*(pow(2,31))/180.0);
+  SemiCircleCoord = (int)(AptRecord.Lon.Value*(pow(2,31))/180.0);
   if (isLittleEndian){
     WriteLittleEndian<int>(SemiCircleCoord,FileBuffer+C_ICD_APT_LON_BYTEPOS);
   }
@@ -247,4 +252,22 @@ void WriteAptRecordToBuffer(const DbRecord_t AptRecord, unsigned char* FileBuffe
   else{
     WriteBigEndian<int>(AptRecord.Elev.Value,FileBuffer+C_ICD_APT_ELEVATION_BYTEPOS);
   }
+}
+
+Validated_Float ReadRwyBearing(std::string FileRecord, char StartIndex){
+  Validated_Float output = {0,false};
+  int TmpInt = 0, length = 0;
+  (FileRecord.at(StartIndex+3) == 'T' ? length = 3 : length = 4);
+  try{
+    TmpInt = std::stoi(FileRecord.substr(StartIndex, length));
+  }
+  catch (std::invalid_argument &InvalidBearing){
+    return {0, false};
+  }
+  output.Value = (float)TmpInt;
+  if (length == 3){
+    output.Value *= -1;
+  }
+  output.Status = true;
+  return output;
 }

@@ -7,15 +7,15 @@
 #include <iostream>
 #include "./DbCommonTypes.hpp"
 
-double ReadLat(std::string FileRecord, char StartIndex);
+Validated_Double ReadLat(std::string FileRecord, char StartIndex);
 
-double ReadLon(std::string FileRecord, char StartIndex);
+Validated_Double ReadLon(std::string FileRecord, char StartIndex);
 
 Validated_Float ReadMagVar(std::string FileRecord, char StartIndex);
 
 Validated_Integer ReadElev(std::string FileRecord, char StartIndex);
 
-void ReadIcaoCode(char* output, std::string FileRecord, char StartIndex, char MaxLen);
+std::string ReadIcaoCode(std::string FileRecord, char StartIndex, char MaxLen);
 
 std::string GenerateDbName(int DbVersion, int DbCycle, bool isLittleEndian);
 
@@ -26,6 +26,8 @@ void WriteWptRecordToBuffer(const DbRecord_t WptRecord, unsigned char* FileBuffe
 void WriteVhfRecordToBuffer(const DbRecord_t VhfRecord, unsigned char* FileBufferStart, bool isLittleEndian);
 
 void WriteAptRecordToBuffer(const DbRecord_t AptRecord, unsigned char* FileBuffer, bool isLittleEndian);
+
+Validated_Float ReadRwyBearing(std::string FileRecord, char StartIndex);
 
 template<typename T> void WriteBigEndian(T Data, unsigned char* DestionationStart);
 
