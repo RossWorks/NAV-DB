@@ -39,6 +39,8 @@ const char C_SUBSECTION_CODE  =  5;
 const char C_VHF_FIGURE_MERIT = 84;
 const char C_RWY_LATITUDE     = 32;
 const char C_RWY_LONGITUDE    = 41;
+const char C_RWY_IDENTIFIER   = 13;
+const char C_RWY_LENGTH       = 22;
 
 /*VHF Field positions*/
 const char C_ICD_VHF_OBJECT_ID_BYTEPOS    =  0;
@@ -177,6 +179,7 @@ typedef struct Record{
 
 typedef struct{
   uint32_t ID;
+  std::string RwyIdent;
   std::string AssAirport;
   Validated_Float Bearing;
   Validated_Double Lat, Lon;

@@ -52,6 +52,11 @@ Validated_Integer ReadElev(std::string FileRecord, char StartIndex){
   return output;
 }
 
+Validated_Integer ReadInteger(std::string Filerecord, const char StartIndex){
+  Validated_Integer output = {0, false};
+  return output;
+}
+
 Validated_Integer ReadRwyLength(std::string FileRecord, char StartIndex){
   Validated_Integer output = {0, false};
   output.Value = std::stoi(FileRecord.substr(StartIndex, 5));

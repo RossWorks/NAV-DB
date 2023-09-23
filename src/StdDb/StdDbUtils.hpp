@@ -15,6 +15,8 @@ Validated_Float ReadMagVar(std::string FileRecord, char StartIndex);
 
 Validated_Integer ReadElev(std::string FileRecord, char StartIndex);
 
+Validated_Integer ReadInteger(std::string Filerecord, const char StartIndex);
+
 std::string ReadIcaoCode(std::string FileRecord, char StartIndex, char MaxLen);
 
 std::string GenerateDbName(int DbVersion, int DbCycle, bool isLittleEndian);
