@@ -12,6 +12,7 @@
 #include <list>
 #include <math.h>
 #include <thread>
+#include <time.h>
 
 #include "./DbCommonTypes.hpp"
 #include "../Common/CommonUtils.hpp"

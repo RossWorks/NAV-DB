@@ -40,6 +40,7 @@ uint32_t StdDb::GetSourceFilesSize(std::string A424Dir){
  */
 E_DbError StdDb::StdDbInitialization(bool SortDb, std::string A424Folder){
   E_DbError output = NO_ERROR;
+  clock_t StartTime = 0, EndTime = 0, ElapTime = 0;
   uint32_t NewDBSize = this->GetSourceFilesSize(A424Folder);
   if(this->DbIsValid){this->DestroyDb();}
   try{
@@ -59,13 +60,18 @@ E_DbError StdDb::StdDbInitialization(bool SortDb, std::string A424Folder){
   this->Statistics.GlobalSize = 0;
   this->Statistics.NDB_size = 0;
   this->Statistics.VHF_size = 0;
+  StartTime = clock();
   output = this->AcquireArinc424Files(A424Folder);
+  EndTime = clock();
+  ElapTime = EndTime - StartTime;
+  Write2Log("Arinc files acquired in " + std::to_string(ElapTime*1e3/CLOCKS_PER_SEC) + " ns");
   if (output != NO_ERROR){
     this->DbIsSorted = false;
     this->DbIsValid  = false;
     return output;
   }
   if (SortDb){
+    StartTime = clock();
     std::cout << "Sorting Db...\n";
     std::thread AptSorter(&StdDb::SortDatabase, this, &(this->AptStorage));
     std::thread VhfSorter(&StdDb::SortDatabase, this, &(this->VhfStorage));
@@ -76,6 +82,9 @@ E_DbError StdDb::StdDbInitialization(bool SortDb, std::string A424Folder){
     NdbSorter.join();
     WpSorter.join();
     std::cout << "DONE\n";
+    EndTime = clock();
+    ElapTime = EndTime - StartTime;
+    Write2Log("Database ordered in " + std::to_string(ElapTime*1e6/CLOCKS_PER_SEC) + " us");
     this->DbIsSorted = true;
   }
   this->DbIsValid  = true;
@@ -175,15 +184,8 @@ DbRecord_t StdDb::AcquireNdbRecord(std::string FileRecord, E_DbError* ReturnCode
   DbRecord_t output;
   std::string SpareString;
   output.ListType = NDB_LIST;
-  for (uint8_t i=0; i<4; i++){
-    output.ICAO[i] = FileRecord[C_ICAO_IDENT+i];
-    if (output.ICAO[i] == ' '){output.ICAO[i] = '\0';}
-  }
-  output.ICAO[4] = '\0';
-  for (uint8_t i=0; i<2; i++){
-    output.CountryCode[i] = FileRecord[C_COUNTRY_CODE+i];
-  }
-  output.CountryCode[2] = '\0';
+  output.ICAO = ReadIcaoCode(FileRecord, C_ICAO_IDENT, 3);
+  output.CountryCode = ReadIcaoCode(FileRecord, C_COUNTRY_CODE, 2);
   output.Freq.Value = 0;
   output.Freq.Status = true;
   for (uint8_t i=0; i<5; i++){
@@ -209,15 +211,8 @@ DbRecord_t StdDb::AcquireVhfRecord(std::string FileRecord, E_DbError* ReturnCode
   DbRecord_t output;
   output.ListType = VHF_LIST;
   char SpareChar = 0;
-  for (uint8_t i=0; i<4; i++){
-    output.ICAO[i] = FileRecord[C_ICAO_IDENT+i];
-    if (output.ICAO[i] == ' '){output.ICAO[i] = '\0';}
-  }
-  output.ICAO[4] = '\0';
-  for (uint8_t i=0; i<2; i++){
-    output.CountryCode[i] = FileRecord[C_COUNTRY_CODE+i];
-  }
-  output.CountryCode[2] = '\0';
+  output.ICAO = ReadIcaoCode(FileRecord, C_ICAO_IDENT, 3);
+  output.CountryCode = ReadIcaoCode(FileRecord, C_COUNTRY_CODE, 2);
   output.MagVar = ReadMagVar(FileRecord, C_NAVAID_MAGVAR);
   switch (FileRecord[C_NAVAID_CLASS]){
     case 'V':
@@ -278,34 +273,43 @@ DbRecord_t StdDb::AcquireVhfRecord(std::string FileRecord, E_DbError* ReturnCode
  */
 std::vector<DbRecord_t> StdDb::Search(std::string Searchkey){
   std::vector<DbRecord_t> output;
+  clock_t StartTime = 0, EndTime = 0, ElapTime = 0;
+  StartTime = clock();
   if (false/*this->DbIsSorted*/){}
   else{
     output = this->LinearSearch(Searchkey);
   }
+  EndTime = clock();
+  ElapTime = EndTime - StartTime;
+  Write2Log("Found " + std::to_string(output.size()) + " occurencies of " + Searchkey + " in " + std::to_string(ElapTime*1e6 / CLOCKS_PER_SEC) + " us");
   return output;
 }
 
 std::vector<DbRecord_t> StdDb::LinearSearch(std::string Searchkey){
   std::vector<DbRecord_t> output;
   std::string TmpString;
+  Write2Log("Searching in APT");
   for (int i = 1; i< this->Statistics.APT_size; i++){
     TmpString = this->AptStorage.at(i).ICAO;
     if (TmpString == Searchkey){
       output.push_back(this->AptStorage.at(i));
     }
   }
+  Write2Log("Searching in NDB");
   for (int i = 1; i< this->Statistics.NDB_size; i++){
     TmpString = this->NdbStorage.at(i).ICAO;
     if (TmpString == Searchkey){
       output.push_back(this->NdbStorage.at(i));
     }
   }
+  Write2Log("Searching in VHF");
   for (int i = 1; i< this->Statistics.VHF_size; i++){
     TmpString = this->VhfStorage.at(i).ICAO;
     if (TmpString == Searchkey){
       output.push_back(this->VhfStorage.at(i));
     }
   }
+  Write2Log("Searching in WPT");
   for (int i = 1; i< this->Statistics.Enroute_size; i++){
     TmpString = this->WpStorage.at(i).ICAO;
     if (TmpString == Searchkey){
@@ -524,10 +528,20 @@ bool StdDb::SortTwoRecords(const DbRecord_t Record1,const DbRecord_t Record2){
 }
 
 E_DbError StdDb::SortDatabase(std::vector<DbRecord_t>* MyStorage){
+  clock_t StartTime = 0, EndTime = 0, ElapTime = 0;
   bool Swapped = false;
   int i = 0, start = 0, end = MyStorage->size()-1;
   DbRecord_t AUX;
+  std::string DbType = "";
+  switch (MyStorage->at(0).ListType){
+  case VHF_LIST: DbType = "VHF"; break;
+  case APT_LIST: DbType = "APT"; break;
+  case NDB_LIST: DbType = "NDB"; break;
+  case WP_LIST:  DbType = "WPT"; break;
+  default: break;
+  }
   if (this->DbIsSorted){return NO_ERROR;};
+  StartTime = clock();
   do{
     for (i = start; i < end; i++){
       if (this->SortTwoRecords(MyStorage->at(i), MyStorage->at(i+1))){
@@ -550,6 +564,9 @@ E_DbError StdDb::SortDatabase(std::vector<DbRecord_t>* MyStorage){
     }
     start++;
   } while (Swapped);
+  EndTime = clock();
+  ElapTime = EndTime - StartTime;
+  Write2Log(std::to_string(MyStorage->size()) + " "+ DbType+" records sorted in " + std::to_string(ElapTime*1e6/CLOCKS_PER_SEC) + " us");
   return NO_ERROR;
 }
 

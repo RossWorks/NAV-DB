@@ -68,6 +68,12 @@ std::string ReadIcaoCode(std::string FileRecord, char StartIndex, char MaxLen){
   int C = 0;
   std::string output = "";
   output = FileRecord.substr(StartIndex, MaxLen);
+  for (C=0; C < output.size(); C++){
+    if (output.at(C) == ' '){
+      output = output.erase(C);
+      C--;
+    }
+  }
   return output;
 }
 
