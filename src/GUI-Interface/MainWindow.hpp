@@ -14,6 +14,7 @@
 #include "./DetailedResultWindow.hpp"
 #include "./GuiDecorations.hpp"
 #include "GuiConstants.hpp"
+#include "../CLI-Interface/Hmi_Support.hpp"
 
 class MainWindow : public Gtk::Window{
 public:

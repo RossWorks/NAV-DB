@@ -41,6 +41,8 @@ const char C_RWY_LATITUDE     = 32;
 const char C_RWY_LONGITUDE    = 41;
 const char C_RWY_IDENTIFIER   = 13;
 const char C_RWY_LENGTH       = 22;
+const char C_RWY_WIDTH        = 77;
+const char C_RWY_ELEV         = 60;
 
 /*VHF Field positions*/
 const char C_ICD_VHF_OBJECT_ID_BYTEPOS    =  0;
@@ -181,10 +183,11 @@ typedef struct{
   uint32_t ID;
   std::string RwyIdent;
   std::string AssAirport;
-  Validated_Float Bearing;
+  Validated_Float MagBearing, Gradient;
   Validated_Double Lat, Lon;
   E_Surf_Type SurfaceType;
-  Validated_Integer Elev, Length;
+  Validated_Integer Elev, Length, LndZoneElev, DispThresDist;
+  Validated_Integer Width;
 } RwyRecord_t;
 
 #endif

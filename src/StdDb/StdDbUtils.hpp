@@ -15,7 +15,11 @@ Validated_Float ReadMagVar(std::string FileRecord, char StartIndex);
 
 Validated_Integer ReadElev(std::string FileRecord, char StartIndex);
 
-Validated_Integer ReadInteger(std::string Filerecord, const char StartIndex);
+Validated_Integer ReadInteger(std::string Filerecord, const char StartIndex,
+                              const char FieldLength, const char Resolution);
+
+Validated_Float ReadFloat(std::string FileRecord, char StartIndex, uint8_t Length,
+                          uint8_t DecimalDigits);
 
 std::string ReadIcaoCode(std::string FileRecord, char StartIndex, char MaxLen);
 

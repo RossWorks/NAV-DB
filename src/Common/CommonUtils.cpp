@@ -23,7 +23,7 @@ std::vector<std::string> SplitString(std::string InString, char delimiter){
 }
 
 void Write2Log(std::string Message){
-  std::ofstream LogFile("./Log.log",std::ios_base::app);
+  std::ofstream LogFile("./Logs/Log.log",std::ios_base::app);
   time_t Now = time(NULL);
   std::string Time = asctime(localtime(&Now));
   LogFile << Time << "\t\t" << Message << "\n\n";

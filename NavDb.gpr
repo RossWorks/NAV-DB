@@ -72,7 +72,7 @@ project NavDb is
       for source_dirs use GlobalSrc & CliSrc;
       for main use ("./src/main.cpp");
     when "GUI" => 
-      for source_dirs use GlobalSrc & GuiSrc;
+      for source_dirs use GlobalSrc & GuiSrc & CliSrc;
       for main use ("./src/main_GUI.cpp");
   end case;
   for Object_Dir use "./obj";

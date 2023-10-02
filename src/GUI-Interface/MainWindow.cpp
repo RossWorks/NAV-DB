@@ -94,10 +94,24 @@ void MainWindow::LoadDb_Imp(){
 }
 
 void MainWindow::SearchDb_F(){
-  int Index = 0;
-  std::string Searchkey = this->TxtSearchKey.get_text();
+  unsigned int Index = 0;
+  E_LIST_TYPE ListType = VHF_LIST;
+  std::string OrderFromName = "", SearchKey = "";
+  std::string UsrCommand = this->TxtSearchKey.get_text();
+  HMI_State DummyState = HMI_START;
   this->SearchResults.clear();
-  this->SearchResults= MyStdDb.Search(Searchkey);
+  DummyState = ParseCommand(UsrCommand, &SearchKey, &Index, &ListType, &OrderFromName);
+  switch (DummyState){
+    case HMI_LIST:
+      this->SearchResults = MyStdDb.GetList(ListType, Index, 5, OrderFromName);
+      break;
+    case HMI_SEARCH:
+      this->SearchResults= MyStdDb.Search(SearchKey);
+      break;
+    default:
+      return;
+      break;
+  }
   if (this->SearchResults.size()<1){TxtSearchKey.set_text("LIST EMPTY");}
   for (Index = 0; Index < 5; Index++){
     if (Index < SearchResults.size()){

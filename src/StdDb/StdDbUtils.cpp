@@ -27,6 +27,21 @@ Validated_Double ReadLon(std::string FileRecord, char StartIndex){
     return output;
 }
 
+Validated_Float ReadFloat(std::string FileRecord, char StartIndex, uint8_t Length,
+                          uint8_t DecimalDigits){
+  Validated_Float output = {0.0, false};
+  int RawNumber = 0;
+  try{
+    RawNumber = std::stoi(FileRecord.substr(StartIndex, Length));
+  }
+  catch (const std::invalid_argument &e){
+    return output;
+  }
+  output.Value = (float)RawNumber/pow(10,DecimalDigits);
+  output.Status = true;
+  return output;
+}
+
 Validated_Float ReadMagVar(std::string FileRecord, char StartIndex){
   Validated_Float output = {0.0, false};
   for (uint8_t i = 0; i < 4; i++){
@@ -52,8 +67,16 @@ Validated_Integer ReadElev(std::string FileRecord, char StartIndex){
   return output;
 }
 
-Validated_Integer ReadInteger(std::string Filerecord, const char StartIndex){
+Validated_Integer ReadInteger(std::string Filerecord, const char StartIndex,
+                              const char FieldLength, const char Resolution){
   Validated_Integer output = {0, false};
+  try{
+    output.Value += std::stoi(Filerecord.substr(StartIndex, FieldLength));
+    output.Status = true;
+  }
+  catch(std::invalid_argument &e){
+    output = {0, false};
+  }
   return output;
 }
 

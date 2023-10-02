@@ -707,12 +707,15 @@ E_DbError StdDb::BuildStdDB(std::string Path, bool isLittleEndian){
 
 RwyRecord_t StdDb::AcquireRwyRecord(std::string FileRecord, E_DbError* ReturnCode){
   RwyRecord_t output;
-  output.AssAirport = ReadIcaoCode(FileRecord,C_APT_ICAO_IDENT,4);
-  output.Lat = ReadLat(FileRecord, C_RWY_LATITUDE);
-  output.Lon = ReadLon(FileRecord, C_RWY_LONGITUDE);
-  output.Bearing  = ReadRwyBearing(FileRecord,27);
-  output.RwyIdent = ReadIcaoCode(FileRecord,C_RWY_IDENTIFIER,5);
-  output.Length   = ReadInteger(FileRecord, C_RWY_LENGTH);
+  output.AssAirport  = ReadIcaoCode(FileRecord,C_APT_ICAO_IDENT,4);
+  output.Lat         = ReadLat(FileRecord, C_RWY_LATITUDE);
+  output.Lon         = ReadLon(FileRecord, C_RWY_LONGITUDE);
+  output.MagBearing  = ReadRwyBearing(FileRecord,27);
+  output.RwyIdent    = ReadIcaoCode(FileRecord,C_RWY_IDENTIFIER,5);
+  output.Length      = ReadInteger(FileRecord, C_RWY_LENGTH, 5, 1);
+  output.Gradient    = ReadFloat(FileRecord, 51, 5,  2);
+  output.Elev        = ReadInteger(FileRecord, C_RWY_ELEV, 6, 1);
+  output.Width       = ReadInteger(FileRecord, C_RWY_WIDTH, 3, 1);
   return output; 
 }
 

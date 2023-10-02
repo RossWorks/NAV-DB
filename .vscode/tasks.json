@@ -17,7 +17,10 @@
         "$ada"
       ],
       "group": "build",
-      "label": "Build current project"
+      "label": "Build current project",
+      "args": [
+        "-Xinterface=GUI -Xmode=debug"
+      ]
     },
     {
       "type": "gnat",
