@@ -305,3 +305,7 @@ Validated_Float ReadRwyBearing(std::string FileRecord, char StartIndex){
   output.Status = true;
   return output;
 }
+
+bool SortTwoRecords(const DbRecord_t Record1,const DbRecord_t Record2){
+  return (Record1.ICAO <= Record2.ICAO);
+}

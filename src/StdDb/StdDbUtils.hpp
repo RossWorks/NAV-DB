@@ -35,6 +35,14 @@ void WriteAptRecordToBuffer(const DbRecord_t AptRecord, unsigned char* FileBuffe
 
 Validated_Float ReadRwyBearing(std::string FileRecord, char StartIndex);
 
+/**
+ * @brief Tells if the first record comes before the second one
+ * @param Record1 The first record
+ * @param Record2 The second record
+ * @return true  if Record1 comes before Record2
+ */
+bool SortTwoRecords(const DbRecord_t Record1, const DbRecord_t Record2);
+
 template<typename T> void WriteBigEndian(T Data, unsigned char* DestionationStart);
 
 template<typename T> void WriteLittleEndian(T Data, unsigned char* DestionationStart);

@@ -101,16 +101,7 @@ private:
    * @return E_DbError NO_ERROR if all good
    */
   E_DbError SortDatabase(std::vector<DbRecord_t>* MyStorage);
-
-  /**
-   * @brief Tells if the first record comes after the second one
-   * @param Record1 The first record
-   * @param Record2 The second record
-   * @return true  if Record1 comes before Record2
-   * @return false if Record2 comes before Record1
-   */
-  bool SortTwoRecords(const DbRecord_t Record1, const DbRecord_t Record2);
-
+  
    /**
    * @brief Clears the content of the Database
    * @return E_DbError Always returns NO_ERROR

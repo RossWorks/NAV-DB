@@ -516,17 +516,6 @@ uint32_t StdDb::GetClosestMatch(std::string OrderFromKey, E_LIST_TYPE ListType){
   return Index;
 }
 
-bool StdDb::SortTwoRecords(const DbRecord_t Record1,const DbRecord_t Record2){
-  std::string Name1(Record1.ICAO), Name2(Record2.ICAO);
-  if (Record1.ListType < Record2.ListType){return true;}
-  if (Record1.ListType > Record2.ListType){return false;}
-  if (Record1.ListType == Record2.ListType){
-    if (Name1 <= Name2){return false;}
-    if (Name1 > Name2){return true;}
-  }
-  return false;
-}
-
 E_DbError StdDb::SortDatabase(std::vector<DbRecord_t>* MyStorage){
   clock_t StartTime = 0, EndTime = 0, ElapTime = 0;
   bool Swapped = false;
@@ -534,36 +523,13 @@ E_DbError StdDb::SortDatabase(std::vector<DbRecord_t>* MyStorage){
   DbRecord_t AUX;
   std::string DbType = "";
   switch (MyStorage->at(0).ListType){
-  case VHF_LIST: DbType = "VHF"; break;
-  case APT_LIST: DbType = "APT"; break;
-  case NDB_LIST: DbType = "NDB"; break;
-  case WP_LIST:  DbType = "WPT"; break;
-  default: break;
+    case VHF_LIST: DbType = "VHF"; break;
+    case APT_LIST: DbType = "APT"; break;
+    case NDB_LIST: DbType = "NDB"; break;
+    case WP_LIST:  DbType = "WPT"; break;
+    default: break;
   }
-  if (this->DbIsSorted){return NO_ERROR;};
-  StartTime = clock();
-  do{
-    for (i = start; i < end; i++){
-      if (this->SortTwoRecords(MyStorage->at(i), MyStorage->at(i+1))){
-        AUX = MyStorage->at(i);
-        MyStorage->at(i) = MyStorage->at(i+1);
-        MyStorage->at(i+1) = AUX;
-        Swapped = true;
-      }
-    }
-    if (!Swapped){break;}
-    Swapped = false;
-    end--;
-    for (i = end; i > start; i--){
-      if (this->SortTwoRecords(MyStorage->at(i), MyStorage->at(i+1))){
-        AUX = MyStorage->at(i);
-        MyStorage->at(i) = MyStorage->at(i+1);
-        MyStorage->at(i+1) = AUX;
-        Swapped = true;
-      }
-    }
-    start++;
-  } while (Swapped);
+  std::sort(MyStorage->begin(), MyStorage->end(), SortTwoRecords);
   EndTime = clock();
   ElapTime = EndTime - StartTime;
   Write2Log(std::to_string(MyStorage->size()) + " "+ DbType+" records sorted in " + std::to_string(ElapTime*1e6/CLOCKS_PER_SEC) + " us");
