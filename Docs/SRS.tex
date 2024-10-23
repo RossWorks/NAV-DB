@@ -1,7 +1,7 @@
 \documentclass{scrreprt}
 \title{Software Requirements Specification for NAVDB GEN}
 \author{Marco Rossetti}
-\usepackage[bookmarks=true]{hyperref}
+\def\NAVDBGEN{NAVDB\_GEN}
 
 
 \begin{document}
@@ -9,11 +9,34 @@
 \tableofcontents
 \chapter{Introduction}
 \section{Purpose}
-The Navigation Database Generation Tool, hereby refered to as NAVDB\_GEN, is a tool aimed to
+The Navigation Database Generation Tool, from now on refered to as \NAVDBGEN, is a tool aimed to
 generate single binary files containing navigation reference points.
 The information contained in the binary file can be used to plan and execute routes.
-\chapter{Requirments}
+\chapter{Requirements}
 \section{Functional requirements}
+\setcounter{secnumdepth}{1}
+\subsection{SRS\_1}
+\label{SRS:1}
+\NAVDBGEN\ shall acquire one or more input files and from their data generate a single file
+\subsection{SRS\_2}
+\label{SRS:2}
+\NAVDBGEN\ shall acquire as input one or more text files formatted according to ARINC 424-19 specification
+\subsection{SRS\_3}
+\label{SRS:3}
+The output file produced by \NAVDBGEN\ shall be named as follows. The name of the file shall be composed by:
+\begin{enumerate}
+\item A fixed part "STDDB.".
+\item A variable part bearing the ICD version applied. This field should be a two-char number (e. g. "02").
+\item A variable part bearing the AIRAC cycle of the data used to generate the binary file.
+\item A variable part of 30 chars at most, made by uppercase alphanumeric chars or by ".", "-", "+", "\_". Spaces and other chars are forbidden.
+\item An example of a valid name is STDDB.03.2210.EUR-LPV\_V2+ILS\_V5.NF
+\end{enumerate}
+\subsection{SRS\_4}
+\label{SRS:4}
+\NAVDBGEN\ shall allow the user to program multiple file generations, in which \NAVDBGEN\ shall produce a single file per generation.
+\subsection{SRS\_5}
+\label{SRS:5}
+\setcounter{secnumdepth}{2}
 \section{Interface requirements}
 \subsection{GUI}
 \subsection{CLI}
