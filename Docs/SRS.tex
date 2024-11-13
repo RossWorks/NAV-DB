@@ -28,14 +28,38 @@ The output file produced by \NAVDBGEN\ shall be named as follows. The name of th
 \item A fixed part "STDDB.".
 \item A variable part bearing the ICD version applied. This field should be a two-char number (e. g. "02").
 \item A variable part bearing the AIRAC cycle of the data used to generate the binary file.
-\item A variable part of 30 chars at most, made by uppercase alphanumeric chars or by ".", "-", "+", "\_". Spaces and other chars are forbidden.
-\item An example of a valid name is STDDB.03.2210.EUR-LPV\_V2+ILS\_V5.NF
+\item A variable part of 30 chars at most, made by uppercase alphanumeric chars or by "-", "+", "\_". Spaces and other chars are forbidden.
 \end{enumerate}
+An example of a valid name is STDDB.03.2210.EUR-LPV\_V2+ILS\_V5-NF
 \subsection{SRS\_4}
 \label{SRS:4}
 \NAVDBGEN\ shall allow the user to program multiple file generations, in which \NAVDBGEN\ shall produce a single file per generation.
 \subsection{SRS\_5}
 \label{SRS:5}
+\NAVDBGEN\ shall allow the user to choose the generation of the same database file output file as Little Endian, Big Endian or both
+\subsection{SRS\_6}
+\label{SRS:6}
+\NAVDBGEN\ shall implement several filters to restrict which items from the source files are
+to be recorded in the output file
+
+The filters shall allow selection by:
+\begin{enumerate} 
+  \item Country code
+\end{enumerate}
+\subsection{SRS\_7}
+\label{SRS:7}
+\NAVDBGEN\ shall generate a log file reporting:
+\begin{enumerate}
+  \item the name of the generated file
+  \item a list of the files used as input
+  \item the endiannes of the generated file
+  \item the exit status of the generation, reporting which error has occured
+  \item the time taken by the generation process
+  \item the number of single record analyzed, both main and continuation
+  \item a list of records discarded because of malformed information. Records discarded as a result of filters or
+unused type of record shall not be included in this list
+\end{enumerate}
+The log file shall be named as the date and time of launch of the generation as per format: YYYY-MM-DD\_hh:mm:ss.log
 \setcounter{secnumdepth}{2}
 \section{Interface requirements}
 \subsection{GUI}
