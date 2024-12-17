@@ -21,10 +21,10 @@ The information contained in the binary file can be used to plan and execute rou
 \setcounter{secnumdepth}{0}
 \section{SRS\_1}
 \label{SRS:1}
-\NAVDBGEN\ shall acquire one or more input files and from their data generate a single file
+\NAVDBGEN\ shall acquire one or more input files and from their data generate a single file.
 \section{SRS\_2}
 \label{SRS:2}
-\NAVDBGEN\ shall acquire as input one or more text files formatted according to ARINC 424-19 specification
+\NAVDBGEN\ shall acquire as input one or more text files formatted according to ARINC 424-19 specification.
 \section{SRS\_3}
 \label{SRS:3}
 The output file produced by \NAVDBGEN\ shall be named as follows. The name of the file shall be composed by:
@@ -34,17 +34,16 @@ The output file produced by \NAVDBGEN\ shall be named as follows. The name of th
 \item A variable part bearing the AIRAC cycle of the data used to generate the binary file.
 \item A variable part of 30 chars at most, made by uppercase alphanumeric chars or by "-", "+", "\_". Spaces and other chars are forbidden.
 \end{enumerate}
-An example of a valid name is STDDB.03.2210.EUR-LPV\_V2+ILS\_V5-NF
+An example of a valid name is STDDB.03.2210.EUR-LPV\_V2+ILS\_V5-NF .
 \section{SRS\_4}
 \label{SRS:4}
 \NAVDBGEN\ shall allow the user to program multiple file generations, in which \NAVDBGEN\ shall produce a single file per generation.
 \section{SRS\_5}
 \label{SRS:5}
-\NAVDBGEN\ shall allow the user to choose the generation of the same database file output file as Little Endian, Big Endian or both
+\NAVDBGEN\ shall allow the user to choose the generation of the same database file output file as Little Endian, Big Endian or both.
 \section{SRS\_6}
 \label{SRS:6}
-\NAVDBGEN\ shall implement several filters to restrict which items from the source files are
-to be recorded in the output file
+\NAVDBGEN\ shall implement several filters to restrict which items from the source files are to be recorded in the output file.
 
 The filters shall allow selection by:
 \begin{enumerate} 
@@ -55,14 +54,15 @@ the filters shall work as prescribed inclusions. Anything not explicitly include
 \label{SRS:7}
 \NAVDBGEN\ shall generate a log file reporting:
 \begin{enumerate}
-  \item the name of the generated file
-  \item a list of the files used as input
-  \item the endiannes of the generated file
-  \item the exit status of the generation, reporting which error has occured
-  \item the time taken by the generation process
-  \item the number of single record analyzed, both main and continuation
-  \item a list of records discarded because of malformed information. Records discarded as a result of filters or
+  \item The name of the generated file
+  \item A list of the files used as input
+  \item The endiannes of the generated file
+  \item The exit status of the generation, reporting which error has occured
+  \item The time taken by the generation process
+  \item The number of single record analyzed, both main and continuation
+  \item A list of records discarded because of malformed information. Records discarded as a result of filters or
 unused type of record shall not be included in this list
+  \item A list of the inclusion criteria applied to the input files
 \end{enumerate}
 The log file shall be named as the date and time of launch of the generation with format: YYYY-MM-DD\_hh:mm:ss. The identifier of the batched generation shall be appende. The identifier of the batched generation shall be appended.
 an example of a valid log name is: 2024-11-02\_12:25:40\_NAVDBGEN1.log
@@ -73,11 +73,12 @@ an example of a valid log name is: 2024-11-02\_12:25:40\_NAVDBGEN1.log
   \item Field "JOB\_NAME": a unique name identifing the job. The name is free text
   \item Field "DATABASE\_NAME": the name to be assigned as the variable part described in \ref{SRS:3}
   \item Field "ICD": the ICD version to be used
-  \item Field "COUNTRY\_CODES\_LIST": the country codes to be included, see \ref{SRS:6}, as a comma-separated list
+  \item Field "COUNTRY\_CODES\_LIST": the country codes to be included, see \ref{SRS:6}, as a comma-separated list. Alternatively, a path to a file containing the criteria can be defined by prepending '@' to the path. The path may be absoute or relative.
   \item Field "SOURCE\_DIR": the directory from which to import the input files. Absolute or relative paths are to be accepted
   \item Field "ENDIANNES": the endiannes requested for the generated file. Admissible values are: "BIG", "LITTLE", "BOTH"
 \end{enumerate}
 The csv shall be named "ScheduledJobs.csv" and placed within the root directory. The columns of the file shall be separated by a semicolon.
+Any job carrying malformed fields shall be skipped, with the reasons why being reported in its log file.
 \setcounter{secnumdepth}{2}
 \section{Interface requirements}
 \subsection{GUI}
