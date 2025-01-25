@@ -1,0 +1,30 @@
+\documentclass{article}
+\newcommand\strpad{Padded with nul chars}
+\newcommand\SemiCircle{Value is in Semi-Circles}
+\begin{document}
+\begin{table}
+   \caption{VHF Table content} 
+   \label{tab:VHF}
+   \small
+   %\centering
+   \begin{tabular}{|l|r|r|r|}
+   %\midrule
+   \textbf{Field} & \textbf{Type} & \textbf{Size in bytes} & \textbf{Notes} \\ 
+   %\midrule
+   ICAO Code & 4 chars string & 4 & \strpad \\
+   %\midrule
+   Country Code & 2 chars string & 2 &\strpad \\
+   %\midrule
+   Latitude & signed integer & 4 & \SemiCircle\\
+   Longitude & signed integer & 4& \SemiCircle\\
+   Frequency & unsigned short integer & 2 & The frequency is expressed tens of kHz, minus 100 MHz \\
+   Class & enumerate & 1 & Refer to "NAVAID Classification" table\\
+   DME colocation & boolean & 1 & If 0, the DME Latitude and Longitude are not valid\\ 
+   DME Latitude  & signed integer & 4 & \SemiCircle\\
+   DME Longitude & signed integer & 4 & \SemiCircle\\
+   DME Elevation & signed short integer & 2 & A value of -32768 means invalid elevation\\
+   Assigned variation & signed short integer & 2 & Value in tenth of degree\\
+   Usage & enumerate & 1 & Refer to "Usage Codes" Table
+   \end{tabular}
+\end{table}
+\end {document}

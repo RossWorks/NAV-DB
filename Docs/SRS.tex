@@ -63,6 +63,7 @@ the filters shall work as prescribed inclusions. Anything not explicitly include
   \item A list of records discarded because of malformed information. Records discarded as a result of filters or
 unused type of record shall not be included in this list
   \item A list of the inclusion criteria applied to the input files
+  \item The CRC-32 of the whole generated file in HEX format
 \end{enumerate}
 The log file shall be named as the date and time of launch of the generation with format: YYYY-MM-DD\_hh:mm:ss. The identifier of the batched generation shall be appende. The identifier of the batched generation shall be appended.
 an example of a valid log name is: 2024-11-02\_12:25:40\_NAVDBGEN1.log
@@ -82,6 +83,18 @@ Any job carrying malformed fields shall be skipped, with the reasons why being r
 \setcounter{secnumdepth}{2}
 \section{Interface requirements}
 \subsection{GUI}
+\setcounter{secnumdepth}{0}
+\section{GUI\_1}
+The GUI shall allow the user to both launch an immediate generation job and schedule a sequence of generation jobs.
+\section{GUI\_2}
+The GUI shall allow the insertion of the data requied to define a job (see SRS\_8) in a single set of input widgets. Said data shall be saved as a new scheduled job or used to launch an immediate job.
+\section{GUI\_3}
+The GUI shall allow the editing of the scheduled job list via editing, deletion, appending or insertion of jobs
+\section{GUI\_4}
+The GUI shall present an indicator about the progress of execution of the scheduled jobs list.
+\section{GUI\_5}
+The GUI shall allow the halting of a generation progress. Halting a job makes the whole scheduled job sequence stop.
+
 \subsection{CLI}
 \subsection{C software interface}
 \subsection{C++ software interface}
