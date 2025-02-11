@@ -1,8 +1,28 @@
 \documentclass{article}
+\usepackage{float} % needed to fit tables within sections
 \newcommand\strpad{Padded with nul chars}
 \newcommand\SemiCircle{Value is in Semi-Circles}
+\newcommand\InvalidPointVal{The max representable value flags an invalid pointer}
+\title{ASD}
 \begin{document}
-\begin{table}
+\section{File header}
+The file header shall bear the following data
+\begin{table}[H]
+   \caption{File header} 
+   \label{tab:HEADER}
+   \small
+   %\centering
+   \begin{tabular}{|l|r|r|r|}
+   %\midrule
+   \textbf{Field} & \textbf{Type} & \textbf{Size in bytes} & \textbf{Notes} \\ 
+   CRC32 & unsigned integer & 4& \\
+   \end{tabular}
+\end{table}
+\section{Tables index}
+bli
+\section{Data tables}
+bla
+\begin{table}[H]
    \caption{VHF Table content} 
    \label{tab:VHF}
    \small
@@ -10,11 +30,8 @@
    \begin{tabular}{|l|r|r|r|}
    %\midrule
    \textbf{Field} & \textbf{Type} & \textbf{Size in bytes} & \textbf{Notes} \\ 
-   %\midrule
    ICAO Code & 4 chars string & 4 & \strpad \\
-   %\midrule
    Country Code & 2 chars string & 2 &\strpad \\
-   %\midrule
    Latitude & signed integer & 4 & \SemiCircle\\
    Longitude & signed integer & 4& \SemiCircle\\
    Frequency & unsigned short integer & 2 & The frequency is expressed tens of kHz, minus 100 MHz \\
@@ -26,5 +43,114 @@
    Assigned variation & signed short integer & 2 & Value in tenth of degree\\
    Usage & enumerate & 1 & Refer to "Usage Codes" Table
    \end{tabular}
+\end{table}
+\begin{table}[H]
+   \caption{NDB Table content} 
+   \label{tab:NDB}
+   \small
+   %\centering
+   \begin{tabular}{|l|r|r|r|}
+   %\midrule
+   \textbf{Field} & \textbf{Type} & \textbf{Size in bytes} & \textbf{Notes} \\ 
+   ICAO Code & 4 chars string & 4 & \strpad \\
+   Country Code & 2 chars string & 2 &\strpad \\
+   Latitude & signed integer & 4 & \SemiCircle\\
+   Longitude & signed integer & 4& \SemiCircle\\
+   Frequency & unsigned short integer & 2 & The frequency is expressed tens of Hz \\
+   \end{tabular}
+\end{table}
+\begin{table}[H]
+   \caption{WAYPOINTS Table content} 
+   \label{tab:WPT}
+   \small
+   %\centering
+   \begin{tabular}{|l|r|r|r|}
+   %\midrule
+   \textbf{Field} & \textbf{Type} & \textbf{Size in bytes} & \textbf{Notes} \\ 
+   ICAO Code & 4 chars string & 4 & \strpad \\
+   Country Code & 2 chars string & 2 &\strpad \\
+   Latitude & signed integer & 4 & \SemiCircle\\
+   Longitude & signed integer & 4& \SemiCircle\\
+   \end{tabular}
+\end{table}
+\begin{table}[H]
+   \caption{AIRPORTS Table content} 
+   \label{tab:APT}
+   \small
+   %\centering
+   \begin{tabular}{|l|r|r|r|}
+   %\midrule
+   \textbf{Field} & \textbf{Type} & \textbf{Size in bytes} & \textbf{Notes} \\ 
+   ICAO Code & 4 chars string & 4 & \strpad \\
+   Country Code & 2 chars string & 2 &\strpad \\
+   Latitude & signed integer & 4 & \SemiCircle\\
+   Longitude & signed integer & 4& \SemiCircle\\
+   Elevation & signed short integer & 2 & the minimum representable value means invalid elevation\\
+   Usage & enumerate & 1 & refer to...\\
+   Airport name & 30 chars string & 30 & \strpad \\
+   Runway Index Pointer & unsigned integer & 4 & \\
+   Number of runways & unsigned char & 1 & this field is meaningless if the Runway Index pointer is invalid\\ 
+  \end{tabular}
+\end{table}
+\begin{table}[H]
+   \caption{RUNWAYS Table content} 
+   \label{tab:RWY}
+   \small
+   %\centering
+   \begin{tabular}{|l|r|r|r|}
+   %\midrule
+   \textbf{Field} & \textbf{Type} & \textbf{Size in bytes} & \textbf{Notes} \\ 
+   Runway identifier & 4 chars string & 4 & \strpad \\
+   Latitude & signed integer & 4 & \SemiCircle\\
+   Longitude & signed integer & 4& \SemiCircle\\
+   Elevation & signed short integer & 2 & A value of -32768 means invalid elevation\\
+   Surface & enumerate & 1 & refer to...\\
+   Slope & char & 1 &  \\
+   True orientation & unsigned short integer & 2 &\\
+   Magnetic variation & short integer  & 2 & \\
+   Length & unsigned short integer & 2&\\
+  \end{tabular}
+\end{table}
+%\begin{table}[H]
+%   \caption{HOLDINGS Table content} 
+%   \label{tab:HLD}
+%   \small
+%   \begin{tabular}{|l|r|r|r|}
+%   \textbf{Field} & \textbf{Type} & \textbf{Size in bytes} & \textbf{Notes} \\ 
+%   FIX database pointer & unsigned integer & 4 & \strpad \\
+%   Country Code & 2 chars string & 2 &\strpad \\
+%   Latitude & signed integer & 4 & \SemiCircle\\
+%   Longitude & signed integer & 4& \SemiCircle\\
+%   Elevation & signed short integer & 2 & A value of -32768 means invalid elevation\\
+%   Usage & enumerate & 1 & refer to...\\
+%   Airport name & 30 chars string & 30 & \strpad \\
+%   Runway Index Pointer & unsigned integer & 4 & The max representable value flags an invalid pointer\\
+%   Number of runways & unsigned char & 1 & this field is meaningless if the Runway Index pointer is invalid\\ 
+%  \end{tabular}
+%\end{table}
+\section{Appendix tables coding values}
+\begin{table}[H]
+  \caption{NAVAID Classification}
+  \begin{tabular}{|l|r|}
+    Coding & Value\\
+    0 & Unknown\\
+    1 & VOR\\
+    2 & DME\\
+    3 & VOR-DME\\
+    4 & TACAN\\
+    5 & VOR-TACAN\\
+    6 & MILITARY TACAN\\
+  \end{tabular}
+\end{table}
+\begin{table}[H]
+  \caption{Usage codes}\label{tab:Use_code}
+\begin{tabular}{|l|r|}
+  Coding & Value\\
+  0 & Terminal (< 25 NM)\\
+  1 & Low Power (< 40 NM)\\
+  2 & High Power (< 130 NM)\\
+  3 & Very High Power (> 130 NM)\\
+  255 & Out of service
+\end{tabular}
 \end{table}
 \end {document}
