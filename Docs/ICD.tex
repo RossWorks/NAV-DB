@@ -1,8 +1,10 @@
 \documentclass{article}
 \usepackage{float} % needed to fit tables within sections
+% \usepackage{tabularx} % needed to wrap text in table row
 \newcommand\strpad{Padded with nul chars}
 \newcommand\SemiCircle{Value is in Semi-Circles}
 \newcommand\InvalidPointVal{The max representable value flags an invalid pointer}
+\newcommand\DateType{The date shall be stored in 4 bytes, from most significant to least significant, as: spare byte, last two digits of year, month, and day. E. g. --|22|10|28}
 \title{ASD}
 \begin{document}
 \section{File header}
@@ -15,13 +17,30 @@ The file header shall bear the following data
    \begin{tabular}{|l|r|r|r|}
    %\midrule
    \textbf{Field} & \textbf{Type} & \textbf{Size in bytes} & \textbf{Notes} \\ 
+   ICD version & 2 chars string & 2 & \strpad\\
+   Effective date & unsigned int & 4 & \DateType \\
+   Expiration date & unsigned int & 4 & \DateType \\
    CRC32 & unsigned integer & 4& \\
+   Database Name & 30 chars string & 30 & \strpad\\
+   Number of tables & unsigned char & 1 & \\
    \end{tabular}
 \end{table}
-\section{Tables index}
-bli
+\section{Tables indexes}
+This table shall have as many rows as reported in the "Number of tables" field in the header
+\begin{table}[H]
+   \caption{Tables index} 
+   \label{tab:TAB_INDEXES}
+   \small
+   %\centering
+   \begin{tabular}{|l|r|r|r|}
+   %\midrule
+   \textbf{Field} & \textbf{Type} & \textbf{Size in bytes} & \textbf{Notes} \\ 
+   Table Type & enumerate & 1 & refer to table type enumerate\\
+   Table row size & unsigned short & 2 & size of data row in bytes \\
+   Table length & unsigned int & 4 & number of rows in the table\\
+   \end{tabular}
+\end{table}
 \section{Data tables}
-bla
 \begin{table}[H]
    \caption{VHF Table content} 
    \label{tab:VHF}
@@ -86,10 +105,11 @@ bla
    Latitude & signed integer & 4 & \SemiCircle\\
    Longitude & signed integer & 4& \SemiCircle\\
    Elevation & signed short integer & 2 & the minimum representable value means invalid elevation\\
-   Usage & enumerate & 1 & refer to...\\
+   Usage & enumerate & 1 & refer to airport usage table\\
    Airport name & 30 chars string & 30 & \strpad \\
-   Runway Index Pointer & unsigned integer & 4 & \\
-   Number of runways & unsigned char & 1 & this field is meaningless if the Runway Index pointer is invalid\\ 
+   Runway Index Pointer & unsigned integer & 4 & \InvalidPointVal\\
+   Number of runways & unsigned char & 1 & this field is meaningless if the Runway Index pointer is invalid\\
+   Recommended Navaid Pointer & unsigned integer & 4 & \InvalidPointVal\\
   \end{tabular}
 \end{table}
 \begin{table}[H]
@@ -104,11 +124,11 @@ bla
    Latitude & signed integer & 4 & \SemiCircle\\
    Longitude & signed integer & 4& \SemiCircle\\
    Elevation & signed short integer & 2 & A value of -32768 means invalid elevation\\
-   Surface & enumerate & 1 & refer to...\\
-   Slope & char & 1 &  \\
-   True orientation & unsigned short integer & 2 &\\
-   Magnetic variation & short integer  & 2 & \\
-   Length & unsigned short integer & 2&\\
+   Surface & enumerate & 1 & refer to Surface type table\\
+   Slope & char & 1 &  Value in thenth of degree\\
+   True orientation & unsigned short integer & 2 & Value is in tenth of degrees\\
+   Magnetic variation & short integer  & 2 & Value is in tenth of degrees\\
+   Length & unsigned short integer & 2&length in feet\\
   \end{tabular}
 \end{table}
 %\begin{table}[H]
@@ -130,6 +150,16 @@ bla
 %\end{table}
 \section{Appendix tables coding values}
 \begin{table}[H]
+  \caption{Table type codes}
+  \begin{tabular}{l|r}
+  Coding & Value\\
+  0 & VHF navaid\\
+  1 & NDB navaid\\
+  2 & STD waypoints\\
+  3 & Airports\\
+  4 & Runways\\
+\end{tabular}
+\begin{table}[H]
   \caption{NAVAID Classification}
   \begin{tabular}{|l|r|}
     Coding & Value\\
@@ -150,7 +180,26 @@ bla
   1 & Low Power (< 40 NM)\\
   2 & High Power (< 130 NM)\\
   3 & Very High Power (> 130 NM)\\
-  255 & Out of service
+  255 & Out of service\\
 \end{tabular}
 \end{table}
-\end {document}
+\begin{table}[H]
+  \caption{Airport usage codes}
+  \begin{tabular}{l|r}
+  Coding & Value\\
+  0 & Civil\\
+  1 & Private\\
+  2 & Military\\
+  3 & Joint\\
+\end{tabular}
+\end{table}
+\begin{table}[H]
+  \caption{Surface type codes}
+  \begin{tabular}{l|r}
+  Coding & Value\\
+  0 & Hard\\
+  1 & Soft\\
+  2 & Water\\
+  3 & Undefined\\
+\end{tabular}
+\end{table}\end {document}

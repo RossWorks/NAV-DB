@@ -21,7 +21,7 @@ The information contained in the binary file can be used to plan and execute rou
 \setcounter{secnumdepth}{0}
 \section{SRS\_1}
 \label{SRS:1}
-\NAVDBGEN\ shall acquire one or more input files and from their data generate a single file.
+\NAVDBGEN\ shall acquire one or more input files and from their data generate a single file whose structure is depicted in the ICD.
 \section{SRS\_2}
 \label{SRS:2}
 \NAVDBGEN\ shall acquire as input one or more text files formatted according to ARINC 424-19 specification.
@@ -76,10 +76,15 @@ an example of a valid log name is: 2024-11-02\_12:25:40\_NAVDBGEN1.log
   \item Field "ICD": the ICD version to be used
   \item Field "COUNTRY\_CODES\_LIST": the country codes to be included, see \ref{SRS:6}, as a comma-separated list. Alternatively, a path to a file containing the criteria can be defined by prepending '@' to the path. The path may be absoute or relative.
   \item Field "SOURCE\_DIR": the directory from which to import the input files. Absolute or relative paths are to be accepted
+  \item Field "AIRAC\_CYCLE": the cycle for which the effective and expiration dates shall be set. the value "0000" means current cycle based on system date
   \item Field "ENDIANNES": the endiannes requested for the generated file. Admissible values are: "BIG", "LITTLE", "BOTH"
 \end{enumerate}
 The csv shall be named "ScheduledJobs.csv" and placed within the root directory. The columns of the file shall be separated by a semicolon.
 Any job carrying malformed fields shall be skipped, with the reasons why being reported in its log file.
+\section{SRS\_9}
+For Navaid records, \NAVDBGEN\ shall select as Assinged variation the one recorded in the appropriate field within the Arinc 424 record, otherwise the Assigned variation shall be marked as invalid.
+\section{SRS\_10}
+For runways records, the latitude and longitude position should point to the runway landing threshold.
 \setcounter{secnumdepth}{2}
 \section{Interface requirements}
 \subsection{GUI}
@@ -96,6 +101,10 @@ The GUI shall present an indicator about the progress of execution of the schedu
 The GUI shall allow the halting of a generation progress. Halting a job makes the whole scheduled job sequence stop.
 
 \subsection{CLI}
+\section{CLI\_1}
+The CLI interface shall accept a single parameter containg a path to an input file listing the jobs (see SRS\_8) to be carried out.
+\section{CLI\_2}
+The CLI shall not allow operations other that the ones depicted in CLI\_1
 \subsection{C software interface}
 \subsection{C++ software interface}
 \subsection{Ada software interface}
