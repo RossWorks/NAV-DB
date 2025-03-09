@@ -2,7 +2,7 @@
 #include <gtkmm/grid.h>
 #include <gtkmm/window.h>
 #include <gtkmm/entry.h>
-#include <gtkmm/image.h>
+#include <gtkmm/frame.h>
 #include <gtkmm/label.h>
 #include <iostream>
 #include <exception>
@@ -27,5 +27,27 @@ private:
 
   /*Window widgets*/
   Gtk::Grid MainGrid;
+
+  Gtk::Frame JobsFrame;
+  Gtk::Grid JobsGrid;
+
+  Gtk::Frame JobsDefineFrame;
+  Gtk::Grid  JobsDefineGrid;
+
   Gtk::Button CmdBuildDb;
+
+  /*Job definition widgets START*/
+  Gtk::Label LblJobName;
+  Gtk::Label LblDbName;
+  Gtk::Label LblIcdVers;
+  Gtk::Label LblCountryList;
+  Gtk::Label LblSrcDir;
+  Gtk::Label LblAiracCycle;
+  Gtk::Label LblEndiannes;
+
+  //std::map <std::string, *Gtk::Label> JobLabeles;
+
+  Gtk::Entry TxtJobName;
+
+  /*Job definition widgets END*/
 };
