@@ -1,9 +1,7 @@
 project NavDb is
 
   type Mode_Type is ("debug", "release");
-  type Interface_Type is ("GUI", "CLI");
   Mode : Mode_Type := external ("mode", "debug");
-  Interface : Interface_Type := external ("interface", "CLI");
   
   Cpp_switches   := ("-std=c++20","-pthread");
   GTKmm_switches := ("-I/usr/include/gtkmm-4.0",
@@ -59,47 +57,20 @@ project NavDb is
                      "-lgobject-2.0",
                      "-lglib-2.0");
 
-  GlobalSrc := ("./src/",
-                "./src/Common/",
-                "./src/StdDb/",
-                "./src/Presentation/");
-  CliSrc := ("./src/CLI-Interface/");
-  GuiSrc := ("./src/GUI-Interface/");
+  GlobalSrc := ("./src/**");
 
   for Languages use ("C++");
-  case Interface is
-    when "CLI" =>
-      for source_dirs use GlobalSrc & CliSrc;
-      for main use ("./src/main.cpp");
-    when "GUI" => 
-      for source_dirs use GlobalSrc & GuiSrc & CliSrc;
-      for main use ("./src/main_GUI.cpp");
-  end case;
+  for source_dirs use GlobalSrc;
+  for main use ("./src/main_GUI.cpp");
   for Object_Dir use "./obj";
   for Exec_dir use "./bin";
 
   package Builder is
-    case Mode is
-      when "debug" =>
-        case Interface is
-          when "CLI" => for Executable("main.cpp") use "NavDbDebug.bin";
-          when "GUI" => for Executable("main_GUI.cpp") use "NavDbGuiDebug.bin";
-        end case;
-      when "release" =>
-        case Interface is
-          when "CLI" => for Executable("main.cpp") use "NavDb.bin";
-          when "GUI" => for Executable("main_GUI.cpp") use "NavDbGui.bin";
-        end case;
-    end case;
+    for Executable("main_GUI.cpp") use "NavDbGuiDebug.bin";
   end Builder;
 
   package Compiler is
-    case Mode is
-      when "debug" =>
-        Cpp_switches := Cpp_switches & ("-g");
-      when "release" =>
-        null;
-    end case;
+    Cpp_switches := Cpp_switches & ("-g");
     for Default_Switches("C++") use Cpp_switches & GTKmm_switches;
   end Compiler;
 

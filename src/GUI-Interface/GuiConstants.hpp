@@ -3,6 +3,8 @@
 
 #include <pango/pango-font.h>
 
+const Glib::ustring GuiTitle("Navigation Database Generator 1.0");
+
 const char DefaultFontFamily[] = "B612";
 const int  DefaultFontSize     = 14 * PANGO_SCALE;
 
