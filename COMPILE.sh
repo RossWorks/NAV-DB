@@ -25,4 +25,4 @@ done
 rm ./Docs/*.aux; rm ./Docs/*.log; rm ./Docs/*.toc
 
 echo Start compilation
-$MAKER -d -p -q -P $PROJECT_FILE -XMode=debug -XInterface=GUI
+$MAKER $PROJECT_FILE -XMode=debug -XInterface=GUI

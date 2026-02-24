@@ -90,5 +90,6 @@
       "span": "cpp",
       "variant": "cpp"
     },
-    "sarif-viewer.connectToGithubCodeScanning": "off"
+    "sarif-viewer.connectToGithubCodeScanning": "off",
+    "C_Cpp.errorSquiggles": "enabled"
 }

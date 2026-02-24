@@ -5,14 +5,18 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "/usr/include/gtkmm-4.0/**",
+                "/usr/include/gtkmm-4.0/gtkmm/**",
                 "/usr/include/**",
+                "/usr/include/glibmm-2.68/glibmm/**",
+                "/usr/lib64/gtkmm-4.0/include",
                 "/usr/include/glibmm-2.68/**",
-                "/usr/include/sigc++-3.0/**"
+                "/usr/include/sigc++-3.0/**",
+                "/usr/include/giomm-2.68/giomm"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",
             "cStandard": "c17",
-            "cppStandard": "c++23",
+            "cppStandard": "c++17",
             "intelliSenseMode": "linux-gcc-x64",
             "browse": {
                 "path": [

@@ -1,7 +1,7 @@
 #ifndef DB_COMMON_TYPES
 #define DB_COMMON_TYPES
 
-#include <stdint.h>
+#include <cstdint>
 
 #define DB_HEADER_SIZE_IN_BYTES 28
 #define VHF_TABLE_ROW_SIZE_IN_BYTES 40

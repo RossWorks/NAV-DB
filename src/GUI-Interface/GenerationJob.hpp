@@ -13,8 +13,11 @@ private:
     std::string srcpath;
     std::list<std::string> AdmittedCountries;
 public:
-    GenerationJob();
+    GenerationJob(std::string JobName, std::string Dbname,
+                  std::string srcDir);
     ~GenerationJob();
+    std::string Getname();
+    std::string ToString();
 };
 
 #endif //GENERATIONJOB

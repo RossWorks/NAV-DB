@@ -2,11 +2,16 @@
 #include <gtkmm/grid.h>
 #include <gtkmm/window.h>
 #include <gtkmm/entry.h>
+#include <gtkmm/textview.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/label.h>
 #include <gtkmm/dropdown.h>
 #include <gtkmm/liststore.h>
+#include <gtkmm/scrolledwindow.h>
+#include <giomm/listmodel.h>
+
 #include <iostream>
+#include <list>
 
 #include "../StdDb/StdDb.hpp"
 #include "../Common/CommonSettings.hpp"
@@ -19,7 +24,7 @@ public:
   MainWindow();
 private:
   
-  GenerationJob JobList;
+  std::list<GenerationJob> JobList;
 
   Glib::RefPtr<Pango::Context> WidgetContext;
   Pango::FontDescription TextFontDescriptor;
@@ -43,13 +48,13 @@ private:
   /*Databse build execution widgets END*/
 
   /*Job definition widgets START*/
-  Gtk::Label LblJobName;
-  Gtk::Label LblDbName;
-  Gtk::Label LblIcdVers;
-  Gtk::Label LblCountryList;
-  Gtk::Label LblSrcDir;
-  Gtk::Label LblAiracCycle;
-  Gtk::Label LblEndiannes;
+  Gtk::Frame FrameJobName;
+  Gtk::Frame FrameDbName;
+  Gtk::Frame FrameIcdVers;
+  Gtk::Frame FrameCountryList;
+  Gtk::Frame FrameSrcDir;
+  Gtk::Frame FrameAiracCycle;
+  Gtk::Frame FrameEndiannes;
 
   //std::map <std::string, *Gtk::Label> JobLabeles;
 
@@ -61,9 +66,17 @@ private:
   Gtk::Entry TxtAiracCycle;
   Gtk::DropDown ListEndianness;
 
-  //Gtk::ListStore ListJobList;
+  Gtk::ScrolledWindow ScrollerJobList;
+  Gtk::TextView ListJobList;
   Gtk::Button CmdAddJob;
   Gtk::Button CmdDeleteJob;
   Gtk::Button CmdEditJob;
   /*Job definition widgets END*/
+
+  /* start of callback declarations*/
+  void AddJob2List();
+
+  void RemoveJobFromList();
+
+  
 };
