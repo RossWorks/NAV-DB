@@ -26,6 +26,7 @@ MainWindow::MainWindow(){
   FrameDbName.set_child(TxtDbName);
   FrameIcdVers.set_label("ICD version");
   FrameIcdVers.set_child(ListIcdVers);
+  ListIcdVers.set_model(SupportedICDList);
   FrameCountryList.set_label("Selected coutries");
   FrameCountryList.set_child(TxtCountryList);
   FrameSrcDir.set_label("Source directory");
@@ -34,9 +35,7 @@ MainWindow::MainWindow(){
   FrameAiracCycle.set_child(TxtAiracCycle);
   FrameEndiannes.set_label("Endianness");
   FrameEndiannes.set_child(ListEndianness);
-
-  // TxtDbName.property_text_length(true);
-  // TxtAiracCycle.set_propagate_text_width(false);
+  ListEndianness.set_model(PossibleEndiannessList);
 
   JobsDefineGrid.attach(FrameJobName,0,0);
   JobsDefineGrid.attach(FrameDbName,1,0);

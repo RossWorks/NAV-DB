@@ -9,6 +9,8 @@
 #include <gtkmm/liststore.h>
 #include <gtkmm/scrolledwindow.h>
 #include <giomm/listmodel.h>
+#include <gtkmm/stringlist.h>
+#include <glibmm/refptr.h>
 
 #include <iostream>
 #include <list>
@@ -34,6 +36,10 @@ private:
   StdDb MyStdDb;
   StdDb* StdDbPtr = &MyStdDb;
 
+  /*Choosing options*/
+  Glib::RefPtr<Gtk::StringList> PossibleEndiannessList = Gtk::StringList::create({"Big Endian", "Little Endian","Both"});
+  Glib::RefPtr<Gtk::StringList> SupportedICDList = Gtk::StringList::create({"01"});
+
   /*Window widgets*/
   Gtk::Grid MainGrid;
 
@@ -55,8 +61,6 @@ private:
   Gtk::Frame FrameSrcDir;
   Gtk::Frame FrameAiracCycle;
   Gtk::Frame FrameEndiannes;
-
-  //std::map <std::string, *Gtk::Label> JobLabeles;
 
   Gtk::Entry TxtJobName;
   Gtk::Entry TxtDbName;
